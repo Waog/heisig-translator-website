@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { pinyin } from 'pinyin-pro';
 import { Subject, debounceTime } from 'rxjs';
 import { mapping } from './mapping';
+import { TranslationService } from './translation.service';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ import { mapping } from './mapping';
   imports: [RouterOutlet, FormsModule, CommonModule, HttpClientModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  providers: [TranslationService], // Ensure the service is provided here
 })
 export class AppComponent {
   userInput: string = '';
@@ -25,11 +27,10 @@ export class AppComponent {
 
   private inputSubject: Subject<string> = new Subject();
 
-  constructor(private http: HttpClient) {
+  constructor(private translationService: TranslationService) {
     this.inputSubject.pipe(debounceTime(1000)).subscribe((input: any) => {
       this.debounceInProgress = false;
-      this.translateWithMyMemory(input);
-      this.translateWithMyMemoryGerman(input);
+      this.translateText(input);
       this.convertToPinyin(input);
     });
   }
@@ -54,13 +55,9 @@ export class AppComponent {
     this.debounceInProgress = false;
   }
 
-  translateWithMyMemory(input: string): void {
+  translateText(input: string): void {
     this.isLoading = true;
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-      input
-    )}&langpair=zh|en`;
-
-    this.http.get<any>(url).subscribe(
+    this.translationService.translate(input, 'zh|en').subscribe(
       (response: any) => {
         this.isLoading = false;
         if (response.responseData) {
@@ -74,17 +71,9 @@ export class AppComponent {
         this.translation = 'Translation error';
       }
     );
-  }
 
-  translateWithMyMemoryGerman(input: string): void {
-    this.isLoading = true;
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-      input
-    )}&langpair=zh|de`;
-
-    this.http.get<any>(url).subscribe(
+    this.translationService.translate(input, 'zh|de').subscribe(
       (response: any) => {
-        this.isLoading = false;
         if (response.responseData) {
           this.germanTranslation = response.responseData.translatedText;
         } else {
@@ -92,7 +81,6 @@ export class AppComponent {
         }
       },
       (error) => {
-        this.isLoading = false;
         this.germanTranslation = 'Translation error';
       }
     );
