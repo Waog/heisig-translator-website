@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { InputTextComponent } from './input-text.component';
 
 describe('InputTextComponent', () => {
@@ -8,9 +9,8 @@ describe('InputTextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InputTextComponent]
-    })
-    .compileComponents();
+      imports: [FormsModule, InputTextComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(InputTextComponent);
     component = fixture.componentInstance;
@@ -19,5 +19,71 @@ describe('InputTextComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should emit userInputChange on input change', () => {
+    spyOn(component.userInputChange, 'emit');
+
+    const inputElement = fixture.debugElement.query(
+      By.css('input')
+    ).nativeElement;
+    inputElement.value = 'test';
+    inputElement.dispatchEvent(new Event('input'));
+
+    expect(component.userInputChange.emit).toHaveBeenCalledWith('test');
+  });
+
+  it('should reset input and emit empty string on reset button click', () => {
+    spyOn(component.userInputChange, 'emit');
+
+    // Fill the input field beforehand
+    component.userInput = 'initial value';
+    fixture.detectChanges();
+
+    const resetButton = fixture.debugElement.query(
+      By.css('.reset-button')
+    ).nativeElement;
+    resetButton.click();
+
+    expect(component.userInput).toBe('');
+    expect(component.userInputChange.emit).toHaveBeenCalledWith('');
+  });
+
+  it('should paste content from clipboard and emit it', async () => {
+    spyOn(component.userInputChange, 'emit');
+    spyOn(navigator.clipboard, 'readText').and.returnValue(
+      Promise.resolve('clipboard content')
+    );
+
+    const pasteButton = fixture.debugElement.query(
+      By.css('.paste-button')
+    ).nativeElement;
+    pasteButton.click();
+
+    await fixture.whenStable(); // Wait for promises to resolve
+
+    expect(component.userInput).toBe('clipboard content');
+    expect(component.userInputChange.emit).toHaveBeenCalledWith(
+      'clipboard content'
+    );
+  });
+
+  it('should handle clipboard read failure gracefully', async () => {
+    spyOn(navigator.clipboard, 'readText').and.returnValue(
+      Promise.reject('Clipboard error')
+    );
+    spyOn(console, 'error');
+
+    const pasteButton = fixture.debugElement.query(
+      By.css('.paste-button')
+    ).nativeElement;
+    pasteButton.click();
+
+    await fixture.whenStable(); // Wait for promises to resolve
+
+    expect(console.error).toHaveBeenCalledWith(
+      'Failed to read clipboard contents: ',
+      'Clipboard error'
+    );
   });
 });
