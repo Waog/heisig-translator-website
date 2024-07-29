@@ -52,6 +52,10 @@ jobs:
       - name: Build project
         run: ng build --configuration production --base-href "/heisig-translator-website/"
 
+      # List files in dist directory for debugging
+      - name: List files
+        run: ls -alh dist/heisig-translator-website
+
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         run: npx angular-cli-ghpages --dir=dist/heisig-translator-website
