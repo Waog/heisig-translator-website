@@ -3,6 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import { pinyin } from 'pinyin-pro';
 import { Subject, debounceTime } from 'rxjs';
 import { mapping } from './mapping';
 
@@ -17,6 +18,7 @@ export class AppComponent {
   userInput: string = '';
   mapping = mapping;
   translation: string = '';
+  pinyinTranslation: string = '';
   isLoading: boolean = false;
   debounceInProgress: boolean = false;
 
@@ -26,6 +28,7 @@ export class AppComponent {
     this.inputSubject.pipe(debounceTime(1000)).subscribe((input: any) => {
       this.debounceInProgress = false;
       this.translateWithMyMemory(input);
+      this.convertToPinyin(input);
     });
   }
 
@@ -43,6 +46,7 @@ export class AppComponent {
   resetInput(): void {
     this.userInput = '';
     this.translation = '';
+    this.pinyinTranslation = '';
     this.isLoading = false;
     this.debounceInProgress = false;
   }
@@ -67,6 +71,10 @@ export class AppComponent {
         this.translation = 'Translation error';
       }
     );
+  }
+
+  convertToPinyin(input: string): void {
+    this.pinyinTranslation = pinyin(input, { toneType: 'num' });
   }
 
   onUserInputChange(): void {
