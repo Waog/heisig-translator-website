@@ -1,0 +1,8 @@
+<div class="output">
+  <div class="character-group" *ngFor="let item of pinyinTranslation">
+    <div class="pinyin">{{ item.pinyin }}</div>
+    <div class="char">{{ item.char }}</div>
+    <div class="translation">{{ mapping[item.char] || item.char }}</div>
+  </div>
+  <app-play-audio [text]="userInput" lang="zh-CN"></app-play-audio>
+</div>

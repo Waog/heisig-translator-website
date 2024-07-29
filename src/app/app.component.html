@@ -12,37 +12,30 @@
   </div>
 
   <div class="output translation-output">
-    <p *ngIf="!isLoading">{{ translation }}</p>
-    <button
-      *ngIf="!isLoading"
-      class="play-button"
-      (click)="playAudio(translation, 'en-US')"
-    >
-      🔊
-    </button>
+    <p *ngIf="!isLoading">
+      {{ translation }}
+      <app-play-audio
+        *ngIf="!isLoading"
+        [text]="translation"
+        lang="en-US"
+      ></app-play-audio>
+    </p>
     <p *ngIf="isLoading">Translating...</p>
   </div>
 
   <div class="output translation-output">
-    <p *ngIf="!isLoading">{{ germanTranslation }}</p>
-    <button
-      *ngIf="!isLoading"
-      class="play-button"
-      (click)="playAudio(germanTranslation, 'de-DE')"
-    >
-      🔊
-    </button>
+    <p *ngIf="!isLoading">
+      {{ germanTranslation }}
+      <app-play-audio
+        *ngIf="!isLoading"
+        [text]="germanTranslation"
+        lang="de-DE"
+      ></app-play-audio>
+    </p>
     <p *ngIf="isLoading">Translating...</p>
   </div>
 
-  <div class="output">
-    <div class="character-group" *ngFor="let item of pinyinTranslation">
-      <div class="pinyin">{{ item.pinyin }}</div>
-      <div class="char">{{ item.char }}</div>
-      <div class="translation">{{ mapping[item.char] || item.char }}</div>
-    </div>
-    <button class="play-button" (click)="playAudio(userInput, 'zh-CN')">
-      🔊
-    </button>
-  </div>
+  <app-single-char-translation
+    [userInput]="userInput"
+  ></app-single-char-translation>
 </div>

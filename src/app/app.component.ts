@@ -1,23 +1,30 @@
-// src/app/app.component.ts
-
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { Subject, debounceTime } from 'rxjs';
-import { AudioService } from './audio.service';
 import { mapping } from './mapping';
 import { PinyinService } from './pinyin.service';
+import { AudioService } from './play-audio/audio.service';
+import { PlayAudioComponent } from './play-audio/play-audio.component';
+import { SingleCharTranslationComponent } from './single-char-translation/single-char-translation.component';
 import { TranslationService } from './translation.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, CommonModule, HttpClientModule],
+  imports: [
+    RouterOutlet,
+    FormsModule,
+    CommonModule,
+    HttpClientModule,
+    SingleCharTranslationComponent,
+    PlayAudioComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [TranslationService, PinyinService, AudioService], // Ensure the services are provided here
+  providers: [TranslationService, PinyinService, AudioService],
 })
 export class AppComponent {
   userInput: string = '';
@@ -30,27 +37,11 @@ export class AppComponent {
 
   private inputSubject: Subject<string> = new Subject();
 
-  constructor(
-    private translationService: TranslationService,
-    private pinyinService: PinyinService,
-    private audioService: AudioService
-  ) {
+  constructor(private translationService: TranslationService) {
     this.inputSubject.pipe(debounceTime(1000)).subscribe((input: any) => {
       this.debounceInProgress = false;
       this.translateText(input);
-      this.convertToPinyin(input);
     });
-  }
-
-  get modifiedInput(): { char: string; translation: string }[] {
-    return this.transformInput(this.userInput);
-  }
-
-  transformInput(input: string): { char: string; translation: string }[] {
-    return Array.from(input).map((char) => ({
-      char: char,
-      translation: this.mapping[char] || char,
-    }));
   }
 
   resetInput(): void {
@@ -93,16 +84,8 @@ export class AppComponent {
     );
   }
 
-  convertToPinyin(input: string): void {
-    this.pinyinTranslation = this.pinyinService.convertToPinyin(input);
-  }
-
   onUserInputChange(): void {
     this.debounceInProgress = true;
     this.inputSubject.next(this.userInput);
-  }
-
-  playAudio(text: string, lang: string): void {
-    this.audioService.playAudio(text, lang);
   }
 }
