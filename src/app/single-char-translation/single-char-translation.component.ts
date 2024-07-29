@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { mapping } from '../mapping';
-import { PinyinService } from '../pinyin.service';
 import { PlayAudioComponent } from '../play-audio/play-audio.component';
+import { PinyinService } from './pinyin.service';
 
 @Component({
   selector: 'app-single-char-translation',

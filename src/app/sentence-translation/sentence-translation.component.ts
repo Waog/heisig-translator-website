@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Subject, debounceTime } from 'rxjs';
 import { PlayAudioComponent } from '../play-audio/play-audio.component';
-import { TranslationService } from '../translation.service';
+import { TranslationService } from './translation.service';
 
 @Component({
   selector: 'app-sentence-translation',

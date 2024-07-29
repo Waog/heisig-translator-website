@@ -3,12 +3,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-import { PinyinService } from './pinyin.service';
 import { AudioService } from './play-audio/audio.service';
 import { PlayAudioComponent } from './play-audio/play-audio.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
+import { TranslationService } from './sentence-translation/translation.service';
+import { PinyinService } from './single-char-translation/pinyin.service';
 import { SingleCharTranslationComponent } from './single-char-translation/single-char-translation.component';
-import { TranslationService } from './translation.service';
 
 @Component({
   selector: 'app-root',
