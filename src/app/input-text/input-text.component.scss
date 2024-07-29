@@ -7,7 +7,7 @@
 
 input[type="text"] {
   width: 100%;
-  padding: 10px;
+  padding: 10px 40px 10px 10px; /* Padding right für Platzierung des Buttons */
   font-size: 1.2em;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -16,7 +16,7 @@ input[type="text"] {
 
 .reset-button {
   position: absolute;
-  right: 10px;
+  right: 10px; /* Platzierung des Buttons rechts */
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -24,6 +24,7 @@ input[type="text"] {
   font-size: 1.2em;
   cursor: pointer;
   color: #888;
+  padding-left: 10px; /* Mehr Platz zwischen Button und Text */
 }
 
 .reset-button:hover {
