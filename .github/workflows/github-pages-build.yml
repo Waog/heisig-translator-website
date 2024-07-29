@@ -54,11 +54,11 @@ jobs:
 
       # List files in dist directory for debugging
       - name: List files
-        run: ls -alh dist/heisig-translator-website
+        run: ls -alh dist/heisig-translator-website/browser
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        run: npx angular-cli-ghpages --dir=dist/heisig-translator-website
+        run: npx angular-cli-ghpages --dir=dist/heisig-translator-website/browser
 
       # Uncomment the following line to deploy using personal access token if required
       # env:
