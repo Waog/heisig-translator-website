@@ -13,6 +13,25 @@
 
   <div class="output translation-output">
     <p *ngIf="!isLoading">{{ translation }}</p>
+    <button
+      *ngIf="!isLoading"
+      class="play-button"
+      (click)="playAudio(translation, 'en-US')"
+    >
+      🔊
+    </button>
+    <p *ngIf="isLoading">Translating...</p>
+  </div>
+
+  <div class="output translation-output">
+    <p *ngIf="!isLoading">{{ germanTranslation }}</p>
+    <button
+      *ngIf="!isLoading"
+      class="play-button"
+      (click)="playAudio(germanTranslation, 'de-DE')"
+    >
+      🔊
+    </button>
     <p *ngIf="isLoading">Translating...</p>
   </div>
 
@@ -22,6 +41,8 @@
       <div class="char">{{ item.char }}</div>
       <div class="translation">{{ mapping[item.char] || item.char }}</div>
     </div>
-    <button class="play-button" (click)="playAudio()">🔊</button>
+    <button class="play-button" (click)="playAudio(userInput, 'zh-CN')">
+      🔊
+    </button>
   </div>
 </div>

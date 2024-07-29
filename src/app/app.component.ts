@@ -18,6 +18,7 @@ export class AppComponent {
   userInput: string = '';
   mapping = mapping;
   translation: string = '';
+  germanTranslation: string = '';
   pinyinTranslation: { char: string; pinyin: string }[] = [];
   isLoading: boolean = false;
   debounceInProgress: boolean = false;
@@ -28,6 +29,7 @@ export class AppComponent {
     this.inputSubject.pipe(debounceTime(1000)).subscribe((input: any) => {
       this.debounceInProgress = false;
       this.translateWithMyMemory(input);
+      this.translateWithMyMemoryGerman(input);
       this.convertToPinyin(input);
     });
   }
@@ -46,6 +48,7 @@ export class AppComponent {
   resetInput(): void {
     this.userInput = '';
     this.translation = '';
+    this.germanTranslation = '';
     this.pinyinTranslation = [];
     this.isLoading = false;
     this.debounceInProgress = false;
@@ -73,6 +76,28 @@ export class AppComponent {
     );
   }
 
+  translateWithMyMemoryGerman(input: string): void {
+    this.isLoading = true;
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+      input
+    )}&langpair=zh|de`;
+
+    this.http.get<any>(url).subscribe(
+      (response: any) => {
+        this.isLoading = false;
+        if (response.responseData) {
+          this.germanTranslation = response.responseData.translatedText;
+        } else {
+          this.germanTranslation = 'Translation error';
+        }
+      },
+      (error) => {
+        this.isLoading = false;
+        this.germanTranslation = 'Translation error';
+      }
+    );
+  }
+
   convertToPinyin(input: string): void {
     this.pinyinTranslation = Array.from(input).map((char) => ({
       char: char,
@@ -85,9 +110,9 @@ export class AppComponent {
     this.inputSubject.next(this.userInput);
   }
 
-  playAudio(): void {
-    const utterance = new SpeechSynthesisUtterance(this.userInput);
-    utterance.lang = 'zh-CN';
+  playAudio(text: string, lang: string): void {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
     speechSynthesis.speak(utterance);
   }
 }
