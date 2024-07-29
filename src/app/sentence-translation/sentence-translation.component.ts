@@ -17,11 +17,15 @@ export class SentenceTranslationComponent implements OnChanges {
 
   translation: string = '';
   isLoading: boolean = false;
+  debounceInProgress: boolean = false;
   private inputSubject: Subject<string> = new Subject();
 
   constructor(private translationService: TranslationService) {
     this.inputSubject.pipe(debounceTime(1000)).subscribe((input: any) => {
-      this.translateText(input);
+      if (input && input.trim().length > 0) {
+        this.debounceInProgress = false;
+        this.translateText(input);
+      }
     });
   }
 
@@ -30,6 +34,7 @@ export class SentenceTranslationComponent implements OnChanges {
       changes['userInput'] &&
       changes['userInput'].currentValue !== changes['userInput'].previousValue
     ) {
+      this.debounceInProgress = true;
       this.inputSubject.next(changes['userInput'].currentValue);
     }
   }

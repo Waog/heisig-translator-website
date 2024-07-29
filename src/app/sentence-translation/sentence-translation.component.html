@@ -1,8 +1,9 @@
 <div class="translation-output">
   <div class="translation-container">
-    <p *ngIf="!isLoading">{{ translation }}</p>
+    <p *ngIf="!isLoading && !debounceInProgress">{{ translation }}</p>
+    <p *ngIf="debounceInProgress">Waiting until input stops...</p>
     <app-play-audio
-      *ngIf="!isLoading"
+      *ngIf="!isLoading && !debounceInProgress"
       [text]="translation"
       [lang]="targetLang"
     ></app-play-audio>
