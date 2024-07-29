@@ -52,6 +52,12 @@ input[type="text"] {
   color: #333;
 }
 
+.feedback {
+  margin-top: 10px;
+  font-size: 1em;
+  color: #888;
+}
+
 .output {
   display: flex;
   flex-direction: row;
@@ -94,6 +100,7 @@ input[type="text"] {
   border-radius: 10px;
   font-size: 1.2em;
   color: #00796b;
+  min-height: 1.5em; /* Maintain space to prevent CLS */
 }
 
 .translation-output > p {

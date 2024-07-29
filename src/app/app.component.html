@@ -10,9 +10,12 @@
     />
     <button class="reset-button" (click)="resetInput()">&#x2715;</button>
   </div>
+
   <div class="output translation-output">
-    <p>{{ translation }}</p>
+    <p *ngIf="!isLoading">{{ translation }}</p>
+    <p *ngIf="isLoading">Translating...</p>
   </div>
+
   <div class="output">
     <div class="character-group" *ngFor="let item of modifiedInput">
       <div class="char">{{ item.char }}</div>

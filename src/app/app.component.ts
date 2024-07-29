@@ -1,4 +1,3 @@
-// app.component.ts
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
@@ -18,11 +17,14 @@ export class AppComponent {
   userInput: string = '';
   mapping = mapping;
   translation: string = '';
+  isLoading: boolean = false;
+  debounceInProgress: boolean = false;
 
   private inputSubject: Subject<string> = new Subject();
 
   constructor(private http: HttpClient) {
     this.inputSubject.pipe(debounceTime(1000)).subscribe((input: any) => {
+      this.debounceInProgress = false;
       this.translateWithMyMemory(input);
     });
   }
@@ -41,15 +43,19 @@ export class AppComponent {
   resetInput(): void {
     this.userInput = '';
     this.translation = '';
+    this.isLoading = false;
+    this.debounceInProgress = false;
   }
 
   translateWithMyMemory(input: string): void {
+    this.isLoading = true;
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
       input
     )}&langpair=zh|en`;
 
     this.http.get<any>(url).subscribe(
       (response: any) => {
+        this.isLoading = false;
         if (response.responseData) {
           this.translation = response.responseData.translatedText;
         } else {
@@ -57,12 +63,14 @@ export class AppComponent {
         }
       },
       (error) => {
+        this.isLoading = false;
         this.translation = 'Translation error';
       }
     );
   }
 
   onUserInputChange(): void {
+    this.debounceInProgress = true;
     this.inputSubject.next(this.userInput);
   }
 }
