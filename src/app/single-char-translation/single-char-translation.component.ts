@@ -13,21 +13,16 @@ import { PinyinService } from './pinyin.service';
 })
 export class SingleCharTranslationComponent implements OnChanges {
   @Input() userInput: string = '';
-  pinyinTranslation: { char: string; pinyin: string }[] = [];
   mapping = mapping;
+  pinyinTranslation: { hanzi: string; pinyin: string }[] = [];
 
   constructor(private pinyinService: PinyinService) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (
-      changes['userInput'] &&
-      changes['userInput'].currentValue !== changes['userInput'].previousValue
-    ) {
-      this.convertToPinyin(changes['userInput'].currentValue);
+  ngOnChanges({ userInput }: SimpleChanges): void {
+    if (userInput && userInput.currentValue !== userInput.previousValue) {
+      this.pinyinTranslation = this.pinyinService.convertToPinyin(
+        userInput.currentValue
+      );
     }
-  }
-
-  convertToPinyin(input: string): void {
-    this.pinyinTranslation = this.pinyinService.convertToPinyin(input);
   }
 }

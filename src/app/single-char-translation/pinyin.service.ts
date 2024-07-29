@@ -1,5 +1,3 @@
-// src/app/pinyin.service.ts
-
 import { Injectable } from '@angular/core';
 import { pinyin } from 'pinyin-pro';
 
@@ -9,9 +7,9 @@ import { pinyin } from 'pinyin-pro';
 export class PinyinService {
   constructor() {}
 
-  convertToPinyin(text: string): { char: string; pinyin: string }[] {
+  convertToPinyin(text: string): { hanzi: string; pinyin: string }[] {
     return Array.from(text).map((char) => ({
-      char: char,
+      hanzi: char,
       pinyin: pinyin(char),
     }));
   }

@@ -2,8 +2,8 @@
   <div class="character-group-container">
     <div class="character-group" *ngFor="let item of pinyinTranslation">
       <div class="pinyin">{{ item.pinyin }}</div>
-      <div class="char">{{ item.char }}</div>
-      <div class="translation">{{ mapping[item.char] || item.char }}</div>
+      <div class="hanzi">{{ item.hanzi }}</div>
+      <div class="heisig">{{ mapping[item.hanzi] || item.hanzi }}</div>
     </div>
   </div>
 </app-translation-and-audio-container>
