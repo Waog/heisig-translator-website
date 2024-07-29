@@ -1,11 +1,11 @@
 <!-- app.component.html -->
-<div>
-  <label for="userInput">Enter text: </label>
+<div class="container">
+  <label for="userInput">Enter text:</label>
   <input id="userInput" type="text" [(ngModel)]="userInput" />
-</div>
-<div class="output">
-  <div class="character-group" *ngFor="let item of modifiedInput">
-    <div class="char">{{ item.char }}</div>
-    <div class="translation">{{ item.translation }}</div>
+  <div class="output">
+    <div class="character-group" *ngFor="let item of modifiedInput">
+      <div class="char">{{ item.char }}</div>
+      <div class="translation">{{ item.translation }}</div>
+    </div>
   </div>
 </div>

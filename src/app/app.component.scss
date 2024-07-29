@@ -1,9 +1,46 @@
 /* app.component.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  font-size: 1.2em;
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.2em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
 .output {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   margin-top: 20px;
-  flex-wrap: wrap; /* Wrap long lines to the next row */
+  padding: 10px;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 10px;
 }
 
 .character-group {
@@ -11,12 +48,13 @@
   flex-direction: column;
   align-items: center;
   margin-right: 5px;
-  max-width: 3em; /* Prevent translation line from growing beyond character width */
+  max-width: 3em;
 }
 
 .char {
-  font-size: 3em; /* Larger font size for characters */
+  font-size: 2em; /* Larger font size for characters */
   white-space: nowrap; /* Prevent character from breaking */
+  color: #333;
 }
 
 .translation {
@@ -25,4 +63,5 @@
   hyphens: auto; /* Enable hyphenation */
   overflow-wrap: break-word; /* Break long words */
   text-align: center; /* Center-align the translations */
+  color: #666;
 }
