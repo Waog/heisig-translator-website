@@ -1,11 +1,13 @@
+// src/app/app.component.ts
+
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-import { pinyin } from 'pinyin-pro';
 import { Subject, debounceTime } from 'rxjs';
 import { mapping } from './mapping';
+import { PinyinService } from './pinyin.service';
 import { TranslationService } from './translation.service';
 
 @Component({
@@ -14,7 +16,7 @@ import { TranslationService } from './translation.service';
   imports: [RouterOutlet, FormsModule, CommonModule, HttpClientModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [TranslationService], // Ensure the service is provided here
+  providers: [TranslationService, PinyinService], // Ensure the services are provided here
 })
 export class AppComponent {
   userInput: string = '';
@@ -27,7 +29,10 @@ export class AppComponent {
 
   private inputSubject: Subject<string> = new Subject();
 
-  constructor(private translationService: TranslationService) {
+  constructor(
+    private translationService: TranslationService,
+    private pinyinService: PinyinService
+  ) {
     this.inputSubject.pipe(debounceTime(1000)).subscribe((input: any) => {
       this.debounceInProgress = false;
       this.translateText(input);
@@ -87,10 +92,7 @@ export class AppComponent {
   }
 
   convertToPinyin(input: string): void {
-    this.pinyinTranslation = Array.from(input).map((char) => ({
-      char: char,
-      pinyin: pinyin(char),
-    }));
+    this.pinyinTranslation = this.pinyinService.convertToPinyin(input);
   }
 
   onUserInputChange(): void {
