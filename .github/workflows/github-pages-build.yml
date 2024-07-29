@@ -56,6 +56,12 @@ jobs:
       - name: List files
         run: ls -alh dist/heisig-translator-website/browser
 
+      # Configure Git user
+      - name: Set up Git user
+        run: |
+          git config --global user.email "hello@waog.net"
+          git config --global user.name "waog"
+
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         run: npx angular-cli-ghpages --dir=dist/heisig-translator-website/browser --no-silent
