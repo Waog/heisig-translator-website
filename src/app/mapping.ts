@@ -882,7 +882,7 @@ export const mapping: { [key: string]: string } = {
   赐: `grant (v.)`,
   尸: `corpse`,
   尼: `nun`,
-  呢: `ní	884	woolen cloth`,
+  呢: `woolen cloth`,
   泥: `mud`,
   屋: `habitation`,
   握: `grip (v.)`,
