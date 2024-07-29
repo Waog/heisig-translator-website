@@ -64,8 +64,6 @@ jobs:
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx angular-cli-ghpages --dir=dist/heisig-translator-website/browser --no-silent
-
-      # Uncomment the following line to deploy using personal access token if required
-      # env:
-      #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
