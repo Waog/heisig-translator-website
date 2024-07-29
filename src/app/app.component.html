@@ -3,6 +3,9 @@
   <label for="userInput">Enter text: </label>
   <input id="userInput" type="text" [(ngModel)]="userInput" />
 </div>
-<div>
-  <p>Mirrored Input: {{ modifiedInput }}</p>
+<div class="output">
+  <div class="character-group" *ngFor="let item of modifiedInput">
+    <div class="char">{{ item.char }}</div>
+    <div class="translation">{{ item.translation }}</div>
+  </div>
 </div>

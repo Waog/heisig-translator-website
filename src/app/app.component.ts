@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
@@ -6,7 +7,7 @@ import { mapping } from './mapping';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule],
+  imports: [RouterOutlet, FormsModule, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -14,18 +15,14 @@ export class AppComponent {
   userInput: string = '';
   mapping = mapping;
 
-  get modifiedInput(): string {
+  get modifiedInput(): { char: string; translation: string }[] {
     return this.transformInput(this.userInput);
   }
 
-  transformInput(input: string): string {
-    let result = input;
-    for (const key in this.mapping) {
-      if (this.mapping.hasOwnProperty(key)) {
-        const regex = new RegExp(key, 'g');
-        result = result.replace(regex, this.mapping[key] + `, `);
-      }
-    }
-    return result;
+  transformInput(input: string): { char: string; translation: string }[] {
+    return Array.from(input).map((char) => ({
+      char: char,
+      translation: this.mapping[char] || char,
+    }));
   }
 }

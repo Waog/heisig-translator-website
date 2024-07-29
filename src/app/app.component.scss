@@ -1,0 +1,28 @@
+/* app.component.css */
+.output {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  flex-wrap: wrap; /* Wrap long lines to the next row */
+}
+
+.character-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 5px;
+  max-width: 3em; /* Prevent translation line from growing beyond character width */
+}
+
+.char {
+  font-size: 3em; /* Larger font size for characters */
+  white-space: nowrap; /* Prevent character from breaking */
+}
+
+.translation {
+  font-size: 0.75em; /* Smaller font size for translations */
+  word-break: break-all; /* Allow breaking within words */
+  hyphens: auto; /* Enable hyphenation */
+  overflow-wrap: break-word; /* Break long words */
+  text-align: center; /* Center-align the translations */
+}
