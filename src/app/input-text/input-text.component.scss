@@ -1,5 +1,3 @@
-/* input-text.component.scss */
-
 .input-container {
   position: relative;
   width: 100%;
@@ -14,9 +12,8 @@ input[type="text"] {
   box-sizing: border-box;
 }
 
-.paste-button {
+button {
   position: absolute;
-  right: 40px; /* Platzierung des Paste-Buttons rechts */
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -26,23 +23,14 @@ input[type="text"] {
   color: #888;
 }
 
-.paste-button:hover {
+button:hover {
   color: #333;
+}
+
+.paste-button {
+  right: 40px; /* Platzierung des Paste-Buttons rechts */
 }
 
 .reset-button {
-  position: absolute;
   right: 10px; /* Platzierung des Reset-Buttons rechts */
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 1.2em;
-  cursor: pointer;
-  color: #888;
-  padding-left: 10px; /* Mehr Platz zwischen Button und Text */
-}
-
-.reset-button:hover {
-  color: #333;
 }
