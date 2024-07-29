@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import { InputTextComponent } from './input-text/input-text.component';
 import { AudioService } from './play-audio/audio.service';
 import { PlayAudioComponent } from './play-audio/play-audio.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
@@ -21,6 +22,7 @@ import { SingleCharTranslationComponent } from './single-char-translation/single
     SingleCharTranslationComponent,
     PlayAudioComponent,
     SentenceTranslationComponent,
+    InputTextComponent,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -29,7 +31,7 @@ import { SingleCharTranslationComponent } from './single-char-translation/single
 export class AppComponent {
   userInput: string = '';
 
-  resetInput(): void {
-    this.userInput = '';
+  onUserInputChange(newInput: string): void {
+    this.userInput = newInput;
   }
 }

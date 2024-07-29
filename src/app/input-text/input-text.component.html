@@ -1,0 +1,9 @@
+<div class="input-container">
+  <input
+    id="userInput"
+    type="text"
+    [(ngModel)]="userInput"
+    (input)="onUserInputChange()"
+  />
+  <button class="reset-button" (click)="resetInput()">&#x2715;</button>
+</div>

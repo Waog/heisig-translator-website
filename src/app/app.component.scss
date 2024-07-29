@@ -22,36 +22,6 @@ label {
   margin-bottom: 10px;
 }
 
-.input-container {
-  position: relative;
-  width: 100%;
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  font-size: 1.2em;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
-.reset-button {
-  position: absolute;
-  right: 40px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 1.2em;
-  cursor: pointer;
-  color: #888;
-}
-
-.reset-button:hover {
-  color: #333;
-}
-
 .feedback {
   margin-top: 10px;
   font-size: 1em;
