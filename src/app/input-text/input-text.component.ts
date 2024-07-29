@@ -22,4 +22,14 @@ export class InputTextComponent {
     this.userInput = '';
     this.onUserInputChange();
   }
+
+  async pasteFromClipboard(): Promise<void> {
+    try {
+      const text = await navigator.clipboard.readText();
+      this.userInput = text;
+      this.onUserInputChange();
+    } catch (err) {
+      console.error('Failed to read clipboard contents: ', err);
+    }
+  }
 }

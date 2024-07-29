@@ -7,16 +7,32 @@
 
 input[type="text"] {
   width: 100%;
-  padding: 10px 40px 10px 10px; /* Padding right für Platzierung des Buttons */
+  padding: 10px 70px 10px 10px; /* Padding right für Platzierung der Buttons */
   font-size: 1.2em;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
 }
 
+.paste-button {
+  position: absolute;
+  right: 40px; /* Platzierung des Paste-Buttons rechts */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  color: #888;
+}
+
+.paste-button:hover {
+  color: #333;
+}
+
 .reset-button {
   position: absolute;
-  right: 10px; /* Platzierung des Buttons rechts */
+  right: 10px; /* Platzierung des Reset-Buttons rechts */
   top: 50%;
   transform: translateY(-50%);
   background: none;

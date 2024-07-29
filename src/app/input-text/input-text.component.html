@@ -5,5 +5,6 @@
     [(ngModel)]="userInput"
     (input)="onUserInputChange()"
   />
+  <button class="paste-button" (click)="pasteFromClipboard()">📋</button>
   <button class="reset-button" (click)="resetInput()">&#x2715;</button>
 </div>
