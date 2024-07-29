@@ -83,6 +83,11 @@ input[type="text"] {
   color: #333;
 }
 
+.pinyin {
+  font-size: 1em;
+  color: #00796b;
+}
+
 .translation {
   font-size: 0.75em; /* Smaller font size for translations */
   word-break: break-all; /* Allow breaking within words */

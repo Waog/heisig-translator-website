@@ -18,7 +18,7 @@ export class AppComponent {
   userInput: string = '';
   mapping = mapping;
   translation: string = '';
-  pinyinTranslation: string = '';
+  pinyinTranslation: { char: string; pinyin: string }[] = [];
   isLoading: boolean = false;
   debounceInProgress: boolean = false;
 
@@ -46,7 +46,7 @@ export class AppComponent {
   resetInput(): void {
     this.userInput = '';
     this.translation = '';
-    this.pinyinTranslation = '';
+    this.pinyinTranslation = [];
     this.isLoading = false;
     this.debounceInProgress = false;
   }
@@ -74,7 +74,10 @@ export class AppComponent {
   }
 
   convertToPinyin(input: string): void {
-    this.pinyinTranslation = pinyin(input, { toneType: 'num' });
+    this.pinyinTranslation = Array.from(input).map((char) => ({
+      char: char,
+      pinyin: pinyin(char),
+    }));
   }
 
   onUserInputChange(): void {

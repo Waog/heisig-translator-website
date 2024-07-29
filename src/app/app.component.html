@@ -16,14 +16,11 @@
     <p *ngIf="isLoading">Translating...</p>
   </div>
 
-  <div class="output pinyin-output">
-    <p>{{ pinyinTranslation }}</p>
-  </div>
-
   <div class="output">
-    <div class="character-group" *ngFor="let item of modifiedInput">
+    <div class="character-group" *ngFor="let item of pinyinTranslation">
+      <div class="pinyin">{{ item.pinyin }}</div>
       <div class="char">{{ item.char }}</div>
-      <div class="translation">{{ item.translation }}</div>
+      <div class="translation">{{ mapping[item.char] || item.char }}</div>
     </div>
   </div>
 </div>
