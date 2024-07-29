@@ -2,8 +2,16 @@
 <div class="container">
   <label for="userInput">Enter text:</label>
   <div class="input-container">
-    <input id="userInput" type="text" [(ngModel)]="userInput" />
+    <input
+      id="userInput"
+      type="text"
+      [(ngModel)]="userInput"
+      (input)="onUserInputChange()"
+    />
     <button class="reset-button" (click)="resetInput()">&#x2715;</button>
+  </div>
+  <div class="output translation-output">
+    <p>{{ translation }}</p>
   </div>
   <div class="output">
     <div class="character-group" *ngFor="let item of modifiedInput">

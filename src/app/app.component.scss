@@ -1,4 +1,4 @@
-/* app.component.css */
+/* app.component.scss */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -84,4 +84,19 @@ input[type="text"] {
   overflow-wrap: break-word; /* Break long words */
   text-align: center; /* Center-align the translations */
   color: #666;
+}
+
+.translation-output {
+  margin-top: 20px;
+  padding: 5px 15px;
+  background-color: #e0f7fa;
+  border: 1px solid #b2ebf2;
+  border-radius: 10px;
+  font-size: 1.2em;
+  color: #00796b;
+}
+
+.translation-output > p {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
