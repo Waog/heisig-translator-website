@@ -24,11 +24,7 @@ describe('InputTextComponent', () => {
   it('should emit userInputChange on input change', () => {
     spyOn(component.userInputChange, 'emit');
 
-    const inputElement = fixture.debugElement.query(
-      By.css('input')
-    ).nativeElement;
-    inputElement.value = 'test';
-    inputElement.dispatchEvent(new Event('input'));
+    setInputValue('test');
 
     expect(component.userInputChange.emit).toHaveBeenCalledWith('test');
   });
@@ -40,10 +36,7 @@ describe('InputTextComponent', () => {
     component.userInput = 'initial value';
     fixture.detectChanges();
 
-    const resetButton = fixture.debugElement.query(
-      By.css('.reset-button')
-    ).nativeElement;
-    resetButton.click();
+    clickButton('.reset-button');
 
     expect(component.userInput).toBe('');
     expect(component.userInputChange.emit).toHaveBeenCalledWith('');
@@ -55,10 +48,7 @@ describe('InputTextComponent', () => {
       Promise.resolve('clipboard content')
     );
 
-    const pasteButton = fixture.debugElement.query(
-      By.css('.paste-button')
-    ).nativeElement;
-    pasteButton.click();
+    clickButton('.paste-button');
 
     await fixture.whenStable(); // Wait for promises to resolve
 
@@ -74,10 +64,7 @@ describe('InputTextComponent', () => {
     );
     spyOn(console, 'error');
 
-    const pasteButton = fixture.debugElement.query(
-      By.css('.paste-button')
-    ).nativeElement;
-    pasteButton.click();
+    clickButton('.paste-button');
 
     await fixture.whenStable(); // Wait for promises to resolve
 
@@ -86,4 +73,19 @@ describe('InputTextComponent', () => {
       'Clipboard error'
     );
   });
+
+  function setInputValue(value: string) {
+    const inputElement = fixture.debugElement.query(
+      By.css('input')
+    ).nativeElement;
+    inputElement.value = value;
+    inputElement.dispatchEvent(new Event('input'));
+  }
+
+  function clickButton(selector: string) {
+    const buttonElement = fixture.debugElement.query(
+      By.css(selector)
+    ).nativeElement;
+    buttonElement.click();
+  }
 });
