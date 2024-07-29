@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { Subject, debounceTime } from 'rxjs';
+import { AudioService } from './audio.service';
 import { mapping } from './mapping';
 import { PinyinService } from './pinyin.service';
 import { TranslationService } from './translation.service';
@@ -16,7 +17,7 @@ import { TranslationService } from './translation.service';
   imports: [RouterOutlet, FormsModule, CommonModule, HttpClientModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [TranslationService, PinyinService], // Ensure the services are provided here
+  providers: [TranslationService, PinyinService, AudioService], // Ensure the services are provided here
 })
 export class AppComponent {
   userInput: string = '';
@@ -31,7 +32,8 @@ export class AppComponent {
 
   constructor(
     private translationService: TranslationService,
-    private pinyinService: PinyinService
+    private pinyinService: PinyinService,
+    private audioService: AudioService
   ) {
     this.inputSubject.pipe(debounceTime(1000)).subscribe((input: any) => {
       this.debounceInProgress = false;
@@ -101,8 +103,6 @@ export class AppComponent {
   }
 
   playAudio(text: string, lang: string): void {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang;
-    speechSynthesis.speak(utterance);
+    this.audioService.playAudio(text, lang);
   }
 }
