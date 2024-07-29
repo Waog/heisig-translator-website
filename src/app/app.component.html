@@ -2,38 +2,19 @@
 <div class="container">
   <label for="userInput">Enter text:</label>
   <div class="input-container">
-    <input
-      id="userInput"
-      type="text"
-      [(ngModel)]="userInput"
-      (input)="onUserInputChange()"
-    />
+    <input id="userInput" type="text" [(ngModel)]="userInput" />
     <button class="reset-button" (click)="resetInput()">&#x2715;</button>
   </div>
 
-  <div class="output translation-output">
-    <p *ngIf="!isLoading">
-      {{ translation }}
-      <app-play-audio
-        *ngIf="!isLoading"
-        [text]="translation"
-        lang="en-US"
-      ></app-play-audio>
-    </p>
-    <p *ngIf="isLoading">Translating...</p>
-  </div>
+  <app-sentence-translation
+    [userInput]="userInput"
+    targetLang="en-US"
+  ></app-sentence-translation>
 
-  <div class="output translation-output">
-    <p *ngIf="!isLoading">
-      {{ germanTranslation }}
-      <app-play-audio
-        *ngIf="!isLoading"
-        [text]="germanTranslation"
-        lang="de-DE"
-      ></app-play-audio>
-    </p>
-    <p *ngIf="isLoading">Translating...</p>
-  </div>
+  <app-sentence-translation
+    [userInput]="userInput"
+    targetLang="de-DE"
+  ></app-sentence-translation>
 
   <app-single-char-translation
     [userInput]="userInput"

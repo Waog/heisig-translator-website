@@ -1,0 +1,22 @@
+/* sentence-translation.component.scss */
+
+.translation-output {
+  margin-top: 20px;
+  padding: 5px 15px;
+  background-color: #e0f7fa;
+  border: 1px solid #b2ebf2;
+  border-radius: 10px;
+  font-size: 1.2em;
+  color: #00796b;
+  min-height: 1.5em; /* Maintain space to prevent CLS */
+}
+
+.translation-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.translation-container > p {
+  margin: 0; /* Ensure no extra margin is added */
+}

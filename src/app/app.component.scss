@@ -57,38 +57,3 @@ input[type="text"] {
   font-size: 1em;
   color: #888;
 }
-
-.translation-output {
-  margin-top: 20px;
-  padding: 5px 15px;
-  background-color: #e0f7fa;
-  border: 1px solid #b2ebf2;
-  border-radius: 10px;
-  font-size: 1.2em;
-  color: #00796b;
-  min-height: 1.5em; /* Maintain space to prevent CLS */
-  display: flex; /* Ensure elements align properly */
-  align-items: center;
-}
-
-.translation-output > p {
-  margin: 0; /* Ensure no extra margin is added */
-  display: flex; /* Ensure elements align properly */
-  align-items: center;
-}
-
-.pinyin-output {
-  margin-top: 10px;
-  padding: 5px 15px;
-  background-color: #ffeb3b;
-  border: 1px solid #fbc02d;
-  border-radius: 10px;
-  font-size: 1.2em;
-  color: #795548;
-  min-height: 1.5em; /* Maintain space to prevent CLS */
-}
-
-.pinyin-output > p {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}

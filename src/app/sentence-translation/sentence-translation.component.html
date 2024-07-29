@@ -1,0 +1,11 @@
+<div class="translation-output">
+  <div class="translation-container">
+    <p *ngIf="!isLoading">{{ translation }}</p>
+    <app-play-audio
+      *ngIf="!isLoading"
+      [text]="translation"
+      [lang]="targetLang"
+    ></app-play-audio>
+  </div>
+  <p *ngIf="isLoading">Translating...</p>
+</div>
