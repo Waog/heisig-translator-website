@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { InputTextComponent } from './input-text/input-text.component';
 import { AudioService } from './play-audio/audio.service';
-import { PlayAudioComponent } from './play-audio/play-audio.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { TranslationService } from './sentence-translation/translation.service';
 import { PinyinService } from './single-char-translation/pinyin.service';
@@ -20,7 +19,6 @@ import { SingleCharTranslationComponent } from './single-char-translation/single
     CommonModule,
     HttpClientModule,
     SingleCharTranslationComponent,
-    PlayAudioComponent,
     SentenceTranslationComponent,
     InputTextComponent,
   ],
