@@ -1,5 +1,5 @@
 <div class="container">
-  <label for="userInput">Enter text:</label>
+  <label for="userInput">Enter Chinese Text:</label>
   <app-input-text
     (userInputChange)="onUserInputChange($event)"
   ></app-input-text>
@@ -8,12 +8,10 @@
     [userInput]="userInput"
     targetLang="en-US"
   ></app-sentence-translation>
-
   <app-sentence-translation
     [userInput]="userInput"
     targetLang="de-DE"
   ></app-sentence-translation>
-
   <app-single-char-translation
     [userInput]="userInput"
   ></app-single-char-translation>
