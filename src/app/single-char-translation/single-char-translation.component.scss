@@ -1,17 +1,5 @@
 /* single-char-translation.component.scss */
 
-.output {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #fafafa;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  align-items: center; /* Center items vertically */
-}
-
 .character-group {
   display: flex;
   flex-direction: column;
@@ -38,4 +26,10 @@
   overflow-wrap: break-word; /* Break long words */
   text-align: center; /* Center-align the translations */
   color: #666;
+}
+
+.character-group-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Add some space between groups */
 }

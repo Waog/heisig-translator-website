@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Subject, debounceTime } from 'rxjs';
-import { PlayAudioComponent } from '../play-audio/play-audio.component';
+import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 import { TranslationService } from './translation.service';
 
 @Component({
   selector: 'app-sentence-translation',
   standalone: true,
-  imports: [CommonModule, PlayAudioComponent],
+  imports: [CommonModule, TranslationAndAudioContainerComponent],
   templateUrl: './sentence-translation.component.html',
   styleUrls: ['./sentence-translation.component.scss'],
 })
@@ -52,7 +52,7 @@ export class SentenceTranslationComponent implements OnChanges {
           this.translation = 'Translation error';
         }
       },
-      (error) => {
+      (error: any) => {
         this.isLoading = false;
         this.translation = 'Translation error';
       }
