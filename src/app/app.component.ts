@@ -84,4 +84,10 @@ export class AppComponent {
     this.debounceInProgress = true;
     this.inputSubject.next(this.userInput);
   }
+
+  playAudio(): void {
+    const utterance = new SpeechSynthesisUtterance(this.userInput);
+    utterance.lang = 'zh-CN';
+    speechSynthesis.speak(utterance);
+  }
 }

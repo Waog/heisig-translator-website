@@ -38,7 +38,7 @@ input[type="text"] {
 
 .reset-button {
   position: absolute;
-  right: 10px;
+  right: 40px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -48,7 +48,17 @@ input[type="text"] {
   color: #888;
 }
 
-.reset-button:hover {
+.play-button {
+  margin-left: 10px;
+  font-size: 1.5em;
+  color: #00796b;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.reset-button:hover,
+.play-button:hover {
   color: #333;
 }
 
