@@ -50,7 +50,7 @@ jobs:
 
       # Build the project
       - name: Build project
-        run: ng build --prod --base-href "/heisig-translator-website/"
+        run: ng build --configuration production --base-href "/heisig-translator-website/"
 
       # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
