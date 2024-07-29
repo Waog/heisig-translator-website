@@ -4,5 +4,5 @@
 >
   <p *ngIf="!isLoading && !debounceInProgress">{{ translation }}</p>
   <p *ngIf="debounceInProgress">Waiting until input stops...</p>
+  <p *ngIf="isLoading">Translating...</p>
 </app-translation-and-audio-container>
-<p *ngIf="isLoading">Translating...</p>

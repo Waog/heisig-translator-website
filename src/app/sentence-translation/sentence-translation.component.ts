@@ -21,7 +21,7 @@ export class SentenceTranslationComponent implements OnChanges {
   private inputSubject: Subject<string> = new Subject();
 
   constructor(private translationService: TranslationService) {
-    this.inputSubject.pipe(debounceTime(1000)).subscribe((input: any) => {
+    this.inputSubject.pipe(debounceTime(1000)).subscribe((input: string) => {
       if (input && input.trim().length > 0) {
         this.debounceInProgress = false;
         this.translateText(input);
