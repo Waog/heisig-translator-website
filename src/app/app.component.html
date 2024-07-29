@@ -1,7 +1,10 @@
 <!-- app.component.html -->
 <div class="container">
   <label for="userInput">Enter text:</label>
-  <input id="userInput" type="text" [(ngModel)]="userInput" />
+  <div class="input-container">
+    <input id="userInput" type="text" [(ngModel)]="userInput" />
+    <button class="reset-button" (click)="resetInput()">&#x2715;</button>
+  </div>
   <div class="output">
     <div class="character-group" *ngFor="let item of modifiedInput">
       <div class="char">{{ item.char }}</div>

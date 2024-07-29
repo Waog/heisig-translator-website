@@ -25,4 +25,8 @@ export class AppComponent {
       translation: this.mapping[char] || char,
     }));
   }
+
+  resetInput(): void {
+    this.userInput = '';
+  }
 }
