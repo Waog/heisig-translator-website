@@ -1,13 +1,4 @@
 <div class="container">
-  <div style="width: 80%; overflow-wrap: anywhere; margin: 2%">
-    Initial URL:<br />
-    {{ initialUrl }}
-  </div>
-  <div style="width: 80%; overflow-wrap: anywhere; margin: 2%">
-    Initial URL Decoded:<br />
-    {{ initialUrlDecoded }}
-  </div>
-
   <label for="userInput">Enter Chinese Text:</label>
   <app-input-text
     (userInputChange)="onUserInputChange($event)"

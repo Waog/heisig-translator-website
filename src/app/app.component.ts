@@ -28,17 +28,6 @@ import { SingleCharTranslationComponent } from './single-char-translation/single
 })
 export class AppComponent {
   userInput: string = '';
-  initialUrl: any = window.location.href;
-  initialUrlDecoded: any = window.location.href.replace(
-    /(%[0-9A-F]{2})+/gi,
-    (match) => {
-      try {
-        return decodeURIComponent(match);
-      } catch {
-        return match;
-      }
-    }
-  );
 
   onUserInputChange(newInput: string): void {
     this.userInput = newInput;
