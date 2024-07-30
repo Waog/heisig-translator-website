@@ -48,6 +48,16 @@ ng e2e
 
 Note: You may need to add a package that implements end-to-end testing capabilities.
 
+### Updating the Dictionary
+
+To update the CEDICT dictionary used by the application, run the following command:
+
+```bash
+npm run update-dictionary
+```
+
+This will download the latest CEDICT file, extract it, parse it, and update the `cedict.json` file in the `src/assets/` directory.
+
 ## Additional Help
 
 For more information on Angular CLI, use `ng help` or visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli).

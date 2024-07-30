@@ -6,6 +6,7 @@ import { RouterOutlet } from '@angular/router';
 import { InputTextComponent } from './input-text/input-text.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { TranslationService } from './sentence-translation/translation.service';
+import { DictionaryService } from './single-char-translation/dictionary.service';
 import { PinyinService } from './single-char-translation/pinyin.service';
 import { SingleCharTranslationComponent } from './single-char-translation/single-char-translation.component';
 
@@ -23,7 +24,7 @@ import { SingleCharTranslationComponent } from './single-char-translation/single
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [TranslationService, PinyinService],
+  providers: [TranslationService, PinyinService, DictionaryService],
 })
 export class AppComponent {
   userInput: string = '';

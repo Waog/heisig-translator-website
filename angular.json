@@ -15,8 +15,8 @@
             "production": {
               "budgets": [
                 {
-                  "maximumError": "1MB",
-                  "maximumWarning": "500kB",
+                  "maximumError": "30MB",
+                  "maximumWarning": "10MB",
                   "type": "initial"
                 },
                 {
@@ -40,7 +40,9 @@
               "src/manifest.json",
               "src/service-worker.js"
             ],
+            "baseHref": "/heisig-translator-website/",
             "browser": "src/main.ts",
+            "deployUrl": "/heisig-translator-website/",
             "index": "src/index.html",
             "inlineStyleLanguage": "scss",
             "outputPath": "dist/heisig-translator-website",

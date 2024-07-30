@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "update-dictionary": "node scripts/update-dictionary.js"
   },
   "private": true,
   "dependencies": {
@@ -18,9 +19,13 @@
     "@angular/platform-browser": "^18.1.0",
     "@angular/platform-browser-dynamic": "^18.1.0",
     "@angular/router": "^18.1.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
     "pinyin-pro": "^3.24.0",
     "rxjs": "~7.8.0",
+    "segmentit": "^2.0.3",
     "tslib": "^2.3.0",
+    "unzipper": "^0.12.2",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {

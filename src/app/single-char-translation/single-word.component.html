@@ -1,0 +1,16 @@
+<div
+  class="word-container"
+  [ngStyle]="{ 'min-width': translation.length * 8 + 'px' }"
+>
+  <span
+    class="word-label"
+    [ngClass]="{ 'api-translation': isApiTranslation }"
+    >{{ translation }}</span
+  >
+  <div class="character-group">
+    <app-single-character
+      *ngFor="let hanziCharacter of hanziCharacters"
+      [hanzi]="hanziCharacter"
+    ></app-single-character>
+  </div>
+</div>

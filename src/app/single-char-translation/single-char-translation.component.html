@@ -1,8 +1,8 @@
 <app-translation-and-audio-container [text]="userInput" [language]="'zh-CN'">
-  <div class="character-group-container">
-    <app-single-character
-      *ngFor="let hanziChar of hanziSentence"
-      [hanzi]="hanziChar"
-    ></app-single-character>
+  <div class="word-group-container">
+    <app-single-word
+      *ngFor="let hanziWord of hanziWords"
+      [hanziWord]="hanziWord"
+    ></app-single-word>
   </div>
 </app-translation-and-audio-container>
