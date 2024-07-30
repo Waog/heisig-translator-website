@@ -1,88 +1,82 @@
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { AudioService } from '../play-audio/audio.service';
-import { PlayAudioComponent } from '../play-audio/play-audio.component';
+import { AudioService } from './audio.service';
 import { TranslationAndAudioContainerComponent } from './translation-and-audio-container.component';
-
-class MockAudioService {
-  playAudio(text: string, lang: string): void {
-    // Mock implementation
-  }
-}
 
 describe('TranslationAndAudioContainerComponent', () => {
   let component: TranslationAndAudioContainerComponent;
   let fixture: ComponentFixture<TranslationAndAudioContainerComponent>;
-  let audioService: MockAudioService;
+  let audioService: AudioService;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TranslationAndAudioContainerComponent, PlayAudioComponent],
-      providers: [{ provide: AudioService, useClass: MockAudioService }],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TranslationAndAudioContainerComponent);
-    component = fixture.componentInstance;
-    audioService = TestBed.inject(AudioService) as unknown as MockAudioService;
-    fixture.detectChanges();
+    await configureTestingModule();
+    createComponent();
+    spyOn(window.speechSynthesis, 'speak'); // Mocking speechSynthesis
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should pass text and language to PlayAudioComponent', () => {
-    component.text = 'Hello';
-    component.language = 'en-US';
-    fixture.detectChanges();
+  it('should call speechSynthesis.speak with correct text and language', async () => {
+    setComponentInputs('Hello', 'en-US');
+    clickContainerElement();
+    await fixture.whenStable(); // Ensure all asynchronous operations complete
 
-    const playAudioComponent = getPlayAudioComponent();
-    expect(playAudioComponent.text).toBe('Hello');
-    expect(playAudioComponent.lang).toBe('en-US');
+    expect(window.speechSynthesis.speak).toHaveBeenCalled();
+    const utterance = (
+      window.speechSynthesis.speak as jasmine.Spy
+    ).calls.mostRecent().args[0] as SpeechSynthesisUtterance;
+    expect(utterance.text).toBe('Hello');
+    expect(utterance.lang).toBe('en-US');
   });
 
   it('should display content inside the container', () => {
-    const testContent = 'Test Content';
-    component.text = 'Hello';
-    component.language = 'en-US';
-    fixture.detectChanges();
-
-    const contentContainer = fixture.debugElement.query(By.css('.content'));
-    contentContainer.nativeElement.innerHTML = testContent;
-    fixture.detectChanges();
-
-    expect(contentContainer.nativeElement.textContent).toContain(testContent);
+    setComponentInputs('Hello', 'en-US');
+    setContent('Test Content');
+    expectContentToContain('Test Content');
   });
 
-  it('should call playAudio on button click', fakeAsync(() => {
-    spyOn(audioService, 'playAudio');
-
-    component.text = 'Hello';
-    component.language = 'en-US';
-    fixture.detectChanges();
-
-    clickPlayButton();
-
-    tick(); // Ensure all asynchronous actions complete
-    expect(audioService.playAudio).toHaveBeenCalledWith('Hello', 'en-US');
-  }));
-
-  function getPlayAudioComponent(): PlayAudioComponent {
-    const playAudioDebugElement = fixture.debugElement.query(
-      By.directive(PlayAudioComponent)
-    );
-    return playAudioDebugElement.componentInstance as PlayAudioComponent;
+  // Helper methods
+  async function configureTestingModule() {
+    await TestBed.configureTestingModule({
+      imports: [TranslationAndAudioContainerComponent], // Importing standalone component
+      providers: [AudioService], // Use the original service
+    }).compileComponents();
   }
 
-  function clickPlayButton() {
-    const playButton = fixture.debugElement.query(
-      By.css('.play-button')
+  function createComponent() {
+    fixture = TestBed.createComponent(TranslationAndAudioContainerComponent);
+    component = fixture.componentInstance;
+    audioService = TestBed.inject(AudioService);
+    fixture.detectChanges();
+  }
+
+  function setComponentInputs(text: string, language: string) {
+    component.text = text;
+    component.language = language;
+    fixture.detectChanges();
+  }
+
+  function clickContainerElement() {
+    const containerElement = fixture.debugElement.query(
+      By.css('.translation-audio-container')
     ).nativeElement;
-    playButton.click();
+    containerElement.click();
+  }
+
+  function setContent(content: string) {
+    const contentContainer = fixture.debugElement.query(
+      By.css('.content')
+    ).nativeElement;
+    contentContainer.innerHTML = content;
+    fixture.detectChanges();
+  }
+
+  function expectContentToContain(content: string) {
+    const contentContainer = fixture.debugElement.query(
+      By.css('.content')
+    ).nativeElement;
+    expect(contentContainer.textContent).toContain(content);
   }
 });

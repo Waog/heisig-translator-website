@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { InputTextComponent } from './input-text/input-text.component';
-import { AudioService } from './play-audio/audio.service';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { TranslationService } from './sentence-translation/translation.service';
 import { PinyinService } from './single-char-translation/pinyin.service';
@@ -24,7 +23,7 @@ import { SingleCharTranslationComponent } from './single-char-translation/single
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [TranslationService, PinyinService, AudioService],
+  providers: [TranslationService, PinyinService],
 })
 export class AppComponent {
   userInput: string = '';
