@@ -86,6 +86,11 @@ export class DictionaryService {
     // If the translation starts with "to ", remove it
     englishArray = englishArray.map((e) => e.replace(/^to /g, '').trim());
 
+    // If the translation contains a comma, replace everything after the comma by `...`
+    englishArray = englishArray.map((e) =>
+      e.includes(`,`) ? e.split(',')[0] + `, ...` : e
+    );
+
     // remove any entries which contain chinese characters
     const chineseCharacterRegex = /[\u4e00-\u9fff]/;
     englishArray = englishArray.filter(
