@@ -75,35 +75,30 @@ export class DictionaryService {
   }
 
   private shortenTranslation(englishArray: string[]): string | undefined {
-    if (englishArray.length === 0) {
-      return undefined;
-    }
+    // Split each English translation by semicolons
+    englishArray = englishArray.map((e) => e.split(';')).flat();
 
+    // Remove any text within parentheses, braces, or brackets
+    englishArray = englishArray.map((e) =>
+      e.replace(/\(.*?\)|\[.*?\]|\{.*?\}/g, '').trim()
+    );
+
+    // If the translation starts with "to ", remove it
+    englishArray = englishArray.map((e) => e.replace(/^to /g, '').trim());
+
+    // remove any entries which contain chinese characters
     const chineseCharacterRegex = /[\u4e00-\u9fff]/;
-
-    // Find the first translation without Chinese characters
-    let translation = englishArray.find(
+    englishArray = englishArray.filter(
       (entry) => !chineseCharacterRegex.test(entry)
     );
 
+    // remove any empty strings
+    englishArray = englishArray.filter((entry) => entry.length > 0);
+
     // If no valid translation was found, fallback to the first entry
-    if (!translation) {
-      translation = englishArray[0];
+    if (englishArray.length === 0) {
+      return undefined;
     }
-
-    // If there is a semicolon, split and take the first part
-    if (translation.includes(';')) {
-      translation = translation.split(';')[0];
-    }
-
-    // Remove any text within parentheses, braces, or brackets
-    translation = translation.replace(/\(.*?\)|\[.*?\]|\{.*?\}/g, '').trim();
-
-    // If the translation starts with "to ", remove it
-    if (translation.startsWith('to ')) {
-      translation = translation.substring(3).trim();
-    }
-
-    return translation;
+    return englishArray[0];
   }
 }
