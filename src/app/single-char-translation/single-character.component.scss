@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 5px;
+  max-width: 3em;
+}
+
+.hanzi {
+  font-size: 2em; /* Larger font size for characters */
+  white-space: nowrap; /* Prevent character from breaking */
+  color: #333;
+}
+
+.pinyin {
+  font-size: 1em;
+  color: #00796b;
+}
+
+.heisig {
+  font-size: 0.75em; /* Smaller font size for translations */
+  word-break: break-all; /* Allow breaking within words */
+  hyphens: auto; /* Enable hyphenation */
+  overflow-wrap: break-word; /* Break long words */
+  text-align: center; /* Center-align the translations */
+  color: #666;
+}
