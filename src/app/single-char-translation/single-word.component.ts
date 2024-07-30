@@ -4,6 +4,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslationService } from '../sentence-translation/translation.service';
 import { SingleCharacterComponent } from '../single-char-translation/single-character.component';
 import { DictionaryService } from './dictionary.service';
+import { heisigMapping } from './heisig-mapping';
 
 @Component({
   selector: 'app-single-word',
@@ -34,6 +35,12 @@ export class SingleWordComponent implements OnChanges {
   translateWord(): void {
     if (!this.containsChineseCharacters(this.hanziWord)) {
       this.translation = this.hanziWord;
+      this.isApiTranslation = false;
+      return;
+    }
+
+    if (this.hanziWord.length === 1 && heisigMapping[this.hanziWord]) {
+      this.translation = heisigMapping[this.hanziWord];
       this.isApiTranslation = false;
       return;
     }

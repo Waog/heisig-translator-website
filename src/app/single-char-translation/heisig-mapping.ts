@@ -1,4 +1,4 @@
-export const mapping: { [key: string]: string } = {
+export const heisigMapping: { [key: string]: string } = {
   一: `one`,
   二: `two`,
   三: `three`,

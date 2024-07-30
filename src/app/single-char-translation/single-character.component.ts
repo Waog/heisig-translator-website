@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { pinyin } from 'pinyin-pro';
-import { mapping } from '../mapping';
+import { heisigMapping } from './heisig-mapping';
 
 @Component({
   selector: 'app-single-character',
@@ -19,7 +19,7 @@ export class SingleCharacterComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['hanzi']) {
       this.pinyin = pinyin(this.hanzi);
-      this.heisig = mapping[this.hanzi] || this.hanzi;
+      this.heisig = heisigMapping[this.hanzi] || this.hanzi;
       this.isChinese = this.isChineseCharacter(this.hanzi);
     }
   }
