@@ -11,11 +11,11 @@
   ],
   "name": "Heisig Translator",
   "share_target": {
-    "action": "/heisig-translator-website/share",
+    "action": "/heisig-translator-website/",
     "enctype": "application/x-www-form-urlencoded",
     "method": "GET",
     "params": {
-      "text": "text",
+      "text": "input",
       "title": "title",
       "url": "url"
     }
