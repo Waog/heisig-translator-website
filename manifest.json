@@ -11,7 +11,7 @@
   ],
   "name": "Heisig Translator",
   "share_target": {
-    "action": "/share",
+    "action": "/heisig-translator-website/share",
     "enctype": "application/x-www-form-urlencoded",
     "method": "GET",
     "params": {
@@ -21,5 +21,5 @@
     }
   },
   "short_name": "Heisig",
-  "start_url": "/"
+  "start_url": "/heisig-translator-website/"
 }
