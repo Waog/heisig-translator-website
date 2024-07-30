@@ -28,3 +28,27 @@
   text-align: center; /* Center-align the translations */
   color: #666;
 }
+
+/* Media query for narrow screens */
+@media (max-width: 600px) {
+  .container {
+    max-width: 2.5em;
+  }
+
+  .chinese {
+    margin-left: 0.075em;
+    margin-right: 0.075em;
+  }
+
+  .hanzi {
+    font-size: 1.75em;
+  }
+
+  .pinyin {
+    font-size: 0.875em;
+  }
+
+  .heisig {
+    font-size: 0.65em;
+  }
+}
