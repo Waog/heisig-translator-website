@@ -1,6 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { of } from 'rxjs';
 import { AppComponent } from './app.component';
 import { InputTextComponent } from './input-text/input-text.component';
 import { AudioService } from './play-audio/audio.service';
@@ -15,8 +17,22 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent, HttpClientTestingModule],
-      providers: [TranslationService, PinyinService, AudioService],
+      imports: [
+        AppComponent,
+        HttpClientTestingModule,
+        RouterModule.forRoot([]),
+      ],
+      providers: [
+        TranslationService,
+        PinyinService,
+        AudioService,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams: of({}),
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);

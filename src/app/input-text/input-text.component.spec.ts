@@ -1,15 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { Subject } from 'rxjs';
 import { InputTextComponent } from './input-text.component';
 
 describe('InputTextComponent', () => {
   let component: InputTextComponent;
   let fixture: ComponentFixture<InputTextComponent>;
+  let queryParamsSubject: Subject<any>;
 
   beforeEach(async () => {
+    queryParamsSubject = new Subject();
+
     await TestBed.configureTestingModule({
-      imports: [FormsModule, InputTextComponent],
+      imports: [FormsModule, InputTextComponent, RouterModule.forRoot([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams: queryParamsSubject.asObservable(),
+          },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(InputTextComponent);
@@ -72,6 +85,16 @@ describe('InputTextComponent', () => {
       'Failed to read clipboard contents: ',
       'Clipboard error'
     );
+  });
+
+  it('should initialize input field with value from URL parameter', async () => {
+    spyOn(component.userInputChange, 'emit');
+
+    queryParamsSubject.next({ input: 'test-input' });
+    fixture.detectChanges();
+
+    expect(component.userInput).toBe('test-input');
+    expect(component.userInputChange.emit).toHaveBeenCalledWith('test-input');
   });
 
   function setInputValue(value: string) {

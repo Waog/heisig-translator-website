@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-input-text',
@@ -9,10 +10,18 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './input-text.component.html',
   styleUrls: ['./input-text.component.scss'],
 })
-export class InputTextComponent {
+export class InputTextComponent implements OnInit {
   @Output() userInputChange = new EventEmitter<string>();
-
   userInput: string = '';
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      this.userInput = params['input'] || '';
+      this.onUserInputChange();
+    });
+  }
 
   onUserInputChange(): void {
     this.userInputChange.emit(this.userInput);
