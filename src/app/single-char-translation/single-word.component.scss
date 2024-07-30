@@ -35,3 +35,10 @@
   align-items: flex-start; /* Align characters at the top */
   width: 100%; /* Ensure the group takes full width */
 }
+
+@media (max-width: 600px) {
+  .word-container {
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+  }
+}

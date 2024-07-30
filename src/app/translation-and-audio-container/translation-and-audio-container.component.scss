@@ -17,7 +17,6 @@
 
 .content {
   flex-grow: 1;
-  margin-right: 10px;
 }
 
 .audio-circle {
@@ -36,4 +35,12 @@
 
 .audio-icon {
   font-size: 0.8em;
+}
+
+/* Media query for narrow screens */
+@media (max-width: 600px) {
+  .translation-audio-container {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
 }
