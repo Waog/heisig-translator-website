@@ -2,13 +2,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 5px;
   max-width: 3em;
+}
+
+.chinese {
+  margin-left: 0.1em;
+  margin-right: 0.1em;
 }
 
 .hanzi {
   font-size: 2em; /* Larger font size for characters */
-  white-space: nowrap; /* Prevent character from breaking */
   color: #333;
 }
 
