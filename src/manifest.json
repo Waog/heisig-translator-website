@@ -1,0 +1,25 @@
+{
+  "background_color": "#ffffff",
+  "description": "A translator using Heisig method",
+  "display": "standalone",
+  "icons": [
+    {
+      "sizes": "192x192",
+      "src": "assets/icons/icon-192x192.png",
+      "type": "image/png"
+    }
+  ],
+  "name": "Heisig Translator",
+  "share_target": {
+    "action": "/heisig-translator-website/",
+    "enctype": "application/x-www-form-urlencoded",
+    "method": "GET",
+    "params": {
+      "text": "input",
+      "title": "title",
+      "url": "url"
+    }
+  },
+  "short_name": "Heisig",
+  "start_url": "/heisig-translator-website/"
+}

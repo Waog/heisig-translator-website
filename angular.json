@@ -34,7 +34,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.json",
+              "src/service-worker.js"
             ],
             "browser": "src/main.ts",
             "index": "src/index.html",
@@ -71,7 +75,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.json",
+              "src/service-worker.js"
             ],
             "inlineStyleLanguage": "scss",
             "polyfills": ["zone.js", "zone.js/testing"],
