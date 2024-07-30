@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { UrlParamService } from './url-param.service';
 
 @Component({
   selector: 'app-input-text',
@@ -14,11 +14,11 @@ export class InputTextComponent implements OnInit {
   @Output() userInputChange = new EventEmitter<string>();
   userInput: string = '';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private urlParamService: UrlParamService) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.userInput = params['input'] || '';
+    this.urlParamService.getFilteredInput().subscribe((input) => {
+      this.userInput = input;
       this.onUserInputChange();
     });
   }
@@ -35,7 +35,7 @@ export class InputTextComponent implements OnInit {
   async pasteFromClipboard(): Promise<void> {
     try {
       const text = await navigator.clipboard.readText();
-      this.userInput = text;
+      this.userInput = this.urlParamService.cleanInput(text);
       this.onUserInputChange();
     } catch (err) {
       console.error('Failed to read clipboard contents: ', err);

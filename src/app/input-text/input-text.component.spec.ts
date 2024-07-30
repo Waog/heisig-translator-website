@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
 import { InputTextComponent } from './input-text.component';
+import { UrlParamService } from './url-param.service';
 
 describe('InputTextComponent', () => {
   let component: InputTextComponent;
@@ -16,6 +17,7 @@ describe('InputTextComponent', () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule, InputTextComponent, RouterModule.forRoot([])],
       providers: [
+        UrlParamService,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -45,7 +47,6 @@ describe('InputTextComponent', () => {
   it('should reset input and emit empty string on reset button click', () => {
     spyOn(component.userInputChange, 'emit');
 
-    // Fill the input field beforehand
     component.userInput = 'initial value';
     fixture.detectChanges();
 
@@ -63,7 +64,7 @@ describe('InputTextComponent', () => {
 
     clickButton('.paste-button');
 
-    await fixture.whenStable(); // Wait for promises to resolve
+    await fixture.whenStable();
 
     expect(component.userInput).toBe('clipboard content');
     expect(component.userInputChange.emit).toHaveBeenCalledWith(
@@ -79,7 +80,7 @@ describe('InputTextComponent', () => {
 
     clickButton('.paste-button');
 
-    await fixture.whenStable(); // Wait for promises to resolve
+    await fixture.whenStable();
 
     expect(console.error).toHaveBeenCalledWith(
       'Failed to read clipboard contents: ',
@@ -87,14 +88,43 @@ describe('InputTextComponent', () => {
     );
   });
 
-  it('should initialize input field with value from URL parameter', async () => {
+  it('should initialize input field with empty string if no URL parameter', (done: DoneFn) => {
     spyOn(component.userInputChange, 'emit');
 
-    queryParamsSubject.next({ input: 'test-input' });
+    queryParamsSubject.next({});
     fixture.detectChanges();
 
-    expect(component.userInput).toBe('test-input');
-    expect(component.userInputChange.emit).toHaveBeenCalledWith('test-input');
+    fixture.whenStable().then(() => {
+      expect(component.userInput).toBe('');
+      expect(component.userInputChange.emit).toHaveBeenCalledWith('');
+      done();
+    });
+  });
+
+  it('should initialize input field with simple input from URL parameter', (done: DoneFn) => {
+    spyOn(component.userInputChange, 'emit');
+
+    queryParamsSubject.next({ input: '你好' });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(component.userInput).toBe('你好');
+      expect(component.userInputChange.emit).toHaveBeenCalledWith('你好');
+      done();
+    });
+  });
+
+  it('should initialize input field with filtered input from Chrome mobile URL parameter', (done: DoneFn) => {
+    spyOn(component.userInputChange, 'emit');
+
+    queryParamsSubject.next({ input: '"你好" https://example.com' });
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(component.userInput).toBe('你好');
+      expect(component.userInputChange.emit).toHaveBeenCalledWith('你好');
+      done();
+    });
   });
 
   function setInputValue(value: string) {
