@@ -1,0 +1,41 @@
+ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0; /* Remove default margin */
+}
+
+ul ul {
+  list-style: disc; /* Keep the same bullet style for nested lists */
+  padding-left: 0; /* Align nested lists with the parent list */
+  margin: 0; /* Remove default margin */
+}
+
+li {
+  margin-bottom: 0; /* Remove the margin between list items */
+  padding-bottom: 0; /* Remove the padding between list items */
+  position: relative;
+}
+
+li > ul > li {
+  margin-bottom: 0; /* Remove the margin between nested list items */
+}
+
+strong {
+  display: block;
+  margin-top: 0.5em;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.5em;
+  font-size: 0.9em; /* Slightly reduce the font size */
+  vertical-align: middle; /* Align button vertically in the middle */
+  line-height: 1; /* Ensure button does not increase line height */
+  padding: 0; /* Remove padding */
+}
+
+button:hover {
+  color: #00796b;
+}

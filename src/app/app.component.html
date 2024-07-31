@@ -14,5 +14,11 @@
   ></app-sentence-translation>
   <app-single-char-translation
     [userInput]="userInput"
+    (wordSelected)="onWordSelected($event)"
+    [selectedWord]="selectedWord"
   ></app-single-char-translation>
+  <app-word-details
+    *ngIf="selectedWord"
+    [word]="selectedWord"
+  ></app-word-details>
 </div>

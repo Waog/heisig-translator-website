@@ -1,0 +1,28 @@
+<app-translation-and-audio-container [text]="word" [language]="'zh-CN'">
+  <h1>{{ simpleTranslation }} - {{ word }} - {{ pinyin }}</h1>
+
+  <h2>Translations:</h2>
+  <ul>
+    <li *ngIf="onlineTranslation">
+      <em>{{ onlineTranslation }}</em>
+      <button (click)="playAudio($event, onlineTranslation)">🔊</button>
+    </li>
+  </ul>
+  <ng-container *ngFor="let entry of allTranslations">
+    <strong *ngIf="displayPinyin">{{ entry.pinyin }}</strong>
+    <ul>
+      <li *ngFor="let eng of entry.english">
+        {{ eng }}
+        <button (click)="playAudio($event, eng)">🔊</button>
+      </li>
+    </ul>
+  </ng-container>
+
+  <h2>Heisig:</h2>
+  <ul>
+    <li *ngFor="let detail of heisigDetails">
+      {{ detail.hanzi }} - {{ detail.heisig }}
+      <button (click)="playAudio($event, detail.heisig)">🔊</button>
+    </li>
+  </ul>
+</app-translation-and-audio-container>

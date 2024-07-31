@@ -13,4 +13,8 @@ export class PinyinService {
       pinyin: pinyin(char),
     }));
   }
+
+  convertToPinyinWithNumbers(text: string): string {
+    return pinyin(text, { toneType: 'num' });
+  }
 }

@@ -1,6 +1,8 @@
 <div
   class="word-container"
+  [ngClass]="{ selected: isSelected }"
   [ngStyle]="{ 'min-width': translation.length * 8 + 'px' }"
+  (click)="onWordClick($event)"
 >
   <span
     class="word-label"

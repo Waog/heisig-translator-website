@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { TranslationService } from '../sentence-translation/translation.service';
 import { SingleCharacterComponent } from '../single-char-translation/single-character.component';
 import { DictionaryService } from './dictionary.service';
@@ -16,6 +23,8 @@ import { heisigMapping } from './heisig-mapping';
 })
 export class SingleWordComponent implements OnChanges {
   @Input() hanziWord: string = '';
+  @Input() isSelected: boolean = false;
+  @Output() wordClicked: EventEmitter<string> = new EventEmitter<string>();
   hanziCharacters: string[] = [];
   translation: string = '';
   isApiTranslation: boolean = false;
@@ -73,5 +82,10 @@ export class SingleWordComponent implements OnChanges {
   containsChineseCharacters(text: string): boolean {
     const chineseCharacterRegex = /[\u4e00-\u9fff]/;
     return chineseCharacterRegex.test(text);
+  }
+
+  onWordClick(event: Event): void {
+    event.stopPropagation();
+    this.wordClicked.emit(this.hanziWord);
   }
 }

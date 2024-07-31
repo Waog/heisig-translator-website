@@ -1,39 +1,45 @@
 .word-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center horizontally */
+  align-items: center;
   margin: 0.5em 0.2em;
   padding: 0.5em;
   position: relative;
-  border-top: 1px solid #00796b; /* Stärkere Farbe für die Border */
-  border-radius: 5px; /* Abgerundete Ecken */
-  background-color: #e0f7fa; /* Hintergrundfarbe wie beim Container */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Schatten um die gesamte Komponente */
+  border-top: 1px solid #00796b;
+  border-radius: 5px;
+  background-color: #e0f7fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer; /* Add cursor pointer */
+}
+
+.word-container.selected {
+  background-color: #c5eae8; /* Intermediate highlight color */
+  border-color: #00796b;
 }
 
 .word-label {
   position: absolute;
-  top: -0.75em; /* Adjust the position as needed */
+  top: -0.75em;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #e0f7fa; /* Hintergrundfarbe wie beim Container */
-  padding: 0 0.2em; /* Padding to add some spacing around the text */
-  font-size: 0.75em; /* Smaller font size for the label */
-  color: #00796b; /* Textfarbe passend zum Rest der App */
-  border-radius: 3px; /* Leicht abgerundete Ecken */
-  white-space: nowrap; /* Ensure the translation stays on one line */
+  background-color: #e0f7fa;
+  padding: 0 0.2em;
+  font-size: 0.75em;
+  color: #00796b;
+  border-radius: 3px;
+  white-space: nowrap;
 }
 
 .api-translation {
-  font-style: italic; /* Make API translations italic */
+  font-style: italic;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .character-group {
   display: flex;
-  justify-content: center; /* Center characters horizontally */
-  align-items: flex-start; /* Align characters at the top */
-  width: 100%; /* Ensure the group takes full width */
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
 }
 
 @media (max-width: 600px) {

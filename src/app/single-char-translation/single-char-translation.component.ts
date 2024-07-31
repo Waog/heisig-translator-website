@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 import { SingleWordComponent } from './single-word.component';
 
@@ -19,6 +26,8 @@ import { Segment, useDefault } from 'segmentit';
 })
 export class SingleCharTranslationComponent implements OnChanges {
   @Input() userInput: string = '';
+  @Input() selectedWord: string = '';
+  @Output() wordSelected: EventEmitter<string> = new EventEmitter<string>();
   hanziWords: string[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -31,5 +40,9 @@ export class SingleCharTranslationComponent implements OnChanges {
         this.hanziWords = [];
       }
     }
+  }
+
+  onWordClick(word: string): void {
+    this.wordSelected.emit(word);
   }
 }

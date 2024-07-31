@@ -74,6 +74,12 @@ export class DictionaryService {
     return this.shortenTranslation(allEnglishTranslations);
   }
 
+  getAllTranslations(word: string): DictionaryEntry[] {
+    return this.dictionary.filter(
+      (e) => e.simplified === word || e.traditional === word
+    );
+  }
+
   private shortenTranslation(englishArray: string[]): string | undefined {
     // Split each English translation by semicolons
     englishArray = englishArray.map((e) => e.split(';')).flat();

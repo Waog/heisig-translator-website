@@ -3,6 +3,8 @@
     <app-single-word
       *ngFor="let hanziWord of hanziWords"
       [hanziWord]="hanziWord"
+      (wordClicked)="onWordClick($event)"
+      [isSelected]="hanziWord === selectedWord"
     ></app-single-word>
   </div>
 </app-translation-and-audio-container>
