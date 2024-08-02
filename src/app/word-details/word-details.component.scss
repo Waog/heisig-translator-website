@@ -1,35 +1,36 @@
 ul {
-  list-style: disc;
   padding-left: 20px;
   margin: 0; /* Remove default margin */
 }
 
-ul ul {
-  list-style: disc; /* Keep the same bullet style for nested lists */
-  padding-left: 0; /* Align nested lists with the parent list */
-  margin: 0; /* Remove default margin */
+.translations-grid {
+  display: grid;
+  grid-template-columns: auto minmax(auto, 33%) auto 1fr;
+  column-gap: 5px; /* Adjust column gap for consistent spacing */
+  row-gap: 5px;
+  align-items: center;
 }
 
-li {
-  margin-bottom: 0; /* Remove the margin between list items */
-  padding-bottom: 0; /* Remove the padding between list items */
-  position: relative;
+.grid-row {
+  display: contents; /* To make the child elements respect the grid layout */
 }
 
-li > ul > li {
-  margin-bottom: 0; /* Remove the margin between nested list items */
+.hanzi-column {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-strong {
-  display: block;
-  margin-top: 0.5em;
+.translation-column {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 button {
   background: none;
   border: none;
   cursor: pointer;
-  margin-left: 0.5em;
   font-size: 0.9em; /* Slightly reduce the font size */
   vertical-align: middle; /* Align button vertically in the middle */
   line-height: 1; /* Ensure button does not increase line height */
@@ -42,4 +43,24 @@ button:hover {
 
 .online-translation {
   font-style: italic;
+}
+
+.clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.clickable:hover {
+  background-color: #f0f0f0;
+}
+
+.expanded-translations {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.expanded-translations .grid-row {
+  padding: 5px 0;
 }

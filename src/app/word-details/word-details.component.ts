@@ -26,12 +26,24 @@ export class WordDetailsComponent implements OnInit, OnChanges {
   simpleTranslation$!: Observable<string>;
   allTranslations$!: Observable<
     {
+      hanzi: string;
       pinyin?: string;
       translations: string[];
       usedApi: boolean;
     }[]
   >;
   displayPinyin$!: Observable<boolean>;
+  translationsContainingCharacter: {
+    [key: string]: Observable<
+      {
+        hanzi: string;
+        pinyin?: string;
+        translations: string[];
+        usedApi: boolean;
+      }[]
+    >;
+  } = {};
+  expandedCharacters: { [key: string]: boolean } = {};
 
   constructor(
     private companion: WordDetailsService,
@@ -57,11 +69,30 @@ export class WordDetailsComponent implements OnInit, OnChanges {
     this.allTranslations$ = this.companion.getAllTranslations(this.wordHanzi);
     this.displayPinyin$ = this.companion.getDisplayPinyin(this.wordHanzi);
 
+    this.heisigDetails.forEach((detail) => {
+      this.translationsContainingCharacter[detail.hanzi] =
+        this.companion.getTranslationsContainingCharacter(detail.hanzi);
+    });
+
     this.audioService.playAudio(this.wordHanzi, 'zh-CN'); // Play audio when component initializes
+  }
+
+  toggleExpansion(character: string): void {
+    this.expandedCharacters[character] = !this.expandedCharacters[character];
+  }
+
+  isExpanded(character: string): boolean {
+    return this.expandedCharacters[character];
   }
 
   playAudio(event: Event, text: string, lang: string = 'en-US'): void {
     event.stopPropagation();
     this.audioService.playAudio(text, lang);
+  }
+
+  cropTranslation(translation: string): string {
+    return translation.length > 60
+      ? `${translation.slice(0, 60)}...`
+      : translation;
   }
 }

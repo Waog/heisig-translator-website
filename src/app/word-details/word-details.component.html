@@ -3,25 +3,53 @@
 
   <h2>Translations:</h2>
   <ng-container *ngFor="let entry of allTranslations$ | async">
-    <strong *ngIf="entry.pinyin && (displayPinyin$ | async)">
-      {{ entry.pinyin }}
-    </strong>
+    <div *ngIf="entry.pinyin && (displayPinyin$ | async)">
+      {{ entry.pinyin }}:
+    </div>
     <ul>
       <li
         *ngFor="let translation of entry.translations"
         [ngClass]="{ 'online-translation': entry.usedApi }"
       >
-        {{ translation }}
         <button (click)="playAudio($event, translation)">🔊</button>
+        {{ translation }}
       </li>
     </ul>
   </ng-container>
 
   <h2>Heisig:</h2>
   <ul class="heisig">
-    <li *ngFor="let detail of heisigDetails">
+    <li
+      *ngFor="let detail of heisigDetails"
+      (click)="toggleExpansion(detail.hanzi)"
+      class="clickable"
+    >
       {{ detail.hanzi }} - {{ detail.heisig }}
       <button (click)="playAudio($event, detail.heisig)">🔊</button>
+      <div
+        *ngIf="isExpanded(detail.hanzi)"
+        class="expanded-translations translations-grid"
+      >
+        <ng-container
+          *ngFor="
+            let entry of (translationsContainingCharacter[detail.hanzi]
+              | async) || []
+          "
+        >
+          <div class="grid-row">
+            <button (click)="playAudio($event, entry.hanzi, 'zh-CN')">
+              🔊
+            </button>
+            <span class="hanzi-column">{{ entry.hanzi }}</span>
+            <button (click)="playAudio($event, entry.translations[0])">
+              🔊
+            </button>
+            <span class="translation-column">{{
+              cropTranslation(entry.translations[0])
+            }}</span>
+          </div>
+        </ng-container>
+      </div>
     </li>
   </ul>
 </app-translation-and-audio-container>

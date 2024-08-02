@@ -11,6 +11,13 @@ export enum Language {
   DE = 'de',
 }
 
+interface Translation {
+  hanzi: string;
+  pinyin?: string;
+  translations: string[];
+  usedApi: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -70,13 +77,12 @@ export class TranslationService {
   getAllTranslations(
     chineseString: string,
     language: Language
-  ): Observable<
-    { pinyin?: string; translations: string[]; usedApi: boolean }[]
-  > {
+  ): Observable<Translation[]> {
     const onlineTranslation$ = this.onlineTranslationService
       .translate(chineseString, `zh|${language}`)
       .pipe(
         map((onlineTranslation) => ({
+          hanzi: chineseString,
           pinyin: undefined,
           translations: [onlineTranslation.responseData.translatedText],
           usedApi: true,
@@ -84,12 +90,14 @@ export class TranslationService {
         catchError((error) => {
           console.error('Online translation error:', error);
           return of({
+            hanzi: chineseString,
             pinyin: undefined,
             translations: ['Translation not found'],
             usedApi: true,
           });
         }),
         startWith({
+          hanzi: chineseString,
           pinyin: undefined,
           translations: ['Loading...'],
           usedApi: true,
@@ -98,17 +106,14 @@ export class TranslationService {
 
     return this.dictionaryService.isLoaded().pipe(
       switchMap((dictionaryLoaded) => {
-        const translations: {
-          pinyin?: string;
-          translations: string[];
-          usedApi: boolean;
-        }[] = [];
+        const translations: Translation[] = [];
 
         if (dictionaryLoaded) {
           const dictionaryEntries =
             this.dictionaryService.getAllTranslations(chineseString);
           translations.push(
             ...dictionaryEntries.map((entry) => ({
+              hanzi: chineseString,
               pinyin: entry.pinyin,
               translations: entry.english,
               usedApi: false,
@@ -122,6 +127,30 @@ export class TranslationService {
             ...dictTranslations,
           ])
         );
+      })
+    );
+  }
+
+  getTranslationsContainingCharacter(
+    character: string
+  ): Observable<Translation[]> {
+    return this.dictionaryService.isLoaded().pipe(
+      switchMap((dictionaryLoaded) => {
+        if (dictionaryLoaded) {
+          const entries =
+            this.dictionaryService.getTranslationsContainingCharacter(
+              character
+            );
+          return of(
+            entries.map((entry) => ({
+              hanzi: entry.simplified,
+              pinyin: entry.pinyin,
+              translations: entry.english,
+              usedApi: false,
+            }))
+          );
+        }
+        return of([]);
       })
     );
   }

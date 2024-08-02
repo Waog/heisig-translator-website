@@ -42,6 +42,7 @@ export class WordDetailsService {
 
   getAllTranslations(word: string): Observable<
     {
+      hanzi: string;
       pinyin?: string;
       translations: string[];
       usedApi: boolean;
@@ -63,6 +64,19 @@ export class WordDetailsService {
             this.normalizeString(entry.pinyin) !== normalizedWholePinyin
         );
       })
+    );
+  }
+
+  getTranslationsContainingCharacter(character: string): Observable<
+    {
+      hanzi: string;
+      pinyin?: string;
+      translations: string[];
+      usedApi: boolean;
+    }[]
+  > {
+    return this.translationService.getTranslationsContainingCharacter(
+      character
     );
   }
 

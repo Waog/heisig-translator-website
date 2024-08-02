@@ -80,6 +80,13 @@ export class DictionaryService {
     );
   }
 
+  getTranslationsContainingCharacter(character: string): DictionaryEntry[] {
+    return this.dictionary.filter(
+      (e) =>
+        e.simplified.includes(character) || e.traditional.includes(character)
+    );
+  }
+
   private shortenTranslation(englishArray: string[]): string | undefined {
     // Split each English translation by semicolons
     englishArray = englishArray.map((e) => e.split(';')).flat();
