@@ -8,10 +8,10 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { TranslationService } from '../sentence-translation/translation.service';
+import { heisigMapping } from '../shared/heisig-mapping';
+import { DictionaryService } from '../shared/services/dictionary.service';
+import { TranslationService } from '../shared/services/translation.service';
 import { SingleCharacterComponent } from './single-character.component';
-import { DictionaryService } from './dictionary.service';
-import { heisigMapping } from './heisig-mapping';
 
 @Component({
   selector: 'app-single-word',

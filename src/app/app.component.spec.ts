@@ -4,11 +4,11 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
+import { DecompositionComponent } from './decomposition/decomposition.component';
 import { InputTextComponent } from './input-text/input-text.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
-import { TranslationService } from './sentence-translation/translation.service';
-import { PinyinService } from './decomposition/pinyin.service';
-import { DecompositionComponent } from './decomposition/decomposition.component';
+import { PinyinService } from './shared/services/pinyin.service';
+import { TranslationService } from './shared/services/translation.service';
 
 describe('AppComponent', () => {
   let component: AppComponent;

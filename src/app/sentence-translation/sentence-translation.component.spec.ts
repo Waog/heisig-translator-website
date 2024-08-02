@@ -10,9 +10,9 @@ import {
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { TranslationService } from '../shared/services/translation.service';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 import { SentenceTranslationComponent } from './sentence-translation.component';
-import { TranslationService } from './translation.service';
 
 describe('SentenceTranslationComponent', () => {
   let component: SentenceTranslationComponent;

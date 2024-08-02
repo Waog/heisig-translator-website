@@ -6,11 +6,11 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { TranslationService } from '../sentence-translation/translation.service';
-import { DictionaryService } from '../decomposition/dictionary.service';
-import { heisigMapping } from '../decomposition/heisig-mapping';
-import { PinyinService } from '../decomposition/pinyin.service';
-import { AudioService } from '../translation-and-audio-container/audio.service';
+import { heisigMapping } from '../shared/heisig-mapping';
+import { AudioService } from '../shared/services/audio.service';
+import { DictionaryService } from '../shared/services/dictionary.service';
+import { PinyinService } from '../shared/services/pinyin.service';
+import { TranslationService } from '../shared/services/translation.service';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 
 @Component({

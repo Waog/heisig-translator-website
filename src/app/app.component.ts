@@ -3,12 +3,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import { DecompositionComponent } from './decomposition/decomposition.component';
 import { InputTextComponent } from './input-text/input-text.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
-import { TranslationService } from './sentence-translation/translation.service';
-import { DictionaryService } from './decomposition/dictionary.service';
-import { PinyinService } from './decomposition/pinyin.service';
-import { DecompositionComponent } from './decomposition/decomposition.component';
+import { DictionaryService } from './shared/services/dictionary.service';
+import { PinyinService } from './shared/services/pinyin.service';
+import { TranslationService } from './shared/services/translation.service';
 import { WordDetailsComponent } from './word-details/word-details.component';
 
 @Component({

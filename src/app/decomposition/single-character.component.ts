@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { pinyin } from 'pinyin-pro';
-import { heisigMapping } from './heisig-mapping';
+import { heisigMapping } from '../shared/heisig-mapping';
 
 @Component({
   selector: 'app-single-character',

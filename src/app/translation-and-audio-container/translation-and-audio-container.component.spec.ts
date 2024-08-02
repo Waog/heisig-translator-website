@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { AudioService } from './audio.service';
+import { AudioService } from '../shared/services/audio.service';
 import { TranslationAndAudioContainerComponent } from './translation-and-audio-container.component';
 
 describe('TranslationAndAudioContainerComponent', () => {

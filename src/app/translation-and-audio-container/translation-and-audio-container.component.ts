@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { AudioService } from './audio.service';
+import { AudioService } from '../shared/services/audio.service';
 
 @Component({
   selector: 'app-translation-and-audio-container',

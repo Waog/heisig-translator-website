@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Subject, debounceTime } from 'rxjs';
+import { TranslationService } from '../shared/services/translation.service';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
-import { TranslationService } from './translation.service';
 
 @Component({
   selector: 'app-sentence-translation',
