@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 import { DictionaryService } from '../shared/services/dictionary.service';
 import { HeisigService } from '../shared/services/heisig.service';
-import { TranslationService } from '../shared/services/translation.service';
+import { OnlineTranslationService } from '../shared/services/online-translation.service';
 import { SingleWordComponent } from './single-word.component';
 
 describe('SingleWordComponent', () => {
@@ -11,7 +11,7 @@ describe('SingleWordComponent', () => {
   let fixture: ComponentFixture<SingleWordComponent>;
   let heisigServiceSpy: jasmine.SpyObj<HeisigService>;
   let dictionaryServiceSpy: jasmine.SpyObj<DictionaryService>;
-  let translationServiceSpy: jasmine.SpyObj<TranslationService>;
+  let translationServiceSpy: jasmine.SpyObj<OnlineTranslationService>;
 
   beforeEach(async () => {
     heisigServiceSpy = await configureTestingModule();
@@ -19,8 +19,8 @@ describe('SingleWordComponent', () => {
       DictionaryService
     ) as jasmine.SpyObj<DictionaryService>;
     translationServiceSpy = TestBed.inject(
-      TranslationService
-    ) as jasmine.SpyObj<TranslationService>;
+      OnlineTranslationService
+    ) as jasmine.SpyObj<OnlineTranslationService>;
     ({ fixture, component } = createComponent());
   });
 
@@ -92,7 +92,7 @@ describe('SingleWordComponent', () => {
       'isLoaded',
       'translate',
     ]);
-    const translationSpy = jasmine.createSpyObj('TranslationService', [
+    const translationSpy = jasmine.createSpyObj('OnlineTranslationService', [
       'translate',
     ]);
 
@@ -101,7 +101,7 @@ describe('SingleWordComponent', () => {
       providers: [
         { provide: HeisigService, useValue: heisigSpy },
         { provide: DictionaryService, useValue: dictionarySpy },
-        { provide: TranslationService, useValue: translationSpy },
+        { provide: OnlineTranslationService, useValue: translationSpy },
       ],
     }).compileComponents();
 

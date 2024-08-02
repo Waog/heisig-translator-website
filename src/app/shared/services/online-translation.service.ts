@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class TranslationService {
+export class OnlineTranslationService {
   private myMemoryUrl = 'https://api.mymemory.translated.net/get';
 
   constructor(private http: HttpClient) {}

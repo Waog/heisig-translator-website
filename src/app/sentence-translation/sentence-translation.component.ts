@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Subject, debounceTime } from 'rxjs';
-import { TranslationService } from '../shared/services/translation.service';
+import { OnlineTranslationService } from '../shared/services/online-translation.service';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 
 @Component({
@@ -20,7 +20,7 @@ export class SentenceTranslationComponent implements OnChanges {
   debounceInProgress: boolean = false;
   private inputSubject: Subject<string> = new Subject();
 
-  constructor(private translationService: TranslationService) {
+  constructor(private translationService: OnlineTranslationService) {
     this.inputSubject.pipe(debounceTime(1000)).subscribe((input: string) => {
       if (input && input.trim().length > 0) {
         this.debounceInProgress = false;

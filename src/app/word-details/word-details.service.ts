@@ -4,13 +4,13 @@ import { map } from 'rxjs/operators';
 import { DictionaryService } from '../shared/services/dictionary.service';
 import { HeisigService } from '../shared/services/heisig.service';
 import { PinyinService } from '../shared/services/pinyin.service';
-import { TranslationService } from '../shared/services/translation.service';
+import { OnlineTranslationService } from '../shared/services/online-translation.service';
 
 @Injectable()
 export class WordDetailsService {
   constructor(
     private dictionaryService: DictionaryService,
-    private translationService: TranslationService,
+    private translationService: OnlineTranslationService,
     private pinyinService: PinyinService,
     private heisigService: HeisigService
   ) {}

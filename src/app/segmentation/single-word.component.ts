@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { DictionaryService } from '../shared/services/dictionary.service';
 import { HeisigService } from '../shared/services/heisig.service';
-import { TranslationService } from '../shared/services/translation.service';
+import { OnlineTranslationService } from '../shared/services/online-translation.service';
 import { SingleCharacterComponent } from './single-character.component';
 
 @Component({
@@ -19,7 +19,7 @@ import { SingleCharacterComponent } from './single-character.component';
   imports: [CommonModule, SingleCharacterComponent, HttpClientModule],
   templateUrl: './single-word.component.html',
   styleUrls: ['./single-word.component.scss'],
-  providers: [TranslationService],
+  providers: [OnlineTranslationService],
 })
 export class SingleWordComponent implements OnChanges {
   @Input() hanziWord: string = '';
@@ -31,7 +31,7 @@ export class SingleWordComponent implements OnChanges {
 
   constructor(
     private dictionaryService: DictionaryService,
-    private translationService: TranslationService,
+    private translationService: OnlineTranslationService,
     private heisigService: HeisigService
   ) {}
 

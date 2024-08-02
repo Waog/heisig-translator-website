@@ -8,7 +8,7 @@ import { InputTextComponent } from './input-text/input-text.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { DictionaryService } from './shared/services/dictionary.service';
 import { PinyinService } from './shared/services/pinyin.service';
-import { TranslationService } from './shared/services/translation.service';
+import { OnlineTranslationService } from './shared/services/online-translation.service';
 import { WordDetailsComponent } from './word-details/word-details.component';
 
 @Component({
@@ -26,7 +26,7 @@ import { WordDetailsComponent } from './word-details/word-details.component';
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [TranslationService, PinyinService, DictionaryService],
+  providers: [OnlineTranslationService, PinyinService, DictionaryService],
 })
 export class AppComponent {
   userInput: string = '';

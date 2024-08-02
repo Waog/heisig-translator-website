@@ -10,14 +10,14 @@ import {
   tick,
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { TranslationService } from '../shared/services/translation.service';
+import { OnlineTranslationService } from '../shared/services/online-translation.service';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 import { SentenceTranslationComponent } from './sentence-translation.component';
 
 describe('SentenceTranslationComponent', () => {
   let component: SentenceTranslationComponent;
   let fixture: ComponentFixture<SentenceTranslationComponent>;
-  let translationService: TranslationService;
+  let translationService: OnlineTranslationService;
   let httpMock: HttpTestingController;
 
   beforeEach(async () => {
@@ -28,12 +28,12 @@ describe('SentenceTranslationComponent', () => {
         SentenceTranslationComponent,
         TranslationAndAudioContainerComponent,
       ],
-      providers: [TranslationService],
+      providers: [OnlineTranslationService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SentenceTranslationComponent);
     component = fixture.componentInstance;
-    translationService = TestBed.inject(TranslationService);
+    translationService = TestBed.inject(OnlineTranslationService);
     httpMock = TestBed.inject(HttpTestingController);
     fixture.detectChanges();
   });

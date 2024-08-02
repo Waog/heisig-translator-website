@@ -8,7 +8,7 @@ import { SegmentationComponent } from './segmentation/segmentation.component';
 import { InputTextComponent } from './input-text/input-text.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { PinyinService } from './shared/services/pinyin.service';
-import { TranslationService } from './shared/services/translation.service';
+import { OnlineTranslationService } from './shared/services/online-translation.service';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -22,7 +22,7 @@ describe('AppComponent', () => {
         RouterModule.forRoot([]),
       ],
       providers: [
-        TranslationService,
+        OnlineTranslationService,
         PinyinService,
         {
           provide: ActivatedRoute,

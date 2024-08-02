@@ -3,14 +3,14 @@ import { Observable, of } from 'rxjs';
 import { DictionaryService } from '../shared/services/dictionary.service';
 import { HeisigService } from '../shared/services/heisig.service';
 import { PinyinService } from '../shared/services/pinyin.service';
-import { TranslationService } from '../shared/services/translation.service';
+import { OnlineTranslationService } from '../shared/services/online-translation.service';
 import { WordDetailsService } from './word-details.service';
 
 describe('WordDetailsService', () => {
   let service: WordDetailsService;
   let heisigServiceSpy: jasmine.SpyObj<HeisigService>;
   let dictionaryServiceSpy: jasmine.SpyObj<DictionaryService>;
-  let translationServiceSpy: jasmine.SpyObj<TranslationService>;
+  let translationServiceSpy: jasmine.SpyObj<OnlineTranslationService>;
   let pinyinServiceSpy: jasmine.SpyObj<PinyinService>;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('WordDetailsService', () => {
       'translate',
       'getAllTranslations',
     ]);
-    const translationSpy = jasmine.createSpyObj('TranslationService', [
+    const translationSpy = jasmine.createSpyObj('OnlineTranslationService', [
       'translate',
     ]);
     const pinyinSpy = jasmine.createSpyObj('PinyinService', [
@@ -33,7 +33,7 @@ describe('WordDetailsService', () => {
         WordDetailsService,
         { provide: HeisigService, useValue: heisigSpy },
         { provide: DictionaryService, useValue: dictionarySpy },
-        { provide: TranslationService, useValue: translationSpy },
+        { provide: OnlineTranslationService, useValue: translationSpy },
         { provide: PinyinService, useValue: pinyinSpy },
       ],
     });
@@ -46,8 +46,8 @@ describe('WordDetailsService', () => {
       DictionaryService
     ) as jasmine.SpyObj<DictionaryService>;
     translationServiceSpy = TestBed.inject(
-      TranslationService
-    ) as jasmine.SpyObj<TranslationService>;
+      OnlineTranslationService
+    ) as jasmine.SpyObj<OnlineTranslationService>;
     pinyinServiceSpy = TestBed.inject(
       PinyinService
     ) as jasmine.SpyObj<PinyinService>;

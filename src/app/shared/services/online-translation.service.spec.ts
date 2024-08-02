@@ -3,18 +3,18 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { TranslationService } from './translation.service';
+import { OnlineTranslationService } from './online-translation.service';
 
-describe('TranslationService', () => {
-  let service: TranslationService;
+describe('OnlineTranslationService', () => {
+  let service: OnlineTranslationService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [TranslationService],
+      providers: [OnlineTranslationService],
     });
-    service = TestBed.inject(TranslationService);
+    service = TestBed.inject(OnlineTranslationService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
