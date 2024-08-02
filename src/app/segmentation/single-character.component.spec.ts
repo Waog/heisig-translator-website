@@ -1,19 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { HeisigService } from '../shared/services/heisig.service';
 import { SingleCharacterComponent } from './single-character.component';
 
 describe('SingleCharacterComponent', () => {
   let component: SingleCharacterComponent;
   let fixture: ComponentFixture<SingleCharacterComponent>;
+  let heisigServiceSpy: jasmine.SpyObj<HeisigService>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [SingleCharacterComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(SingleCharacterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    heisigServiceSpy = await configureTestingModule();
+    ({ fixture, component } = createComponent());
   });
 
   it('should create', () => {
@@ -21,29 +18,50 @@ describe('SingleCharacterComponent', () => {
   });
 
   it('should display pinyin, hanzi, and heisig', () => {
-    component.hanzi = '好';
+    setHeisigServiceSpyReturnValue('good');
+    triggerHanziChange('好');
+
+    expect(getElementText('.pinyin')).toBe('hǎo');
+    expect(getElementText('.hanzi')).toBe('好');
+    expect(getElementText('.heisig')).toBe('good');
+  });
+
+  async function configureTestingModule() {
+    const spy = jasmine.createSpyObj('HeisigService', ['getHeisigEn']);
+
+    await TestBed.configureTestingModule({
+      imports: [SingleCharacterComponent],
+      providers: [{ provide: HeisigService, useValue: spy }],
+    }).compileComponents();
+
+    return TestBed.inject(HeisigService) as jasmine.SpyObj<HeisigService>;
+  }
+
+  function createComponent() {
+    const fixture = TestBed.createComponent(SingleCharacterComponent);
+    const component = fixture.componentInstance;
+    return { fixture, component };
+  }
+
+  function setHeisigServiceSpyReturnValue(value: string) {
+    heisigServiceSpy.getHeisigEn.and.returnValue(value);
+  }
+
+  function triggerHanziChange(hanzi: string) {
+    component.hanzi = hanzi;
     component.ngOnChanges({
       hanzi: {
-        currentValue: '好',
+        currentValue: hanzi,
         previousValue: '',
         firstChange: false,
         isFirstChange: () => false,
       },
     });
     fixture.detectChanges();
+  }
 
-    const pinyinElement = fixture.debugElement.query(
-      By.css('.pinyin')
-    ).nativeElement;
-    const hanziElement = fixture.debugElement.query(
-      By.css('.hanzi')
-    ).nativeElement;
-    const heisigElement = fixture.debugElement.query(
-      By.css('.heisig')
-    ).nativeElement;
-
-    expect(pinyinElement.textContent).toBe('hǎo');
-    expect(hanziElement.textContent).toBe('好');
-    expect(heisigElement.textContent).toBe('good');
-  });
+  function getElementText(selector: string) {
+    return fixture.debugElement.query(By.css(selector)).nativeElement
+      .textContent;
+  }
 });

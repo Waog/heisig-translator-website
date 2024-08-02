@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { heisigMapping } from '../shared/heisig-mapping';
 import { DictionaryService } from '../shared/services/dictionary.service';
+import { HeisigService } from '../shared/services/heisig.service';
 import { PinyinService } from '../shared/services/pinyin.service';
 import { TranslationService } from '../shared/services/translation.service';
 
@@ -11,7 +11,8 @@ export class WordDetailsService {
   constructor(
     private dictionaryService: DictionaryService,
     private translationService: TranslationService,
-    private pinyinService: PinyinService
+    private pinyinService: PinyinService,
+    private heisigService: HeisigService
   ) {}
 
   getPinyin(word: string): string {
@@ -28,7 +29,7 @@ export class WordDetailsService {
   getHeisigDetails(word: string): { hanzi: string; heisig: string }[] {
     return Array.from(word).map((char) => ({
       hanzi: char,
-      heisig: heisigMapping[char] || '??',
+      heisig: this.heisigService.getHeisigEn(char) || '??',
     }));
   }
 

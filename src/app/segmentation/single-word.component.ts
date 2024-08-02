@@ -8,8 +8,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { heisigMapping } from '../shared/heisig-mapping';
 import { DictionaryService } from '../shared/services/dictionary.service';
+import { HeisigService } from '../shared/services/heisig.service';
 import { TranslationService } from '../shared/services/translation.service';
 import { SingleCharacterComponent } from './single-character.component';
 
@@ -31,7 +31,8 @@ export class SingleWordComponent implements OnChanges {
 
   constructor(
     private dictionaryService: DictionaryService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private heisigService: HeisigService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -48,10 +49,13 @@ export class SingleWordComponent implements OnChanges {
       return;
     }
 
-    if (this.hanziWord.length === 1 && heisigMapping[this.hanziWord]) {
-      this.translation = heisigMapping[this.hanziWord];
-      this.isApiTranslation = false;
-      return;
+    if (this.hanziWord.length === 1) {
+      const heisigTranslation = this.heisigService.getHeisigEn(this.hanziWord);
+      if (heisigTranslation) {
+        this.translation = heisigTranslation;
+        this.isApiTranslation = false;
+        return;
+      }
     }
 
     this.dictionaryService.isLoaded().subscribe((loaded) => {
