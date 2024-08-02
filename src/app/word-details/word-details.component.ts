@@ -6,12 +6,10 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { heisigMapping } from '../shared/heisig-mapping';
+import { Observable } from 'rxjs';
 import { AudioService } from '../shared/services/audio.service';
-import { DictionaryService } from '../shared/services/dictionary.service';
-import { PinyinService } from '../shared/services/pinyin.service';
-import { TranslationService } from '../shared/services/translation.service';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
+import { WordDetailsService } from './word-details.service';
 
 @Component({
   selector: 'app-word-details',
@@ -19,22 +17,19 @@ import { TranslationAndAudioContainerComponent } from '../translation-and-audio-
   imports: [CommonModule, TranslationAndAudioContainerComponent],
   templateUrl: './word-details.component.html',
   styleUrls: ['./word-details.component.scss'],
-  providers: [AudioService],
+  providers: [AudioService, WordDetailsService],
 })
 export class WordDetailsComponent implements OnInit, OnChanges {
-  @Input() word: string = '';
+  @Input() wordHanzi: string = '';
   pinyin: string = '';
   heisigDetails: { hanzi: string; heisig: string }[] = [];
-  simpleTranslation: string = '';
-  onlineTranslation: string = 'Loading...';
-  allTranslations: { pinyin: string; english: string[] }[] = [];
-  pinyinWithNumbers: string = '';
-  displayPinyin: boolean = false;
+  simpleTranslation$!: Observable<string>;
+  onlineTranslation$!: Observable<string>;
+  allTranslations$!: Observable<{ pinyin: string; english: string[] }[]>;
+  displayPinyin$!: Observable<boolean>;
 
   constructor(
-    private dictionaryService: DictionaryService,
-    private translationService: TranslationService,
-    private pinyinService: PinyinService,
+    private companion: WordDetailsService,
     private audioService: AudioService
   ) {}
 
@@ -43,76 +38,24 @@ export class WordDetailsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['word']) {
+    if (changes['wordHanzi']) {
       this.loadDetails();
     }
   }
 
   private loadDetails(): void {
-    this.setPinyin();
-    this.setHeisigDetails();
-    this.loadTranslations();
-    this.loadOnlineTranslation();
-    this.audioService.playAudio(this.word, 'zh-CN'); // Play audio when component initializes
-  }
-
-  private setPinyin(): void {
-    this.pinyin = this.pinyinService
-      .convertToPinyin(this.word)
-      .map((entry) => entry.pinyin)
-      .join(' ');
-
-    this.pinyinWithNumbers = this.pinyinService.convertToPinyinWithNumbers(
-      this.word
+    this.pinyin = this.companion.getPinyin(this.wordHanzi);
+    this.heisigDetails = this.companion.getHeisigDetails(this.wordHanzi);
+    this.simpleTranslation$ = this.companion.getSimpleTranslation(
+      this.wordHanzi
     );
-  }
-
-  private setHeisigDetails(): void {
-    this.heisigDetails = Array.from(this.word).map((char) => ({
-      hanzi: char,
-      heisig: heisigMapping[char] || '??',
-    }));
-  }
-
-  private loadTranslations(): void {
-    this.dictionaryService.isLoaded().subscribe((loaded) => {
-      if (loaded) {
-        this.simpleTranslation =
-          this.dictionaryService.translate(this.word) || '';
-
-        this.allTranslations = this.dictionaryService
-          .getAllTranslations(this.word)
-          .map((entry) => ({
-            pinyin: entry.pinyin,
-            english: entry.english.filter((eng) => eng !== 'Not available'),
-          }));
-
-        const normalizedWholePinyin = this.normalizeString(
-          this.pinyinWithNumbers
-        );
-        this.displayPinyin = this.allTranslations.some(
-          (entry) =>
-            this.normalizeString(entry.pinyin) !== normalizedWholePinyin
-        );
-      }
-    });
-  }
-
-  private loadOnlineTranslation(): void {
-    this.onlineTranslation = 'Loading...';
-    this.translationService.translate(this.word, 'zh|en').subscribe(
-      (response) => {
-        this.onlineTranslation = response.responseData.translatedText;
-      },
-      (error) => {
-        console.error('Translation error:', error);
-        this.onlineTranslation = '';
-      }
+    this.onlineTranslation$ = this.companion.getOnlineTranslation(
+      this.wordHanzi
     );
-  }
+    this.allTranslations$ = this.companion.getAllTranslations(this.wordHanzi);
+    this.displayPinyin$ = this.companion.getDisplayPinyin(this.wordHanzi);
 
-  private normalizeString(str: string): string {
-    return str.replace(/\s+/g, '').toLowerCase();
+    this.audioService.playAudio(this.wordHanzi, 'zh-CN'); // Play audio when component initializes
   }
 
   playAudio(event: Event, text: string, lang: string = 'en-US'): void {

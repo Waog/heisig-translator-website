@@ -1,25 +1,27 @@
-<app-translation-and-audio-container [text]="word" [language]="'zh-CN'">
-  <h1>{{ simpleTranslation }} - {{ word }} - {{ pinyin }}</h1>
+<app-translation-and-audio-container [text]="wordHanzi" [language]="'zh-CN'">
+  <h1>{{ simpleTranslation$ | async }} - {{ wordHanzi }} - {{ pinyin }}</h1>
 
   <h2>Translations:</h2>
   <ul>
-    <li *ngIf="onlineTranslation">
+    <li *ngIf="onlineTranslation$ | async as onlineTranslation">
       <em>{{ onlineTranslation }}</em>
       <button (click)="playAudio($event, onlineTranslation)">🔊</button>
     </li>
   </ul>
-  <ng-container *ngFor="let entry of allTranslations">
-    <strong *ngIf="displayPinyin">{{ entry.pinyin }}</strong>
-    <ul>
-      <li *ngFor="let eng of entry.english">
-        {{ eng }}
-        <button (click)="playAudio($event, eng)">🔊</button>
-      </li>
-    </ul>
+  <ng-container *ngIf="allTranslations$ | async as allTranslations">
+    <ng-container *ngFor="let entry of allTranslations">
+      <strong *ngIf="displayPinyin$ | async">{{ entry.pinyin }}</strong>
+      <ul>
+        <li *ngFor="let eng of entry.english">
+          {{ eng }}
+          <button (click)="playAudio($event, eng)">🔊</button>
+        </li>
+      </ul>
+    </ng-container>
   </ng-container>
 
   <h2>Heisig:</h2>
-  <ul>
+  <ul class="heisig">
     <li *ngFor="let detail of heisigDetails">
       {{ detail.hanzi }} - {{ detail.heisig }}
       <button (click)="playAudio($event, detail.heisig)">🔊</button>
