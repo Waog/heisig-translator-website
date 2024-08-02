@@ -2,22 +2,19 @@
   <h1>{{ simpleTranslation$ | async }} - {{ wordHanzi }} - {{ pinyin }}</h1>
 
   <h2>Translations:</h2>
-  <ul>
-    <li *ngIf="onlineTranslation$ | async as onlineTranslation">
-      <em>{{ onlineTranslation }}</em>
-      <button (click)="playAudio($event, onlineTranslation)">🔊</button>
-    </li>
-  </ul>
-  <ng-container *ngIf="allTranslations$ | async as allTranslations">
-    <ng-container *ngFor="let entry of allTranslations">
-      <strong *ngIf="displayPinyin$ | async">{{ entry.pinyin }}</strong>
-      <ul>
-        <li *ngFor="let eng of entry.english">
-          {{ eng }}
-          <button (click)="playAudio($event, eng)">🔊</button>
-        </li>
-      </ul>
-    </ng-container>
+  <ng-container *ngFor="let entry of allTranslations$ | async">
+    <strong *ngIf="entry.pinyin && (displayPinyin$ | async)">
+      {{ entry.pinyin }}
+    </strong>
+    <ul>
+      <li
+        *ngFor="let translation of entry.translations"
+        [ngClass]="{ 'online-translation': entry.usedApi }"
+      >
+        {{ translation }}
+        <button (click)="playAudio($event, translation)">🔊</button>
+      </li>
+    </ul>
   </ng-container>
 
   <h2>Heisig:</h2>

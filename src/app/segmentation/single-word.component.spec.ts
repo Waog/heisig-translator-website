@@ -3,7 +3,7 @@ import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 import { DictionaryService } from '../shared/services/dictionary.service';
 import { HeisigService } from '../shared/services/heisig.service';
-import { OnlineTranslationService } from '../shared/services/online-translation.service';
+import { TranslationService } from '../shared/services/translation.service';
 import { SingleWordComponent } from './single-word.component';
 
 describe('SingleWordComponent', () => {
@@ -11,17 +11,29 @@ describe('SingleWordComponent', () => {
   let fixture: ComponentFixture<SingleWordComponent>;
   let heisigServiceSpy: jasmine.SpyObj<HeisigService>;
   let dictionaryServiceSpy: jasmine.SpyObj<DictionaryService>;
-  let translationServiceSpy: jasmine.SpyObj<OnlineTranslationService>;
+  let translationServiceSpy: jasmine.SpyObj<TranslationService>;
 
   beforeEach(async () => {
-    heisigServiceSpy = await configureTestingModule();
-    dictionaryServiceSpy = TestBed.inject(
-      DictionaryService
-    ) as jasmine.SpyObj<DictionaryService>;
-    translationServiceSpy = TestBed.inject(
-      OnlineTranslationService
-    ) as jasmine.SpyObj<OnlineTranslationService>;
-    ({ fixture, component } = createComponent());
+    heisigServiceSpy = jasmine.createSpyObj('HeisigService', ['getHeisigEn']);
+    dictionaryServiceSpy = jasmine.createSpyObj('DictionaryService', [
+      'isLoaded',
+      'translate',
+    ]);
+    translationServiceSpy = jasmine.createSpyObj('TranslationService', [
+      'getTranslation',
+    ]);
+
+    await TestBed.configureTestingModule({
+      declarations: [SingleWordComponent],
+      providers: [
+        { provide: HeisigService, useValue: heisigServiceSpy },
+        { provide: DictionaryService, useValue: dictionaryServiceSpy },
+        { provide: TranslationService, useValue: translationServiceSpy },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(SingleWordComponent);
+    component = fixture.componentInstance;
   });
 
   it('should create', () => {
@@ -29,7 +41,10 @@ describe('SingleWordComponent', () => {
   });
 
   it('should use HeisigService for single character translation', () => {
-    setHeisigServiceSpyReturnValue('good');
+    heisigServiceSpy.getHeisigEn.and.returnValue('good');
+    translationServiceSpy.getTranslation.and.returnValue(
+      of({ translation: 'good', usedApi: false })
+    );
     triggerHanziWordChange('好');
 
     expect(getElementText('.word-label')).toBe('good');
@@ -39,6 +54,9 @@ describe('SingleWordComponent', () => {
   it('should use DictionaryService for local translation if available', () => {
     dictionaryServiceSpy.isLoaded.and.returnValue(of(true));
     dictionaryServiceSpy.translate.and.returnValue('local translation');
+    translationServiceSpy.getTranslation.and.returnValue(
+      of({ translation: 'local translation', usedApi: false })
+    );
     triggerHanziWordChange('词');
 
     expect(getElementText('.word-label')).toBe('local translation');
@@ -47,20 +65,21 @@ describe('SingleWordComponent', () => {
 
   it('should use TranslationService for API translation if local translation is not available', () => {
     dictionaryServiceSpy.isLoaded.and.returnValue(of(true));
-    dictionaryServiceSpy.translate.and.returnValue(null);
-    translationServiceSpy.translate.and.returnValue(
-      of({ responseData: { translatedText: 'api translation' } })
+    dictionaryServiceSpy.translate.and.returnValue(undefined);
+    translationServiceSpy.getTranslation.and.returnValue(
+      of({ translation: 'api translation', usedApi: true })
     );
     triggerHanziWordChange('词');
 
     expect(getElementText('.word-label')).toBe('api translation');
     expect(component.isApiTranslation).toBeTrue();
+    expect(isElementItalic('.word-label')).toBeTrue();
   });
 
   it('should handle translation error gracefully', () => {
     dictionaryServiceSpy.isLoaded.and.returnValue(of(true));
-    dictionaryServiceSpy.translate.and.returnValue(null);
-    translationServiceSpy.translate.and.returnValue(throwError('error'));
+    dictionaryServiceSpy.translate.and.returnValue(undefined);
+    translationServiceSpy.getTranslation.and.returnValue(throwError('error'));
     triggerHanziWordChange('词');
 
     expect(getElementText('.word-label')).toBe('Translation not found');
@@ -86,38 +105,6 @@ describe('SingleWordComponent', () => {
     );
   });
 
-  async function configureTestingModule() {
-    const heisigSpy = jasmine.createSpyObj('HeisigService', ['getHeisigEn']);
-    const dictionarySpy = jasmine.createSpyObj('DictionaryService', [
-      'isLoaded',
-      'translate',
-    ]);
-    const translationSpy = jasmine.createSpyObj('OnlineTranslationService', [
-      'translate',
-    ]);
-
-    await TestBed.configureTestingModule({
-      imports: [SingleWordComponent],
-      providers: [
-        { provide: HeisigService, useValue: heisigSpy },
-        { provide: DictionaryService, useValue: dictionarySpy },
-        { provide: OnlineTranslationService, useValue: translationSpy },
-      ],
-    }).compileComponents();
-
-    return TestBed.inject(HeisigService) as jasmine.SpyObj<HeisigService>;
-  }
-
-  function createComponent() {
-    const fixture = TestBed.createComponent(SingleWordComponent);
-    const component = fixture.componentInstance;
-    return { fixture, component };
-  }
-
-  function setHeisigServiceSpyReturnValue(value: string) {
-    heisigServiceSpy.getHeisigEn.and.returnValue(value);
-  }
-
   function triggerHanziWordChange(hanziWord: string) {
     component.hanziWord = hanziWord;
     component.ngOnChanges({
@@ -131,9 +118,15 @@ describe('SingleWordComponent', () => {
     fixture.detectChanges();
   }
 
-  function getElementText(selector: string) {
+  function getElementText(selector: string): string {
     return fixture.debugElement
       .query(By.css(selector))
       .nativeElement.textContent.trim();
+  }
+
+  function isElementItalic(selector: string): boolean {
+    const element = fixture.debugElement.query(By.css(selector)).nativeElement;
+    const fontStyle = window.getComputedStyle(element).fontStyle;
+    return fontStyle === 'italic';
   }
 });

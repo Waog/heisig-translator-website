@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DictionaryService } from '../shared/services/dictionary.service';
 import { HeisigService } from '../shared/services/heisig.service';
 import { PinyinService } from '../shared/services/pinyin.service';
-import { OnlineTranslationService } from '../shared/services/online-translation.service';
+import {
+  Language,
+  TranslationService,
+} from '../shared/services/translation.service';
 
 @Injectable()
 export class WordDetailsService {
   constructor(
-    private dictionaryService: DictionaryService,
-    private translationService: OnlineTranslationService,
+    private translationService: TranslationService,
     private pinyinService: PinyinService,
     private heisigService: HeisigService
   ) {}
@@ -34,32 +35,19 @@ export class WordDetailsService {
   }
 
   getSimpleTranslation(word: string): Observable<string> {
-    return this.dictionaryService.isLoaded().pipe(
-      map((loaded) => {
-        if (loaded) {
-          return this.dictionaryService.translate(word) || '';
-        }
-        return '';
-      })
-    );
+    return this.translationService
+      .getTranslation(word, Language.EN)
+      .pipe(map((translationResult) => translationResult.translation));
   }
 
-  getAllTranslations(
-    word: string
-  ): Observable<{ pinyin: string; english: string[] }[]> {
-    return this.dictionaryService.isLoaded().pipe(
-      map((loaded) => {
-        if (loaded) {
-          return this.dictionaryService
-            .getAllTranslations(word)
-            .map((entry) => ({
-              pinyin: entry.pinyin,
-              english: entry.english.filter((eng) => eng !== 'Not available'),
-            }));
-        }
-        return [];
-      })
-    );
+  getAllTranslations(word: string): Observable<
+    {
+      pinyin?: string;
+      translations: string[];
+      usedApi: boolean;
+    }[]
+  > {
+    return this.translationService.getAllTranslations(word, Language.EN);
   }
 
   getDisplayPinyin(word: string): Observable<boolean> {
@@ -71,26 +59,11 @@ export class WordDetailsService {
 
         return allTranslations.some(
           (entry) =>
+            entry.pinyin &&
             this.normalizeString(entry.pinyin) !== normalizedWholePinyin
         );
       })
     );
-  }
-
-  getOnlineTranslation(word: string): Observable<string> {
-    return new Observable((observer) => {
-      this.translationService.translate(word, 'zh|en').subscribe(
-        (response) => {
-          observer.next(response.responseData.translatedText);
-          observer.complete();
-        },
-        (error) => {
-          console.error('Translation error:', error);
-          observer.next('');
-          observer.complete();
-        }
-      );
-    });
   }
 
   private normalizeString(str: string): string {

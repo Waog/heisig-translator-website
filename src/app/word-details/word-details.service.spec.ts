@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { Observable, of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { DictionaryService } from '../shared/services/dictionary.service';
 import { HeisigService } from '../shared/services/heisig.service';
 import { PinyinService } from '../shared/services/pinyin.service';
-import { OnlineTranslationService } from '../shared/services/online-translation.service';
+import { TranslationService } from '../shared/services/translation.service';
 import { WordDetailsService } from './word-details.service';
 
 describe('WordDetailsService', () => {
   let service: WordDetailsService;
   let heisigServiceSpy: jasmine.SpyObj<HeisigService>;
   let dictionaryServiceSpy: jasmine.SpyObj<DictionaryService>;
-  let translationServiceSpy: jasmine.SpyObj<OnlineTranslationService>;
+  let translationServiceSpy: jasmine.SpyObj<TranslationService>;
   let pinyinServiceSpy: jasmine.SpyObj<PinyinService>;
 
   beforeEach(() => {
@@ -20,8 +20,9 @@ describe('WordDetailsService', () => {
       'translate',
       'getAllTranslations',
     ]);
-    const translationSpy = jasmine.createSpyObj('OnlineTranslationService', [
-      'translate',
+    const translationSpy = jasmine.createSpyObj('TranslationService', [
+      'getTranslation',
+      'getAllTranslations',
     ]);
     const pinyinSpy = jasmine.createSpyObj('PinyinService', [
       'convertToPinyin',
@@ -33,7 +34,7 @@ describe('WordDetailsService', () => {
         WordDetailsService,
         { provide: HeisigService, useValue: heisigSpy },
         { provide: DictionaryService, useValue: dictionarySpy },
-        { provide: OnlineTranslationService, useValue: translationSpy },
+        { provide: TranslationService, useValue: translationSpy },
         { provide: PinyinService, useValue: pinyinSpy },
       ],
     });
@@ -46,8 +47,8 @@ describe('WordDetailsService', () => {
       DictionaryService
     ) as jasmine.SpyObj<DictionaryService>;
     translationServiceSpy = TestBed.inject(
-      OnlineTranslationService
-    ) as jasmine.SpyObj<OnlineTranslationService>;
+      TranslationService
+    ) as jasmine.SpyObj<TranslationService>;
     pinyinServiceSpy = TestBed.inject(
       PinyinService
     ) as jasmine.SpyObj<PinyinService>;
@@ -85,8 +86,8 @@ describe('WordDetailsService', () => {
   describe('getHeisigDetails', () => {
     it('should return the Heisig details of the word', () => {
       const word = '你好';
+      const mapping: { [key: string]: string } = { 你: 'you', 好: 'good' };
       heisigServiceSpy.getHeisigEn.and.callFake((char: string) => {
-        const mapping = { 你: 'you', 好: 'good' };
         return mapping[char] || '??';
       });
 
@@ -103,8 +104,9 @@ describe('WordDetailsService', () => {
   describe('getSimpleTranslation', () => {
     it('should return the simple translation of the word', (done) => {
       const word = '你好';
-      dictionaryServiceSpy.isLoaded.and.returnValue(of(true));
-      dictionaryServiceSpy.translate.and.returnValue('hello');
+      translationServiceSpy.getTranslation.and.returnValue(
+        of({ translation: 'hello', usedApi: false })
+      );
 
       service.getSimpleTranslation(word).subscribe((translation) => {
         expect(translation).toBe('hello');
@@ -112,8 +114,8 @@ describe('WordDetailsService', () => {
       });
     });
 
-    it('should return an empty string if the dictionary is not loaded', (done) => {
-      dictionaryServiceSpy.isLoaded.and.returnValue(of(false));
+    it('should return an empty string if there is an error', (done) => {
+      translationServiceSpy.getTranslation.and.returnValue(throwError('error'));
 
       service.getSimpleTranslation('你好').subscribe((translation) => {
         expect(translation).toBe('');
@@ -126,22 +128,32 @@ describe('WordDetailsService', () => {
     it('should return all translations of the word', (done) => {
       const word = '你好';
       const mockTranslations = [
-        { pinyin: 'ni3', english: ['you'] },
-        { pinyin: 'hao3', english: ['good'] },
+        { pinyin: 'ni3', translations: ['you'], usedApi: false },
+        { pinyin: 'hao3', translations: ['good'], usedApi: false },
       ];
-      dictionaryServiceSpy.isLoaded.and.returnValue(of(true));
-      dictionaryServiceSpy.getAllTranslations.and.returnValue(
-        mockTranslations as any
+      const mockOnlineTranslation = {
+        pinyin: undefined,
+        translations: ['hello'],
+        usedApi: true,
+      };
+
+      translationServiceSpy.getAllTranslations.and.returnValue(
+        of([mockOnlineTranslation, ...mockTranslations])
       );
 
       service.getAllTranslations(word).subscribe((translations) => {
-        expect(translations).toEqual(mockTranslations);
+        expect(translations).toEqual([
+          mockOnlineTranslation,
+          ...mockTranslations,
+        ]);
         done();
       });
     });
 
-    it('should return an empty array if the dictionary is not loaded', (done) => {
-      dictionaryServiceSpy.isLoaded.and.returnValue(of(false));
+    it('should return an empty array if there is an error', (done) => {
+      translationServiceSpy.getAllTranslations.and.returnValue(
+        throwError('error')
+      );
 
       service.getAllTranslations('你好').subscribe((translations) => {
         expect(translations).toEqual([]);
@@ -154,12 +166,12 @@ describe('WordDetailsService', () => {
     it('should return true if any pinyin does not match the normalized whole pinyin', (done) => {
       const word = '要';
       const mockTranslations = [
-        { pinyin: 'yao1', english: ['demand'] },
-        { pinyin: 'yao4', english: ['want', 'need'] },
+        { pinyin: 'yao1', translations: ['demand'], usedApi: false },
+        { pinyin: 'yao4', translations: ['want', 'need'], usedApi: false },
       ];
-      dictionaryServiceSpy.isLoaded.and.returnValue(of(true));
-      dictionaryServiceSpy.getAllTranslations.and.returnValue(
-        mockTranslations as any
+
+      translationServiceSpy.getAllTranslations.and.returnValue(
+        of(mockTranslations)
       );
       pinyinServiceSpy.convertToPinyinWithNumbers.and.returnValue('yao4');
 
@@ -172,44 +184,17 @@ describe('WordDetailsService', () => {
     it('should return false if all pinyin match the normalized whole pinyin', (done) => {
       const word = '你';
       const mockTranslations = [
-        { pinyin: 'ni3', english: ['you'] },
-        { pinyin: 'ni3', english: ['bla bla'] },
+        { pinyin: 'ni3', translations: ['you'], usedApi: false },
+        { pinyin: 'ni3', translations: ['bla bla'], usedApi: false },
       ];
-      dictionaryServiceSpy.isLoaded.and.returnValue(of(true));
-      dictionaryServiceSpy.getAllTranslations.and.returnValue(
-        mockTranslations as any
+
+      translationServiceSpy.getAllTranslations.and.returnValue(
+        of(mockTranslations)
       );
       pinyinServiceSpy.convertToPinyinWithNumbers.and.returnValue('ni3');
 
       service.getDisplayPinyin(word).subscribe((displayPinyin) => {
         expect(displayPinyin).toBe(false);
-        done();
-      });
-    });
-  });
-
-  describe('getOnlineTranslation', () => {
-    it('should return the online translation of the word', (done) => {
-      const word = '你好';
-      const response = { responseData: { translatedText: 'hello' } };
-      translationServiceSpy.translate.and.returnValue(of(response));
-
-      service.getOnlineTranslation(word).subscribe((translation) => {
-        expect(translation).toBe('hello');
-        done();
-      });
-    });
-
-    it('should return an empty string if there is an error', (done) => {
-      const word = '你好';
-      translationServiceSpy.translate.and.returnValue(
-        new Observable((observer) => {
-          observer.error('Error');
-        })
-      );
-
-      service.getOnlineTranslation(word).subscribe((translation) => {
-        expect(translation).toBe('');
         done();
       });
     });

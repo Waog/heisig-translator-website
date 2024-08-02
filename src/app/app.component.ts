@@ -3,12 +3,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-import { SegmentationComponent } from './segmentation/segmentation.component';
 import { InputTextComponent } from './input-text/input-text.component';
+import { SegmentationComponent } from './segmentation/segmentation.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { DictionaryService } from './shared/services/dictionary.service';
-import { PinyinService } from './shared/services/pinyin.service';
 import { OnlineTranslationService } from './shared/services/online-translation.service';
+import { PinyinService } from './shared/services/pinyin.service';
+import { TranslationService } from './shared/services/translation.service';
 import { WordDetailsComponent } from './word-details/word-details.component';
 
 @Component({
@@ -26,7 +27,12 @@ import { WordDetailsComponent } from './word-details/word-details.component';
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [OnlineTranslationService, PinyinService, DictionaryService],
+  providers: [
+    OnlineTranslationService,
+    PinyinService,
+    DictionaryService,
+    TranslationService,
+  ],
 })
 export class AppComponent {
   userInput: string = '';

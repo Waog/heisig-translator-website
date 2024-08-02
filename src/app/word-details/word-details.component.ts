@@ -24,8 +24,13 @@ export class WordDetailsComponent implements OnInit, OnChanges {
   pinyin: string = '';
   heisigDetails: { hanzi: string; heisig: string }[] = [];
   simpleTranslation$!: Observable<string>;
-  onlineTranslation$!: Observable<string>;
-  allTranslations$!: Observable<{ pinyin: string; english: string[] }[]>;
+  allTranslations$!: Observable<
+    {
+      pinyin?: string;
+      translations: string[];
+      usedApi: boolean;
+    }[]
+  >;
   displayPinyin$!: Observable<boolean>;
 
   constructor(
@@ -47,9 +52,6 @@ export class WordDetailsComponent implements OnInit, OnChanges {
     this.pinyin = this.companion.getPinyin(this.wordHanzi);
     this.heisigDetails = this.companion.getHeisigDetails(this.wordHanzi);
     this.simpleTranslation$ = this.companion.getSimpleTranslation(
-      this.wordHanzi
-    );
-    this.onlineTranslation$ = this.companion.getOnlineTranslation(
       this.wordHanzi
     );
     this.allTranslations$ = this.companion.getAllTranslations(this.wordHanzi);
