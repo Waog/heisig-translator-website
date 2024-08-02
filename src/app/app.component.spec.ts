@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
-import { DecompositionComponent } from './decomposition/decomposition.component';
+import { SegmentationComponent } from './segmentation/segmentation.component';
 import { InputTextComponent } from './input-text/input-text.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { PinyinService } from './shared/services/pinyin.service';
@@ -71,7 +71,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
 
     const singleCharTranslationComponent = fixture.debugElement.query(
-      By.directive(DecompositionComponent)
+      By.directive(SegmentationComponent)
     );
     expect(singleCharTranslationComponent.componentInstance.userInput).toBe(
       'Hello'

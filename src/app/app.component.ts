@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-import { DecompositionComponent } from './decomposition/decomposition.component';
+import { SegmentationComponent } from './segmentation/segmentation.component';
 import { InputTextComponent } from './input-text/input-text.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { DictionaryService } from './shared/services/dictionary.service';
@@ -19,7 +19,7 @@ import { WordDetailsComponent } from './word-details/word-details.component';
     FormsModule,
     CommonModule,
     HttpClientModule,
-    DecompositionComponent,
+    SegmentationComponent,
     SentenceTranslationComponent,
     InputTextComponent,
     WordDetailsComponent,

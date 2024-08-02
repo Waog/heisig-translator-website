@@ -12,11 +12,11 @@
     [userInput]="userInput"
     targetLang="de-DE"
   ></app-sentence-translation>
-  <app-decomposition
+  <app-segmentation
     [userInput]="userInput"
     (wordSelected)="onWordSelected($event)"
     [selectedWord]="selectedWord"
-  ></app-decomposition>
+  ></app-segmentation>
   <app-word-details
     *ngIf="selectedWord"
     [word]="selectedWord"
