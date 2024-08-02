@@ -7,9 +7,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { TranslationService } from '../sentence-translation/translation.service';
-import { DictionaryService } from '../single-char-translation/dictionary.service';
-import { heisigMapping } from '../single-char-translation/heisig-mapping';
-import { PinyinService } from '../single-char-translation/pinyin.service';
+import { DictionaryService } from '../decomposition/dictionary.service';
+import { heisigMapping } from '../decomposition/heisig-mapping';
+import { PinyinService } from '../decomposition/pinyin.service';
 import { AudioService } from '../translation-and-audio-container/audio.service';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 

@@ -14,17 +14,17 @@ import { SingleWordComponent } from './single-word.component';
 import { Segment, useDefault } from 'segmentit';
 
 @Component({
-  selector: 'app-single-char-translation',
+  selector: 'app-decomposition',
   standalone: true,
   imports: [
     CommonModule,
     TranslationAndAudioContainerComponent,
     SingleWordComponent,
   ],
-  templateUrl: './single-char-translation.component.html',
-  styleUrls: ['./single-char-translation.component.scss'],
+  templateUrl: './decomposition.component.html',
+  styleUrls: ['./decomposition.component.scss'],
 })
-export class SingleCharTranslationComponent implements OnChanges {
+export class DecompositionComponent implements OnChanges {
   @Input() userInput: string = '';
   @Input() selectedWord: string = '';
   @Output() wordSelected: EventEmitter<string> = new EventEmitter<string>();

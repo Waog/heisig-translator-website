@@ -1,24 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
-import { SingleCharTranslationComponent } from './single-char-translation.component';
+import { DecompositionComponent } from './decomposition.component';
 import { SingleCharacterComponent } from './single-character.component';
 
-describe('SingleCharTranslationComponent', () => {
-  let component: SingleCharTranslationComponent;
-  let fixture: ComponentFixture<SingleCharTranslationComponent>;
+describe('DecompositionComponent', () => {
+  let component: DecompositionComponent;
+  let fixture: ComponentFixture<DecompositionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         CommonModule,
-        SingleCharTranslationComponent,
+        DecompositionComponent,
         TranslationAndAudioContainerComponent,
         SingleCharacterComponent,
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SingleCharTranslationComponent);
+    fixture = TestBed.createComponent(DecompositionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -6,9 +6,9 @@ import { RouterOutlet } from '@angular/router';
 import { InputTextComponent } from './input-text/input-text.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { TranslationService } from './sentence-translation/translation.service';
-import { DictionaryService } from './single-char-translation/dictionary.service';
-import { PinyinService } from './single-char-translation/pinyin.service';
-import { SingleCharTranslationComponent } from './single-char-translation/single-char-translation.component';
+import { DictionaryService } from './decomposition/dictionary.service';
+import { PinyinService } from './decomposition/pinyin.service';
+import { DecompositionComponent } from './decomposition/decomposition.component';
 import { WordDetailsComponent } from './word-details/word-details.component';
 
 @Component({
@@ -19,7 +19,7 @@ import { WordDetailsComponent } from './word-details/word-details.component';
     FormsModule,
     CommonModule,
     HttpClientModule,
-    SingleCharTranslationComponent,
+    DecompositionComponent,
     SentenceTranslationComponent,
     InputTextComponent,
     WordDetailsComponent,

@@ -9,7 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { TranslationService } from '../sentence-translation/translation.service';
-import { SingleCharacterComponent } from '../single-char-translation/single-character.component';
+import { SingleCharacterComponent } from './single-character.component';
 import { DictionaryService } from './dictionary.service';
 import { heisigMapping } from './heisig-mapping';
 

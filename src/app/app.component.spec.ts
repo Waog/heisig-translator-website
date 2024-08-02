@@ -7,8 +7,8 @@ import { AppComponent } from './app.component';
 import { InputTextComponent } from './input-text/input-text.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
 import { TranslationService } from './sentence-translation/translation.service';
-import { PinyinService } from './single-char-translation/pinyin.service';
-import { SingleCharTranslationComponent } from './single-char-translation/single-char-translation.component';
+import { PinyinService } from './decomposition/pinyin.service';
+import { DecompositionComponent } from './decomposition/decomposition.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -71,7 +71,7 @@ describe('AppComponent', () => {
     fixture.detectChanges();
 
     const singleCharTranslationComponent = fixture.debugElement.query(
-      By.directive(SingleCharTranslationComponent)
+      By.directive(DecompositionComponent)
     );
     expect(singleCharTranslationComponent.componentInstance.userInput).toBe(
       'Hello'
