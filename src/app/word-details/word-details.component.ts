@@ -73,8 +73,6 @@ export class WordDetailsComponent implements OnInit, OnChanges {
       this.translationsContainingCharacter[detail.hanzi] =
         this.companion.getTranslationsContainingCharacter(detail.hanzi);
     });
-
-    this.audioService.playAudio(this.wordHanzi, 'zh-CN'); // Play audio when component initializes
   }
 
   toggleExpansion(character: string): void {

@@ -12,25 +12,38 @@
 .filled-and-bordered {
   background-color: #e0f7fa;
   border: 1px solid #b2ebf2;
-  cursor: pointer;
 }
 
 .content {
   flex-grow: 1;
 }
 
-.audio-circle {
+.audio-button {
   position: absolute;
-  top: -0.5em; /* Adjust to position on the top edge */
-  right: -0.5em; /* Adjust to position on the right edge */
-  width: 1em;
-  height: 1em;
+  width: 3em;
+  height: 2em;
   display: flex;
   justify-content: center;
   align-items: center;
   color: #00796b;
-  border-radius: 50%;
+  border-radius: 0.5em;
   padding: 2px;
+  cursor: pointer;
+}
+
+.audio-button:nth-child(1) {
+  top: -0.5em;
+  right: -0.5em;
+}
+
+.audio-button:nth-child(2) {
+  top: 2em;
+  right: -0.5em;
+}
+
+.audio-button:nth-child(3) {
+  top: 4.5em;
+  right: -0.5em;
 }
 
 .audio-icon {
