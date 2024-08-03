@@ -7,6 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import { smoothenHeisig } from '../shared/helper';
 import { OnlineTranslationService } from '../shared/services/online-translation.service';
 import {
   Language,
@@ -27,7 +28,7 @@ export class SingleWordComponent implements OnChanges {
   @Input() isSelected: boolean = false;
   @Output() wordClicked: EventEmitter<string> = new EventEmitter<string>();
   hanziCharacters: string[] = [];
-  translation: string = '';
+  public translation: string = '';
   isApiTranslation: boolean = false;
 
   constructor(private translationService: TranslationService) {}
@@ -43,7 +44,7 @@ export class SingleWordComponent implements OnChanges {
     this.translationService
       .getTranslation(this.hanziWord, Language.EN)
       .subscribe((translationResult) => {
-        this.translation = translationResult.translation;
+        this.translation = smoothenHeisig(translationResult.translation);
         this.isApiTranslation = translationResult.usedApi;
       });
   }

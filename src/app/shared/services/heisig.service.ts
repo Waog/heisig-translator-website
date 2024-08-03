@@ -10,4 +10,11 @@ export class HeisigService {
   getHeisigEn(hanzi: string): string {
     return heisigMapping[hanzi];
   }
+
+  getHeisigSentenceEn(hanziSentence: string): string {
+    return hanziSentence
+      .split('')
+      .map((hanzi) => this.getHeisigEn(hanzi) || hanzi)
+      .join(' ');
+  }
 }

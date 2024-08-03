@@ -7,6 +7,7 @@
   border-radius: 10px;
   font-size: 1.2em;
   color: #00796b;
+  z-index: 1; /* Ensure audio container is behind word components */
 }
 
 .filled-and-bordered {
@@ -29,6 +30,7 @@
   border-radius: 0.5em;
   padding: 2px;
   cursor: pointer;
+  z-index: 0; /* Ensure audio buttons are behind word components */
 }
 
 .audio-button:nth-child(1) {

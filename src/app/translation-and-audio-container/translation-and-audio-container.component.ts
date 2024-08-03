@@ -13,10 +13,14 @@ import { AudioService } from '../shared/services/audio.service';
 export class TranslationAndAudioContainerComponent {
   @Input() text: string = '';
   @Input() language: string = '';
+  @Input() text2: string = '';
+  @Input() language2: string = '';
+  @Input() text3: string = '';
+  @Input() language3: string = '';
 
   constructor(private audioService: AudioService) {}
 
-  playAudio(): void {
-    this.audioService.playAudio(this.text, this.language);
+  playAudio(text: string, language: string): void {
+    this.audioService.playAudio(text, language);
   }
 }

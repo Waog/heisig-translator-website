@@ -1,4 +1,11 @@
-<app-translation-and-audio-container [text]="userInput" [language]="'zh-CN'">
+<app-translation-and-audio-container
+  [text]="wordsTTS"
+  [language]="'en-US'"
+  [text2]="userInput"
+  [language2]="'zh-CN'"
+  [text3]="heisigTTS"
+  [language3]="'en-US'"
+>
   <div class="word-group-container">
     <app-single-word
       *ngFor="let hanziWord of hanziWords"

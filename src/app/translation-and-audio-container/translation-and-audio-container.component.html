@@ -3,7 +3,24 @@
     <ng-content></ng-content>
   </div>
   <div class="audio-buttons">
-    <div class="audio-button filled-and-bordered" (click)="playAudio()">
+    <div
+      class="audio-button filled-and-bordered"
+      (click)="playAudio(text, language)"
+    >
+      <div class="audio-icon">🔊</div>
+    </div>
+    <div
+      *ngIf="text2 && language2"
+      class="audio-button filled-and-bordered"
+      (click)="playAudio(text2, language2)"
+    >
+      <div class="audio-icon">🔊</div>
+    </div>
+    <div
+      *ngIf="text3 && language3"
+      class="audio-button filled-and-bordered"
+      (click)="playAudio(text3, language3)"
+    >
       <div class="audio-icon">🔊</div>
     </div>
   </div>

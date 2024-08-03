@@ -10,6 +10,7 @@
   background-color: #e0f7fa;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   cursor: pointer; /* Add cursor pointer */
+  z-index: 2; /* Ensure word components are on top */
 }
 
 .word-container.selected {
@@ -28,6 +29,7 @@
   color: #00796b;
   border-radius: 3px;
   white-space: nowrap;
+  z-index: 2; /* Ensure word labels are on top */
 }
 
 .api-translation {
