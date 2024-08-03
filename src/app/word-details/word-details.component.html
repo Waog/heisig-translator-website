@@ -6,7 +6,7 @@
     <div *ngIf="entry.pinyin && (displayPinyin$ | async)">
       {{ entry.pinyin }}:
     </div>
-    <ul>
+    <ul class="translations">
       <li
         *ngFor="let translation of entry.translations"
         [ngClass]="{ 'online-translation': entry.usedApi }"

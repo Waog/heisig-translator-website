@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import {
   Component,
   EventEmitter,
@@ -18,7 +17,7 @@ import { SingleCharacterComponent } from './single-character.component';
 @Component({
   selector: 'app-single-word',
   standalone: true,
-  imports: [CommonModule, SingleCharacterComponent, HttpClientModule],
+  imports: [CommonModule, SingleCharacterComponent],
   templateUrl: './single-word.component.html',
   styleUrls: ['./single-word.component.scss'],
   providers: [OnlineTranslationService],

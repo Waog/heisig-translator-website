@@ -52,6 +52,8 @@ export class TranslationService {
           if (dictionaryTranslation) {
             return of({ translation: dictionaryTranslation, usedApi: false });
           }
+        } else {
+          return of({ translation: 'Loading dictionary...', usedApi: false });
         }
 
         return this.onlineTranslationService
