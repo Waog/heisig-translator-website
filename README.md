@@ -48,15 +48,29 @@ ng e2e
 
 Note: You may need to add a package that implements end-to-end testing capabilities.
 
-### Updating the Dictionary
+### Updating the Dictionary and Heisig Data
 
-To update the CEDICT dictionary used by the application, run the following command:
+To update the CEDICT dictionary and Heisig data used by the application, run the following command:
+
+```bash
+npm run update-assets
+```
+
+This will run the `update-dictionary` and `update-heisig` scripts to download the latest CEDICT file and fetch the Heisig data from the Google Sheets link, updating the `cedict.json` and `heisig.json` files in the `src/assets/` directory.
+
+Alternatively, you can run the scripts individually:
+
+To update the CEDICT dictionary:
 
 ```bash
 npm run update-dictionary
 ```
 
-This will download the latest CEDICT file, extract it, parse it, and update the `cedict.json` file in the `src/assets/` directory.
+To update the Heisig data:
+
+```bash
+npm run update-heisig
+```
 
 ## Additional Help
 
