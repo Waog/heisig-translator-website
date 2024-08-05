@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AudioService } from '../shared/services/audio.service';
-import { HeisigEntry } from '../shared/services/heisig.service';
+import { HeisigEntry, HeisigService } from '../shared/services/heisig.service';
 import { WordDetailsService } from './word-details.service';
 
 @Component({
@@ -13,25 +13,21 @@ import { WordDetailsService } from './word-details.service';
   styleUrls: ['./heisig-details.component.scss'],
   providers: [AudioService, WordDetailsService],
 })
-export class HeisigDetailsComponent {
-  @Input() heisigDetails: HeisigEntry[] = [];
-  @Input() translationsContainingCharacter: {
-    [key: string]: Observable<
-      {
-        hanzi: string;
-        pinyin?: string;
-        translations: string[];
-        usedApi: boolean;
-      }[]
-    >;
-  } = {};
+export class HeisigDetailsComponent implements OnInit {
+  @Input() hanzi: string = '';
+  detail: HeisigEntry | undefined;
   expandedCharacters: { [key: string]: boolean } = {};
   expandedDetails: { [key: string]: boolean } = {};
 
   constructor(
+    private heisigService: HeisigService,
     private audioService: AudioService,
-    private companion: WordDetailsService
+    public companion: WordDetailsService
   ) {}
+
+  ngOnInit(): void {
+    this.detail = this.heisigService.getHeisigEntry(this.hanzi);
+  }
 
   toggleExpansion(character: string, event: Event): void {
     event.stopPropagation();
@@ -60,5 +56,16 @@ export class HeisigDetailsComponent {
     return translation.length > 60
       ? `${translation.slice(0, 60)}...`
       : translation;
+  }
+
+  getTranslationsContainingCharacter(character: string): Observable<
+    {
+      hanzi: string;
+      pinyin?: string;
+      translations: string[];
+      usedApi: boolean;
+    }[]
+  > {
+    return this.companion.getTranslationsContainingCharacter(character);
   }
 }

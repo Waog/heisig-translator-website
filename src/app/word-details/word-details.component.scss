@@ -5,30 +5,6 @@ ul {
   color: #e0e0e0;
 }
 
-.translations-grid {
-  display: grid;
-  grid-template-columns: auto minmax(auto, 33%) auto 1fr;
-  column-gap: 5px;
-  row-gap: 5px;
-  align-items: center;
-}
-
-.grid-row {
-  display: contents;
-}
-
-.hanzi-column {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.translation-column {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 button {
   background: none;
   border: none;
@@ -45,24 +21,4 @@ button:hover {
 
 .online-translation {
   font-style: italic;
-}
-
-.clickable {
-  cursor: pointer;
-  user-select: none;
-}
-
-.clickable:hover {
-  background-color: #2c2c2c;
-}
-
-.expanded-translations {
-  background-color: #2c2c2c;
-  padding: 10px;
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.expanded-translations .grid-row {
-  padding: 5px 0;
 }

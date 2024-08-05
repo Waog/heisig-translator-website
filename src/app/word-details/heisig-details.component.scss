@@ -1,32 +1,9 @@
-ul {
-  padding-left: 20px;
-  margin: 0;
-  background-color: #1e1e1e;
-  color: #e0e0e0;
+.heisig-item {
+  user-select: text;
 }
 
-.translations-grid {
-  display: grid;
-  grid-template-columns: auto minmax(auto, 33%) auto 1fr;
-  column-gap: 5px;
-  row-gap: 5px;
-  align-items: center;
-}
-
-.grid-row {
-  display: contents;
-}
-
-.hanzi-column {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.translation-column {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.heisig-text {
+  user-select: text;
 }
 
 button {
@@ -42,18 +19,6 @@ button {
 
 button:hover {
   color: #80cbc4;
-}
-
-.online-translation {
-  font-style: italic;
-}
-
-.heisig-item {
-  user-select: text;
-}
-
-.heisig-text {
-  user-select: text;
 }
 
 .toggle-button,
@@ -86,4 +51,16 @@ button:hover {
   padding: 10px;
   border-radius: 5px;
   margin-top: 10px;
+}
+
+.hanzi-column {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.translation-column {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
