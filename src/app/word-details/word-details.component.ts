@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AudioService } from '../shared/services/audio.service';
+import { HeisigEntry, HeisigService } from '../shared/services/heisig.service';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 import { HeisigDetailsComponent } from './heisig-details.component';
 import { WordDetailsService } from './word-details.service';
@@ -38,7 +39,7 @@ export class WordDetailsComponent implements OnInit, OnChanges {
     }[]
   >;
   displayPinyin$!: Observable<boolean>;
-  heisigDetails: { hanzi: string; heisig: string }[] = [];
+  heisigDetails: HeisigEntry[] = [];
   translationsContainingCharacter: {
     [key: string]: Observable<
       {
@@ -52,6 +53,7 @@ export class WordDetailsComponent implements OnInit, OnChanges {
 
   constructor(
     private companion: WordDetailsService,
+    private heisigService: HeisigService,
     private audioService: AudioService
   ) {}
 
@@ -72,7 +74,10 @@ export class WordDetailsComponent implements OnInit, OnChanges {
     );
     this.allTranslations$ = this.companion.getAllTranslations(this.wordHanzi);
     this.displayPinyin$ = this.companion.getDisplayPinyin(this.wordHanzi);
-    this.heisigDetails = this.companion.getHeisigDetails(this.wordHanzi);
+    this.heisigDetails = this.wordHanzi
+      .split('')
+      .map((char) => this.heisigService.getHeisigEntry(char))
+      .filter((entry) => entry) as HeisigEntry[];
     this.heisigTTSText = this.companion.getHeisigTTSText(this.wordHanzi);
 
     this.heisigDetails.forEach((detail) => {

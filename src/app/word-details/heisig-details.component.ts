@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AudioService } from '../shared/services/audio.service';
+import { HeisigEntry } from '../shared/services/heisig.service';
 import { WordDetailsService } from './word-details.service';
 
 @Component({
@@ -13,7 +14,7 @@ import { WordDetailsService } from './word-details.service';
   providers: [AudioService, WordDetailsService],
 })
 export class HeisigDetailsComponent {
-  @Input() heisigDetails: { hanzi: string; heisig: string }[] = [];
+  @Input() heisigDetails: HeisigEntry[] = [];
   @Input() translationsContainingCharacter: {
     [key: string]: Observable<
       {
@@ -25,6 +26,7 @@ export class HeisigDetailsComponent {
     >;
   } = {};
   expandedCharacters: { [key: string]: boolean } = {};
+  expandedDetails: { [key: string]: boolean } = {};
 
   constructor(
     private audioService: AudioService,
@@ -36,8 +38,17 @@ export class HeisigDetailsComponent {
     this.expandedCharacters[character] = !this.expandedCharacters[character];
   }
 
+  toggleDetails(character: string, event: Event): void {
+    event.stopPropagation();
+    this.expandedDetails[character] = !this.expandedDetails[character];
+  }
+
   isExpanded(character: string): boolean {
     return this.expandedCharacters[character];
+  }
+
+  isDetailsExpanded(character: string): boolean {
+    return this.expandedDetails[character];
   }
 
   playAudio(event: Event, text: string, lang: string = 'en-US'): void {

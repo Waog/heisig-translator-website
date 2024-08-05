@@ -2,14 +2,20 @@
 <ul class="heisig">
   <li *ngFor="let detail of heisigDetails" class="heisig-item">
     <span class="heisig-text">
-      {{ detail.hanzi }} - {{ detail.heisig }}
-      <button (click)="playAudio($event, detail.heisig)">🔊</button>
+      {{ detail.hanzi }} - {{ detail.keyword }}
+      <button (click)="playAudio($event, detail.keyword)">🔊</button>
     </span>
     <button
       class="toggle-button"
       (click)="toggleExpansion(detail.hanzi, $event)"
     >
       {{ isExpanded(detail.hanzi) ? "▲" : "▼" }}
+    </button>
+    <button
+      class="toggle-details-button"
+      (click)="toggleDetails(detail.hanzi, $event)"
+    >
+      {{ isDetailsExpanded(detail.hanzi) ? "Details ▲" : "Details ▼" }}
     </button>
     <div
       *ngIf="isExpanded(detail.hanzi)"
@@ -30,6 +36,27 @@
           }}</span>
         </div>
       </ng-container>
+    </div>
+    <div *ngIf="isDetailsExpanded(detail.hanzi)" class="heisig-details">
+      <p><strong>Keyword:</strong> {{ detail.keyword }}</p>
+      <p><strong>Keyword (DE):</strong> {{ detail.keywordDe }}</p>
+      <p><strong>Hanzi:</strong> {{ detail.hanzi }}</p>
+      <p><strong>Traditional:</strong> {{ detail.traditional }}</p>
+      <p><strong>Heisig Number:</strong> {{ detail.heisigNumber }}</p>
+      <p><strong>Heisig Sequence:</strong> {{ detail.heisigSequence }}</p>
+      <p><strong>Story:</strong> {{ detail.story }}</p>
+      <p><strong>Story (DE):</strong> {{ detail.storyDe }}</p>
+      <p><strong>Stroke Count:</strong> {{ detail.strokeCount }}</p>
+      <p><strong>Pinyin:</strong> {{ detail.pinyin }}</p>
+      <p><strong>Components Hanzi:</strong> {{ detail.componentsHanzi }}</p>
+      <p><strong>Components Pinyin:</strong> {{ detail.componentsPinyin }}</p>
+      <p>
+        <strong>Components Keywords:</strong> {{ detail.componentsKeywords }}
+      </p>
+      <p>
+        <strong>Components Keywords (DE):</strong>
+        {{ detail.componentsKeywordsDe }}
+      </p>
     </div>
   </li>
 </ul>

@@ -56,7 +56,8 @@ button:hover {
   user-select: text;
 }
 
-.toggle-button {
+.toggle-button,
+.toggle-details-button {
   background: none;
   border: none;
   cursor: pointer;
@@ -64,7 +65,8 @@ button:hover {
   margin-left: 10px;
 }
 
-.toggle-button:hover {
+.toggle-button:hover,
+.toggle-details-button:hover {
   color: #80cbc4;
 }
 
@@ -77,4 +79,11 @@ button:hover {
 
 .expanded-translations .grid-row {
   padding: 5px 0;
+}
+
+.heisig-details {
+  background-color: #2c2c2c;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
 }
