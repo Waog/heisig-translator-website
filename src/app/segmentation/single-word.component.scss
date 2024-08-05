@@ -5,17 +5,17 @@
   margin: 0.5em 0.2em;
   padding: 0.5em;
   position: relative;
-  border-top: 1px solid #00796b;
+  border-top: 1px solid #80cbc4;
   border-radius: 5px;
-  background-color: #e0f7fa;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  cursor: pointer; /* Add cursor pointer */
-  z-index: 2; /* Ensure word components are on top */
+  background-color: #1e1e1e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  z-index: 2;
 }
 
 .word-container.selected {
-  background-color: #c5eae8; /* Intermediate highlight color */
-  border-color: #00796b;
+  background-color: #263238;
+  border-color: #80cbc4;
 }
 
 .word-label {
@@ -23,18 +23,18 @@
   top: -0.75em;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #e0f7fa;
+  background-color: #1e1e1e;
   padding: 0 0.2em;
   font-size: 0.75em;
-  color: #00796b;
+  color: #80cbc4;
   border-radius: 3px;
   white-space: nowrap;
-  z-index: 2; /* Ensure word labels are on top */
+  z-index: 2;
 }
 
 .api-translation {
   font-style: italic;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 .character-group {

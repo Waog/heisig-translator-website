@@ -6,13 +6,13 @@
   padding: 10px;
   border-radius: 10px;
   font-size: 1.2em;
-  color: #00796b;
-  z-index: 1; /* Ensure audio container is behind word components */
+  color: #80cbc4;
+  z-index: 1;
 }
 
 .filled-and-bordered {
-  background-color: #e0f7fa;
-  border: 1px solid #b2ebf2;
+  background-color: #1e1e1e;
+  border: 1px solid #37474f;
 }
 
 .content {
@@ -26,11 +26,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #00796b;
+  color: #80cbc4;
   border-radius: 0.5em;
   padding: 2px;
   cursor: pointer;
-  z-index: 0; /* Ensure audio buttons are behind word components */
+  z-index: 0;
 }
 
 .audio-button:nth-child(1) {
@@ -52,7 +52,6 @@
   font-size: 0.8em;
 }
 
-/* Media query for narrow screens */
 @media (max-width: 600px) {
   .translation-audio-container {
     padding-left: 3px;

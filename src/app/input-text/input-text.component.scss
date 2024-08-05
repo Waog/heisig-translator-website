@@ -5,11 +5,23 @@
 
 input[type="text"] {
   width: 100%;
-  padding: 10px 70px 10px 10px; /* Padding right für Platzierung der Buttons */
+  padding: 10px 70px 10px 10px;
   font-size: 1.2em;
-  border: 1px solid #ccc;
+  border: 1px solid #37474f;
   border-radius: 5px;
   box-sizing: border-box;
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+}
+
+input[type="text"]::placeholder {
+  color: #b0bec5;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #2c2c2c inset !important;
+  box-shadow: 0 0 0 1000px #2c2c2c inset !important;
+  -webkit-text-fill-color: #e0e0e0 !important;
 }
 
 button {
@@ -20,17 +32,17 @@ button {
   border: none;
   font-size: 1.2em;
   cursor: pointer;
-  color: #888;
+  color: #b0bec5;
 }
 
 button:hover {
-  color: #333;
+  color: #e0e0e0;
 }
 
 .paste-button {
-  right: 40px; /* Platzierung des Paste-Buttons rechts */
+  right: 40px;
 }
 
 .reset-button {
-  right: 10px; /* Platzierung des Reset-Buttons rechts */
+  right: 10px;
 }
