@@ -9,12 +9,17 @@ import {
 import { Observable } from 'rxjs';
 import { AudioService } from '../shared/services/audio.service';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
+import { HeisigDetailsComponent } from './heisig-details.component';
 import { WordDetailsService } from './word-details.service';
 
 @Component({
   selector: 'app-word-details',
   standalone: true,
-  imports: [CommonModule, TranslationAndAudioContainerComponent],
+  imports: [
+    CommonModule,
+    TranslationAndAudioContainerComponent,
+    HeisigDetailsComponent,
+  ],
   templateUrl: './word-details.component.html',
   styleUrls: ['./word-details.component.scss'],
   providers: [AudioService, WordDetailsService],
@@ -22,7 +27,6 @@ import { WordDetailsService } from './word-details.service';
 export class WordDetailsComponent implements OnInit, OnChanges {
   @Input() wordHanzi: string = '';
   pinyin: string = '';
-  heisigDetails: { hanzi: string; heisig: string }[] = [];
   heisigTTSText: string = '';
   simpleTranslation$!: Observable<string>;
   allTranslations$!: Observable<
@@ -34,6 +38,7 @@ export class WordDetailsComponent implements OnInit, OnChanges {
     }[]
   >;
   displayPinyin$!: Observable<boolean>;
+  heisigDetails: { hanzi: string; heisig: string }[] = [];
   translationsContainingCharacter: {
     [key: string]: Observable<
       {
@@ -44,7 +49,6 @@ export class WordDetailsComponent implements OnInit, OnChanges {
       }[]
     >;
   } = {};
-  expandedCharacters: { [key: string]: boolean } = {};
 
   constructor(
     private companion: WordDetailsService,
@@ -63,36 +67,22 @@ export class WordDetailsComponent implements OnInit, OnChanges {
 
   private loadDetails(): void {
     this.pinyin = this.companion.getPinyin(this.wordHanzi);
-    this.heisigDetails = this.companion.getHeisigDetails(this.wordHanzi);
     this.simpleTranslation$ = this.companion.getSimpleTranslation(
       this.wordHanzi
     );
     this.allTranslations$ = this.companion.getAllTranslations(this.wordHanzi);
     this.displayPinyin$ = this.companion.getDisplayPinyin(this.wordHanzi);
+    this.heisigDetails = this.companion.getHeisigDetails(this.wordHanzi);
+    this.heisigTTSText = this.companion.getHeisigTTSText(this.wordHanzi);
 
     this.heisigDetails.forEach((detail) => {
       this.translationsContainingCharacter[detail.hanzi] =
         this.companion.getTranslationsContainingCharacter(detail.hanzi);
     });
-    this.heisigTTSText = this.companion.getHeisigTTSText(this.wordHanzi);
-  }
-
-  toggleExpansion(character: string): void {
-    this.expandedCharacters[character] = !this.expandedCharacters[character];
-  }
-
-  isExpanded(character: string): boolean {
-    return this.expandedCharacters[character];
   }
 
   playAudio(event: Event, text: string, lang: string = 'en-US'): void {
     event.stopPropagation();
     this.audioService.playAudio(text, lang);
-  }
-
-  cropTranslation(translation: string): string {
-    return translation.length > 60
-      ? `${translation.slice(0, 60)}...`
-      : translation;
   }
 }
