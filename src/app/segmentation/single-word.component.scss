@@ -7,14 +7,14 @@
   position: relative;
   border-top: 1px solid #80cbc4;
   border-radius: 5px;
-  background-color: #1e1e1e;
+  background-color: #333;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   cursor: pointer;
   z-index: 2;
 }
 
 .word-container.selected {
-  background-color: #263238;
+  background-color: #444;
   border-color: #80cbc4;
 }
 
@@ -23,7 +23,7 @@
   top: -0.75em;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #1e1e1e;
+  background-color: #333;
   padding: 0 0.2em;
   font-size: 0.75em;
   color: #80cbc4;

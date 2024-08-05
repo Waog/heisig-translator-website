@@ -1,9 +1,10 @@
 .translation-audio-container {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   margin-top: 20px;
-  padding: 10px;
+  padding: 20px;
   border-radius: 10px;
   font-size: 1.2em;
   color: #80cbc4;
@@ -17,12 +18,21 @@
 
 .content {
   flex-grow: 1;
+  width: 100%;
+}
+
+.audio-buttons {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  position: absolute;
+  top: -1em;
+  right: 1em;
 }
 
 .audio-button {
-  position: absolute;
-  width: 3em;
-  height: 2em;
+  width: 2.5em;
+  height: 1.35em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,22 +40,7 @@
   border-radius: 0.5em;
   padding: 2px;
   cursor: pointer;
-  z-index: 0;
-}
-
-.audio-button:nth-child(1) {
-  top: -0.5em;
-  right: -0.5em;
-}
-
-.audio-button:nth-child(2) {
-  top: 2em;
-  right: -0.5em;
-}
-
-.audio-button:nth-child(3) {
-  top: 4.5em;
-  right: -0.5em;
+  margin-left: 0.5em;
 }
 
 .audio-icon {
@@ -56,5 +51,19 @@
   .translation-audio-container {
     padding-left: 3px;
     padding-right: 3px;
+  }
+
+  .audio-buttons {
+    top: -0.5em;
+    right: 0.5em;
+  }
+
+  .audio-button {
+    width: 2em;
+    height: 1.1em;
+  }
+
+  .audio-icon {
+    font-size: 0.7em;
   }
 }
