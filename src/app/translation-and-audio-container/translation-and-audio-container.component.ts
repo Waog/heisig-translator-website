@@ -17,6 +17,9 @@ export class TranslationAndAudioContainerComponent {
   @Input() language2: string = '';
   @Input() text3: string = '';
   @Input() language3: string = '';
+  @Input() label1: string = '';
+  @Input() label2: string = '';
+  @Input() label3: string = '';
 
   constructor(private audioService: AudioService) {}
 

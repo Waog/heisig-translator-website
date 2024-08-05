@@ -5,6 +5,7 @@
       (click)="playAudio(text, language)"
     >
       <div class="audio-icon">🔊</div>
+      <div class="audio-label" *ngIf="label1">{{ label1 }}</div>
     </div>
     <div
       *ngIf="text2 && language2"
@@ -12,6 +13,7 @@
       (click)="playAudio(text2, language2)"
     >
       <div class="audio-icon">🔊</div>
+      <div class="audio-label" *ngIf="label2">{{ label2 }}</div>
     </div>
     <div
       *ngIf="text3 && language3"
@@ -19,6 +21,7 @@
       (click)="playAudio(text3, language3)"
     >
       <div class="audio-icon">🔊</div>
+      <div class="audio-label" *ngIf="label3">{{ label3 }}</div>
     </div>
   </div>
   <div class="content">
