@@ -11,10 +11,13 @@ export class HeisigService {
     return heisigMapping[hanzi];
   }
 
-  getHeisigSentenceEn(hanziSentence: string): string {
+  getHeisigSentenceEn(
+    hanziSentence: string,
+    replacementForUnknown: string | undefined = undefined
+  ): string {
     return hanziSentence
       .split('')
-      .map((hanzi) => this.getHeisigEn(hanzi) || hanzi)
+      .map((hanzi) => this.getHeisigEn(hanzi) || replacementForUnknown || hanzi)
       .join(' ');
   }
 }

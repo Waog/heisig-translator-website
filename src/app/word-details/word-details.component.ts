@@ -23,6 +23,7 @@ export class WordDetailsComponent implements OnInit, OnChanges {
   @Input() wordHanzi: string = '';
   pinyin: string = '';
   heisigDetails: { hanzi: string; heisig: string }[] = [];
+  heisigTTSText: string = '';
   simpleTranslation$!: Observable<string>;
   allTranslations$!: Observable<
     {
@@ -73,6 +74,7 @@ export class WordDetailsComponent implements OnInit, OnChanges {
       this.translationsContainingCharacter[detail.hanzi] =
         this.companion.getTranslationsContainingCharacter(detail.hanzi);
     });
+    this.heisigTTSText = this.companion.getHeisigTTSText(this.wordHanzi);
   }
 
   toggleExpansion(character: string): void {

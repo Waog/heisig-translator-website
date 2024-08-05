@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { smoothenHeisig } from '../shared/helper';
 import { HeisigService } from '../shared/services/heisig.service';
 import { PinyinService } from '../shared/services/pinyin.service';
 import {
@@ -32,6 +33,12 @@ export class WordDetailsService {
       hanzi: char,
       heisig: this.heisigService.getHeisigEn(char) || '??',
     }));
+  }
+
+  getHeisigTTSText(word: string): string {
+    return smoothenHeisig(
+      this.heisigService.getHeisigSentenceEn(word, 'unknown')
+    );
   }
 
   getSimpleTranslation(word: string): Observable<string> {

@@ -1,4 +1,14 @@
-<app-translation-and-audio-container [text]="wordHanzi" [language]="'zh-CN'">
+<app-translation-and-audio-container
+  [text]="(simpleTranslation$ | async) || ''"
+  [language]="'en-US'"
+  [label1]="'English'"
+  [text2]="wordHanzi"
+  [language2]="'zh-CN'"
+  [label2]="'Chinese'"
+  [text3]="heisigTTSText"
+  [language3]="'en-US'"
+  [label3]="'Heisig'"
+>
   <h1>{{ simpleTranslation$ | async }} - {{ wordHanzi }} - {{ pinyin }}</h1>
 
   <h2>Translations:</h2>
