@@ -6,7 +6,7 @@
   user-select: text;
   display: flex;
   align-items: center;
-  flex-wrap: wrap; /* Added to ensure wrapping if the content overflows */
+  flex-wrap: wrap;
 }
 
 button {

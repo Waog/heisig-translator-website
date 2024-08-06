@@ -31,12 +31,22 @@ export class HeisigDetailsComponent implements OnInit {
 
   toggleExpansion(character: string, event: Event): void {
     event.stopPropagation();
-    this.expandedCharacters[character] = !this.expandedCharacters[character];
+    if (this.expandedCharacters[character]) {
+      this.expandedCharacters[character] = false;
+    } else {
+      this.expandedCharacters = { [character]: true };
+      this.expandedDetails = {};
+    }
   }
 
   toggleDetails(character: string, event: Event): void {
     event.stopPropagation();
-    this.expandedDetails[character] = !this.expandedDetails[character];
+    if (this.expandedDetails[character]) {
+      this.expandedDetails[character] = false;
+    } else {
+      this.expandedDetails = { [character]: true };
+      this.expandedCharacters = {};
+    }
   }
 
   isExpanded(character: string): boolean {
