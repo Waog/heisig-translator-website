@@ -2,17 +2,31 @@
   <span class="heisig-text">
     {{ detail.hanzi }} {{ detail.pinyin }} - {{ detail.keyword }}
     <small class="heisig-number">[{{ detail.heisigNumber }}]</small>
-    <button (click)="playAudio($event, detail.keyword)">🔊</button>
+    <button
+      class="audio-button"
+      (click)="playAudio($event, detail.hanzi, 'zh-CN')"
+    >
+      🔊 <span class="audio-label">CH</span>
+    </button>
+    <button
+      class="audio-button"
+      (click)="playAudio($event, detail.keyword, 'en-US')"
+    >
+      🔊 <span class="audio-label">EN</span>
+    </button>
+    <button
+      class="toggle-button"
+      (click)="toggleExpansion(detail.hanzi, $event)"
+    >
+      📖 {{ isExpanded(detail.hanzi) ? "▲" : "▼" }}
+    </button>
+    <button
+      class="toggle-details-button"
+      (click)="toggleDetails(detail.hanzi, $event)"
+    >
+      {{ isDetailsExpanded(detail.hanzi) ? "Details ▲" : "Details ▼" }}
+    </button>
   </span>
-  <button class="toggle-button" (click)="toggleExpansion(detail.hanzi, $event)">
-    📖 {{ isExpanded(detail.hanzi) ? "▲" : "▼" }}
-  </button>
-  <button
-    class="toggle-details-button"
-    (click)="toggleDetails(detail.hanzi, $event)"
-  >
-    {{ isDetailsExpanded(detail.hanzi) ? "Details ▲" : "Details ▼" }}
-  </button>
   <div
     *ngIf="isExpanded(detail.hanzi)"
     class="expanded-translations translations-grid"
