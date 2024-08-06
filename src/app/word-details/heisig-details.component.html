@@ -1,6 +1,12 @@
 <div *ngIf="detail" class="heisig-item">
   <span class="heisig-text">
-    {{ detail.hanzi }} {{ detail.pinyin }} - {{ detail.keyword }}
+    <img
+      style="filter: invert(1); height: 1em"
+      *ngIf="isPrimitiveWithImage()"
+      [src]="getPrimitiveImageFileName()"
+    />
+    {{ !isPrimitiveWithImage() ? detail.hanzi : "" }} {{ detail.pinyin }} -
+    {{ detail.keyword }}
     <small class="heisig-number">[{{ detail.heisigNumber }}]</small>
     <button
       class="audio-button"
@@ -52,6 +58,11 @@
       {{ detail.keywordDe }}
       <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>
     </h3>
+    <img
+      style="filter: invert(1)"
+      *ngIf="isPrimitiveWithImage()"
+      [src]="getPrimitiveImageFileName()"
+    />
     <p *ngIf="detail.story" class="story">
       <span class="quote">”</span>{{ detail.story }}
       <button
