@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 // Internal interface for the JSON structure
@@ -41,7 +41,7 @@ export interface HeisigEntry {
 })
 export class HeisigService {
   private heisigData: HeisigEntryInternal[] = [];
-  private heisigLoaded = new BehaviorSubject<boolean>(false);
+  private heisigLoaded = new ReplaySubject<boolean>(1);
 
   constructor(private http: HttpClient) {
     this.loadHeisigData();
