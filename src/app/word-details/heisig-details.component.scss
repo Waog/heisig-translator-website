@@ -1,5 +1,11 @@
 .heisig-item {
   user-select: text;
+  background-color: #2c2c2c;
+  padding: 8px 15px;
+  border-radius: 8px;
+  border-left: 1px solid #80cbc4;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .heisig-text {
@@ -7,6 +13,26 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  font-size: 1.2em;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.right-buttons {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.subtle-separator {
+  color: #b0bec5;
+  margin: 0 0.5em;
+}
+
+.toggle-sub-components-button-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-start;
 }
 
 button {
@@ -24,7 +50,9 @@ button:hover {
   color: #80cbc4;
 }
 
-.audio-button {
+.audio-button,
+.audio-button-inline,
+.audio-button-story {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,50 +69,67 @@ button:hover {
 }
 
 .audio-button-story {
+  display: inline-block;
+}
+
+.audio-button-inline {
+  padding: 2px 3px;
+  min-width: auto;
   display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: #b0bec5;
-  border-radius: 0.5em;
-  padding: 2px 5px;
-  cursor: pointer;
-  margin-left: 0.5em;
-  background-color: #2c2c2c;
-  border: 1px solid #455a64;
-  font-size: 0.9em;
 }
 
 .audio-button:hover,
+.audio-button-inline:hover,
 .audio-button-story:hover {
   color: #80cbc4;
   border-color: #80cbc4;
 }
 
 .toggle-button,
-.toggle-details-button {
+.toggle-heisig-details-button,
+.toggle-sub-components-button,
+.styled-toggle-button,
+.toggle-occurrences-button {
   background: none;
   border: none;
   cursor: pointer;
   color: #b0bec5;
-  margin-left: 10px;
-  padding: 2px 5px;
   border-radius: 3px;
   border: 1px solid #2c2c2c;
 }
 
 .toggle-button:hover,
-.toggle-details-button:hover {
+.toggle-heisig-details-button:hover,
+.toggle-sub-components-button:hover,
+.styled-toggle-button:hover,
+.toggle-occurrences-button:hover {
   color: #80cbc4;
   border-color: #80cbc4;
 }
 
+.toggle-sub-components-button,
+.styled-toggle-button,
+.toggle-occurrences-button {
+  font-size: 0.9em;
+  color: #b0bec5;
+  display: flex;
+  align-items: center;
+}
+
+.styled-toggle-button {
+  margin-left: 0.5em;
+}
+
+.toggle-occurrences-button {
+  margin: 0 auto;
+  font-size: 0.8em;
+  color: #b0bec5;
+  padding: 4px 8px;
+}
+
 .heisig-details {
-  background-color: #2c2c2c;
-  padding: 15px;
-  border-radius: 8px;
-  border-left: 3px solid #80cbc4;
   margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .heisig-number {
@@ -98,11 +143,12 @@ button:hover {
   color: #999;
 }
 
-.heisig-details h3 {
-  font-size: 1.3em;
+.keyword-de {
+  font-size: 1.1em;
   margin-top: 0;
   margin-bottom: 10px;
   color: #e0e0e0;
+  display: block;
 }
 
 .heisig-details p {
@@ -121,4 +167,16 @@ button:hover {
   position: absolute;
   left: 0;
   top: 0;
+}
+
+.pinyin-line {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 1em;
+}
+
+.sub-components {
+  margin-left: 24px;
+  margin-top: 10px;
 }

@@ -1,72 +1,105 @@
-<div *ngIf="detail" class="heisig-item">
-  <span class="heisig-text">
-    <img
-      style="filter: invert(1); height: 1em"
-      *ngIf="isPrimitiveWithImage()"
-      [src]="getPrimitiveImageFileName()"
-    />
-    {{ !isPrimitiveWithImage() ? detail.hanzi : "" }} {{ detail.pinyin }} -
-    {{ detail.keyword }}
-    <small class="heisig-number">[{{ detail.heisigNumber }}]</small>
-    <button
-      class="audio-button"
-      (click)="playAudio($event, detail.hanzi, 'zh-CN')"
-    >
-      🔊
-    </button>
-    <button
-      class="audio-button"
-      (click)="playAudio($event, detail.keyword, 'en-US')"
-    >
-      🔊
-    </button>
-    <button
-      class="toggle-button"
-      (click)="toggleOccurrencesExpansion(detail.hanzi, $event)"
-    >
-      📖 {{ isOccurrencesExpanded(detail.hanzi) ? "▲" : "▼" }}
-    </button>
-    <button
-      class="toggle-details-button"
-      (click)="toggleHeisigDetailsExpansion(detail.hanzi, $event)"
-    >
-      {{ isHeisigDetailsExpanded(detail.hanzi) ? "Details ▲" : "Details ▼" }}
-    </button>
-  </span>
-  <app-dictionary-occurrences
-    *ngIf="isOccurrencesExpanded(detail.hanzi)"
-    [hanziChar]="detail.hanzi"
-  ></app-dictionary-occurrences>
-  <div *ngIf="isHeisigDetailsExpanded(detail.hanzi)" class="heisig-details">
-    <h3>
-      {{ detail.keywordDe }}
-      <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>
-    </h3>
-    <img
-      style="filter: invert(1)"
-      *ngIf="isPrimitiveWithImage()"
-      [src]="getPrimitiveImageFileName()"
-    />
-    <p *ngIf="detail.story" class="story">
-      <span class="quote">”</span>{{ detail.story }}
+<div>
+  <div *ngIf="detail" class="heisig-item">
+    <span class="heisig-text">
+      <img
+        style="filter: invert(1); height: 1.5em; margin-right: 0.5em"
+        *ngIf="isPrimitiveWithImage()"
+        [src]="getPrimitiveImageFileName()"
+      />
+      {{ !isPrimitiveWithImage() ? detail.hanzi : "" }}
+      <span class="subtle-separator">–</span>
+      {{ detail.keyword }}
+      <span class="right-buttons">
+        <button
+          class="audio-button-inline"
+          (click)="playAudio($event, detail.keyword, 'en-US')"
+        >
+          🔊
+        </button>
+        <button
+          class="toggle-heisig-details-button styled-toggle-button"
+          (click)="toggleHeisigDetailsExpansion(detail.hanzi, $event)"
+        >
+          {{
+            isHeisigDetailsExpanded(detail.hanzi) ? "Details ▲" : "Details ▼"
+          }}
+        </button>
+      </span>
+    </span>
+    <div *ngIf="isHeisigDetailsExpanded(detail.hanzi)" class="heisig-details">
+      <span class="keyword-de">
+        {{ detail.keywordDe }}
+        <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>
+        <small class="heisig-number">[{{ detail.heisigNumber }}]</small>
+      </span>
+      <img
+        style="filter: invert(1); margin-top: 10px"
+        *ngIf="isPrimitiveWithImage()"
+        [src]="getPrimitiveImageFileName()"
+      />
+      <p class="pinyin-line">
+        {{ detail.pinyin }}
+        <button
+          class="audio-button-inline"
+          (click)="playAudio($event, detail.hanzi, 'zh-CN')"
+        >
+          🔊
+        </button>
+      </p>
+      <p *ngIf="detail.story" class="story">
+        <span class="quote">”</span>{{ detail.story }}
+        <button
+          class="audio-button-story"
+          (click)="playAudio($event, detail.story, 'en-US')"
+        >
+          🔊
+        </button>
+      </p>
+      <p *ngIf="detail.storyDe" class="story">
+        <span class="quote">”</span>{{ detail.storyDe }}
+        <button
+          class="audio-button-story"
+          (click)="playAudio($event, detail.storyDe, 'de-DE')"
+        >
+          🔊
+        </button>
+      </p>
       <button
-        class="audio-button-story"
-        (click)="playAudio($event, detail.story, 'en-US')"
+        class="toggle-occurrences-button"
+        (click)="toggleOccurrencesExpansion(detail.hanzi, $event)"
       >
-        🔊
+        {{
+          isOccurrencesExpanded(detail.hanzi)
+            ? "Hide Occurrences ▲"
+            : "Show Occurrences ▼"
+        }}
       </button>
-    </p>
-    <p *ngIf="detail.storyDe" class="story">
-      <span class="quote">”</span>{{ detail.storyDe }}
+      <app-dictionary-occurrences
+        *ngIf="isOccurrencesExpanded(detail.hanzi)"
+        [hanziChar]="detail.hanzi"
+      ></app-dictionary-occurrences>
+    </div>
+    <div
+      *ngIf="detail.components.length > 0"
+      class="toggle-sub-components-button-container"
+    >
       <button
-        class="audio-button-story"
-        (click)="playAudio($event, detail.storyDe, 'de-DE')"
+        class="toggle-sub-components-button"
+        (click)="toggleSubComponentsExpansion(detail.hanzi, $event)"
       >
-        🔊
+        {{
+          isSubComponentsExpanded(detail.hanzi)
+            ? "▼ Hide Components"
+            : "▶ Show Components"
+        }}
       </button>
-    </p>
+    </div>
+  </div>
+  <div
+    *ngIf="detail && isSubComponentsExpanded(detail.hanzi)"
+    class="sub-components"
+  >
     <div class="components" *ngIf="detail.components.length > 0">
-      <p>Components:</p>
       <ng-container *ngFor="let component of detail.components">
         <app-heisig-details [hanzi]="component.hanzi"></app-heisig-details>
       </ng-container>

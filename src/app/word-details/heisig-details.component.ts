@@ -18,6 +18,7 @@ export class HeisigDetailsComponent implements OnInit {
   detail: HeisigEntry | undefined;
   expandedOccurrences: { [key: string]: boolean } = {};
   expandedHeisigDetails: { [key: string]: boolean } = {};
+  expandedSubComponents: { [key: string]: boolean } = {};
 
   constructor(
     private heisigService: HeisigService,
@@ -31,22 +32,19 @@ export class HeisigDetailsComponent implements OnInit {
 
   toggleOccurrencesExpansion(character: string, event: Event): void {
     event.stopPropagation();
-    if (this.expandedOccurrences[character]) {
-      this.expandedOccurrences[character] = false;
-    } else {
-      this.expandedOccurrences = { [character]: true };
-      this.expandedHeisigDetails = {};
-    }
+    this.expandedOccurrences[character] = !this.expandedOccurrences[character];
   }
 
   toggleHeisigDetailsExpansion(character: string, event: Event): void {
     event.stopPropagation();
-    if (this.expandedHeisigDetails[character]) {
-      this.expandedHeisigDetails[character] = false;
-    } else {
-      this.expandedHeisigDetails = { [character]: true };
-      this.expandedOccurrences = {};
-    }
+    this.expandedHeisigDetails[character] =
+      !this.expandedHeisigDetails[character];
+  }
+
+  toggleSubComponentsExpansion(character: string, event: Event): void {
+    event.stopPropagation();
+    this.expandedSubComponents[character] =
+      !this.expandedSubComponents[character];
   }
 
   isOccurrencesExpanded(character: string): boolean {
@@ -55,6 +53,10 @@ export class HeisigDetailsComponent implements OnInit {
 
   isHeisigDetailsExpanded(character: string): boolean {
     return this.expandedHeisigDetails[character];
+  }
+
+  isSubComponentsExpanded(character: string): boolean {
+    return this.expandedSubComponents[character];
   }
 
   playAudio(event: Event, text: string, lang: string = 'en-US'): void {

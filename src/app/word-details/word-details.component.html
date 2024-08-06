@@ -28,9 +28,11 @@
   </ng-container>
 
   <h2>Heisig:</h2>
-  <ul class="heisig">
-    <li *ngFor="let char of wordHanzi.split('')" class="heisig-item">
-      <app-heisig-details [hanzi]="char"></app-heisig-details>
-    </li>
-  </ul>
+  <div class="heisig-list">
+    <app-heisig-details
+      *ngFor="let char of wordHanzi.split('')"
+      [hanzi]="char"
+      class="heisig-item"
+    ></app-heisig-details>
+  </div>
 </app-translation-and-audio-container>

@@ -171,14 +171,12 @@ describe('Integration: AppComponent', () => {
       getElementText(WordDetailsComponent, 0, '.translations li', 2)
     ).toContain('hi');
 
-    expect(getElementText(WordDetailsComponent, 0, '.heisig li', 0)).toContain(
-      '你 nǐ - you'
-    );
-    expect(getElementText(WordDetailsComponent, 0, '.heisig li', 1)).toContain(
-      '好 hǎo - good'
-    );
+    expect(getElementText(HeisigDetailsComponent, 0)).toContain('你 – you');
+    expect(getElementText(HeisigDetailsComponent, 1)).toContain('好 – good');
 
-    clickElement(HeisigDetailsComponent, 0, '.toggle-button');
+    clickElement(HeisigDetailsComponent, 0, '.toggle-heisig-details-button');
+
+    clickElement(HeisigDetailsComponent, 0, '.toggle-occurrences-button');
 
     expect(
       getElementText(DictionaryOccurrencesComponent, 0, '.hanzi-column', 0)
