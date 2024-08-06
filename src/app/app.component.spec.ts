@@ -81,11 +81,11 @@ describe('Integration: AppComponent', () => {
           'Herr T. kennt Sie besser als Sie. Deshalb hörst du dir alles an, was er dir sagt.',
         StrokeCount: 7,
         Pinyin: 'nǐ',
-        ComponentsHanzi: '欠\n人\np.<img src="rsh-drop.jpg">\n尔\n小',
-        ComponentsPinyin: 'qiàn\nrén\n\něr\nxiǎo',
-        ComponentsKeywords:
+        ComponentsFlatHanzi: '欠\n人\np.<img src="rsh-drop.jpg">\n尔\n小',
+        ComponentsFlatPinyin: 'qiàn\nrén\n\něr\nxiǎo',
+        ComponentsFlatKeywords:
           'lack (v.)\nperson\np.A drop of\nyou (literary)\nsmall',
-        ComponentsKeywordsdeDE:
+        ComponentsFlatKeywordsdeDE:
           'Mangel (v.)\nPerson\np.Ein Tropfen\ndu (literarisch)\nklein',
       },
       {
@@ -98,10 +98,10 @@ describe('Integration: AppComponent', () => {
           'Eine gute Mutter ist eine Frau, die sich immer um ihr Kind kümmert.',
         StrokeCount: 6,
         Pinyin: 'hǎo',
-        ComponentsHanzi: '子\n女',
-        ComponentsPinyin: 'zǐ\nnǚ',
-        ComponentsKeywords: 'child\nwoman',
-        ComponentsKeywordsdeDE: 'Kind\nFrau',
+        ComponentsFlatHanzi: '子\n女',
+        ComponentsFlatPinyin: 'zǐ\nnǚ',
+        ComponentsFlatKeywords: 'child\nwoman',
+        ComponentsFlatKeywordsdeDE: 'Kind\nFrau',
       },
     ];
     mockHeisig(heisigJson);

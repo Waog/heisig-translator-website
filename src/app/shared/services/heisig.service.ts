@@ -15,10 +15,10 @@ interface HeisigEntryInternal {
   StorydeDEGoogleTranslate: string;
   StrokeCount: number;
   Pinyin: string;
-  ComponentsHanzi: string;
-  ComponentsPinyin: string;
-  ComponentsKeywords: string;
-  ComponentsKeywordsdeDE: string;
+  ComponentsFlatHanzi: string;
+  ComponentsFlatPinyin: string;
+  ComponentsFlatKeywords: string;
+  ComponentsFlatKeywordsdeDE: string;
 }
 
 // Public interface for service consumers
@@ -75,15 +75,36 @@ export class HeisigService {
       storyDe: entry.StorydeDEGoogleTranslate,
       strokeCount: entry.StrokeCount,
       pinyin: entry.Pinyin,
-      components: this.mapComponents(entry.ComponentsKeywords),
+      components: this.mapComponents(entry.ComponentsFlatKeywords),
     };
   }
 
   private mapComponents(componentsKeywords: string): HeisigEntry[] {
     const keywordsArray = componentsKeywords.split('\n').map((k) => k.trim());
-    return keywordsArray
+    const allComponents = keywordsArray
       .map((keyword) => this.getHeisigEntryByKeyword(keyword))
       .filter((entry): entry is HeisigEntry => entry !== undefined);
+
+    const uniqueComponents = this.filterUniqueComponents(allComponents);
+    return uniqueComponents;
+  }
+
+  private filterUniqueComponents(components: HeisigEntry[]): HeisigEntry[] {
+    const childKeywords = new Set<string>();
+
+    const gatherChildKeywords = (entry: HeisigEntry) => {
+      entry.components.forEach((child) => {
+        if (!childKeywords.has(child.keyword)) {
+          childKeywords.add(child.keyword);
+          gatherChildKeywords(child);
+        }
+      });
+    };
+
+    components.forEach((component) => gatherChildKeywords(component));
+    return components.filter(
+      (component) => !childKeywords.has(component.keyword)
+    );
   }
 
   getHeisigEn(hanzi: string): string {
