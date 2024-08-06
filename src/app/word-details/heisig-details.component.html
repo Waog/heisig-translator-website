@@ -6,13 +6,13 @@
       class="audio-button"
       (click)="playAudio($event, detail.hanzi, 'zh-CN')"
     >
-      🔊 <span class="audio-label">CH</span>
+      🔊
     </button>
     <button
       class="audio-button"
       (click)="playAudio($event, detail.keyword, 'en-US')"
     >
-      🔊 <span class="audio-label">EN</span>
+      🔊
     </button>
     <button
       class="toggle-button"
@@ -54,9 +54,21 @@
     </h3>
     <p *ngIf="detail.story" class="story">
       <span class="quote">”</span>{{ detail.story }}
+      <button
+        class="audio-button-story"
+        (click)="playAudio($event, detail.story, 'en-US')"
+      >
+        🔊
+      </button>
     </p>
     <p *ngIf="detail.storyDe" class="story">
       <span class="quote">”</span>{{ detail.storyDe }}
+      <button
+        class="audio-button-story"
+        (click)="playAudio($event, detail.storyDe, 'de-DE')"
+      >
+        🔊
+      </button>
     </p>
     <div class="components" *ngIf="detail.components.length > 0">
       <p>Components:</p>

@@ -40,12 +40,23 @@ button:hover {
   font-size: 0.9em;
 }
 
-.audio-label {
-  font-size: 0.8em;
-  margin-left: 0.3em;
+.audio-button-story {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #b0bec5;
+  border-radius: 0.5em;
+  padding: 2px 5px;
+  cursor: pointer;
+  margin-left: 0.5em;
+  background-color: #2c2c2c;
+  border: 1px solid #455a64;
+  font-size: 0.9em;
 }
 
-.audio-button:hover {
+.audio-button:hover,
+.audio-button-story:hover {
   color: #80cbc4;
   border-color: #80cbc4;
 }
