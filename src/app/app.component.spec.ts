@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { SingleCharacterComponent } from './segmentation/single-character.component';
 import { SingleWordComponent } from './segmentation/single-word.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
+import { HeisigDetailsComponent } from './word-details/heisig-details.component';
 import { WordDetailsComponent } from './word-details/word-details.component';
 
 describe('Integration: AppComponent', () => {
@@ -46,12 +47,14 @@ describe('Integration: AppComponent', () => {
   });
 
   it('should create the app', async () => {
+    mockHeisig([]);
     expect(component).toBeTruthy();
   });
 
   it('should wait for the user input to finish', async () => {
     await setUserInput('你');
     mockLocalDictionary([]);
+    mockHeisig([]);
     await wait(500);
     const text1 = getElementText(SentenceTranslationComponent, 0);
     const text2 = getElementText(SentenceTranslationComponent, 1);
@@ -64,6 +67,43 @@ describe('Integration: AppComponent', () => {
     const userInput = '你好Oli!';
 
     await setUserInput(userInput);
+
+    const heisigJson = [
+      {
+        Keyword: 'you',
+        KeyworddeDEGoogleTranslate: 'Du',
+        Hanzi: '你',
+        HeisigNumber: 799,
+        Story:
+          "Mr. T knows you better than you. That's why you listen to everything he tells you.",
+        StorydeDEGoogleTranslate:
+          'Herr T. kennt Sie besser als Sie. Deshalb hörst du dir alles an, was er dir sagt.',
+        StrokeCount: 7,
+        Pinyin: 'nǐ',
+        ComponentsHanzi: '欠\n人\np.<img src="rsh-drop.jpg">\n尔\n小',
+        ComponentsPinyin: 'qiàn\nrén\n\něr\nxiǎo',
+        ComponentsKeywords:
+          'lack (v.)\nperson\np.A drop of\nyou (literary)\nsmall',
+        ComponentsKeywordsdeDE:
+          'Mangel (v.)\nPerson\np.Ein Tropfen\ndu (literarisch)\nklein',
+      },
+      {
+        Keyword: 'good',
+        KeyworddeDEGoogleTranslate: 'Gut',
+        Hanzi: '好',
+        HeisigNumber: 103,
+        Story: 'A good mother is a woman who always takes care of her child.',
+        StorydeDEGoogleTranslate:
+          'Eine gute Mutter ist eine Frau, die sich immer um ihr Kind kümmert.',
+        StrokeCount: 6,
+        Pinyin: 'hǎo',
+        ComponentsHanzi: '子\n女',
+        ComponentsPinyin: 'zǐ\nnǚ',
+        ComponentsKeywords: 'child\nwoman',
+        ComponentsKeywordsdeDE: 'Kind\nFrau',
+      },
+    ];
+    mockHeisig(heisigJson);
 
     const dictionary = [
       { simplified: '你好', pinyin: 'ni3 hao3', english: ['hello', 'hi'] },
@@ -131,26 +171,26 @@ describe('Integration: AppComponent', () => {
     ).toContain('hi');
 
     expect(getElementText(WordDetailsComponent, 0, '.heisig li', 0)).toContain(
-      '你 - you'
+      '你 nǐ - you'
     );
     expect(getElementText(WordDetailsComponent, 0, '.heisig li', 1)).toContain(
-      '好 - good'
+      '好 hǎo - good'
     );
 
-    clickElement(WordDetailsComponent, 0, '.heisig li', 0);
+    clickElement(HeisigDetailsComponent, 0, '.toggle-button');
 
     const charWordsSelectorHan = '.translations-grid .grid-row .hanzi-column';
     const charWordsSelectorEng =
       '.translations-grid .grid-row .translation-column';
     expect(
-      getElementText(WordDetailsComponent, 0, charWordsSelectorHan, 0)
+      getElementText(HeisigDetailsComponent, 0, charWordsSelectorHan, 0)
     ).toContain('你好');
     expect(
       getElementText(WordDetailsComponent, 0, charWordsSelectorEng, 0)
     ).toContain('hello');
 
     expect(
-      getElementText(WordDetailsComponent, 0, charWordsSelectorHan, 1)
+      getElementText(HeisigDetailsComponent, 0, charWordsSelectorHan, 1)
     ).toContain('你');
     expect(
       getElementText(WordDetailsComponent, 0, charWordsSelectorEng, 1)
@@ -235,6 +275,10 @@ describe('Integration: AppComponent', () => {
 
   function mockLocalDictionary(dictionaryJson: any[]): void {
     mockHttpResponse('GET', 'assets/cedict.json', dictionaryJson);
+  }
+
+  function mockHeisig(heisigJson: any[]): void {
+    mockHttpResponse('GET', 'assets/heisig.json', heisigJson);
   }
 
   function mockOnlineDictionaryResponse({
