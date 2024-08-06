@@ -1,0 +1,28 @@
+<div *ngIf="translations$ | async as translations" class="translations">
+  <table class="translations-table">
+    <tbody>
+      <tr *ngFor="let entry of translations">
+        <td class="audio-button-cell">
+          <button
+            class="audio-button-small"
+            (click)="playAudio($event, entry.hanzi, 'zh-CN')"
+          >
+            🔊
+          </button>
+        </td>
+        <td class="hanzi-column">{{ entry.hanzi }}</td>
+        <td class="audio-button-cell">
+          <button
+            class="audio-button-small"
+            (click)="playAudio($event, entry.translations[0])"
+          >
+            🔊
+          </button>
+        </td>
+        <td class="translation-column">
+          {{ cropTranslation(entry.translations[0]) }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

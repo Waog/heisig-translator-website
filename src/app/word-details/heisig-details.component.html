@@ -22,38 +22,22 @@
     </button>
     <button
       class="toggle-button"
-      (click)="toggleExpansion(detail.hanzi, $event)"
+      (click)="toggleOccurrencesExpansion(detail.hanzi, $event)"
     >
-      📖 {{ isExpanded(detail.hanzi) ? "▲" : "▼" }}
+      📖 {{ isOccurrencesExpanded(detail.hanzi) ? "▲" : "▼" }}
     </button>
     <button
       class="toggle-details-button"
-      (click)="toggleDetails(detail.hanzi, $event)"
+      (click)="toggleHeisigDetailsExpansion(detail.hanzi, $event)"
     >
-      {{ isDetailsExpanded(detail.hanzi) ? "Details ▲" : "Details ▼" }}
+      {{ isHeisigDetailsExpanded(detail.hanzi) ? "Details ▲" : "Details ▼" }}
     </button>
   </span>
-  <div
-    *ngIf="isExpanded(detail.hanzi)"
-    class="expanded-translations translations-grid"
-  >
-    <ng-container
-      *ngFor="
-        let entry of (getTranslationsContainingCharacter(detail.hanzi)
-          | async) || []
-      "
-    >
-      <div class="grid-row">
-        <button (click)="playAudio($event, entry.hanzi, 'zh-CN')">🔊</button>
-        <span class="hanzi-column">{{ entry.hanzi }}</span>
-        <button (click)="playAudio($event, entry.translations[0])">🔊</button>
-        <span class="translation-column">{{
-          cropTranslation(entry.translations[0])
-        }}</span>
-      </div>
-    </ng-container>
-  </div>
-  <div *ngIf="isDetailsExpanded(detail.hanzi)" class="heisig-details">
+  <app-dictionary-occurrences
+    *ngIf="isOccurrencesExpanded(detail.hanzi)"
+    [hanziChar]="detail.hanzi"
+  ></app-dictionary-occurrences>
+  <div *ngIf="isHeisigDetailsExpanded(detail.hanzi)" class="heisig-details">
     <h3>
       {{ detail.keywordDe }}
       <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>

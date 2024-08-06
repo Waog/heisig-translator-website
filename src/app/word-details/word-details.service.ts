@@ -74,19 +74,6 @@ export class WordDetailsService {
     );
   }
 
-  getTranslationsContainingCharacter(character: string): Observable<
-    {
-      hanzi: string;
-      pinyin?: string;
-      translations: string[];
-      usedApi: boolean;
-    }[]
-  > {
-    return this.translationService.getTranslationsContainingCharacter(
-      character
-    );
-  }
-
   private normalizeString(str: string): string {
     return str.replace(/\s+/g, '').toLowerCase();
   }

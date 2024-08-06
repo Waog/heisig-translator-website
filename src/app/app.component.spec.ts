@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { SingleCharacterComponent } from './segmentation/single-character.component';
 import { SingleWordComponent } from './segmentation/single-word.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
+import { DictionaryOccurrencesComponent } from './word-details/dictionary-occurrences.component';
 import { HeisigDetailsComponent } from './word-details/heisig-details.component';
 import { WordDetailsComponent } from './word-details/word-details.component';
 
@@ -179,21 +180,28 @@ describe('Integration: AppComponent', () => {
 
     clickElement(HeisigDetailsComponent, 0, '.toggle-button');
 
-    const charWordsSelectorHan = '.translations-grid .grid-row .hanzi-column';
-    const charWordsSelectorEng =
-      '.translations-grid .grid-row .translation-column';
     expect(
-      getElementText(HeisigDetailsComponent, 0, charWordsSelectorHan, 0)
+      getElementText(DictionaryOccurrencesComponent, 0, '.hanzi-column', 0)
     ).toContain('你好');
     expect(
-      getElementText(WordDetailsComponent, 0, charWordsSelectorEng, 0)
+      getElementText(
+        DictionaryOccurrencesComponent,
+        0,
+        '.translation-column',
+        0
+      )
     ).toContain('hello');
 
     expect(
-      getElementText(HeisigDetailsComponent, 0, charWordsSelectorHan, 1)
+      getElementText(DictionaryOccurrencesComponent, 0, '.hanzi-column', 1)
     ).toContain('你');
     expect(
-      getElementText(WordDetailsComponent, 0, charWordsSelectorEng, 1)
+      getElementText(
+        DictionaryOccurrencesComponent,
+        0,
+        '.translation-column',
+        1
+      )
     ).toContain('you (informal)');
   });
 

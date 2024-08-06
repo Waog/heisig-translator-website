@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { AudioService } from '../shared/services/audio.service';
 import { HeisigEntry, HeisigService } from '../shared/services/heisig.service';
+import { DictionaryOccurrencesComponent } from './dictionary-occurrences.component';
 import { WordDetailsService } from './word-details.service';
 
 @Component({
   selector: 'app-heisig-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DictionaryOccurrencesComponent],
   templateUrl: './heisig-details.component.html',
   styleUrls: ['./heisig-details.component.scss'],
   providers: [AudioService, WordDetailsService],
@@ -16,8 +16,8 @@ import { WordDetailsService } from './word-details.service';
 export class HeisigDetailsComponent implements OnInit {
   @Input() hanzi: string = '';
   detail: HeisigEntry | undefined;
-  expandedCharacters: { [key: string]: boolean } = {};
-  expandedDetails: { [key: string]: boolean } = {};
+  expandedOccurrences: { [key: string]: boolean } = {};
+  expandedHeisigDetails: { [key: string]: boolean } = {};
 
   constructor(
     private heisigService: HeisigService,
@@ -29,54 +29,37 @@ export class HeisigDetailsComponent implements OnInit {
     this.detail = this.heisigService.getHeisigEntry(this.hanzi);
   }
 
-  toggleExpansion(character: string, event: Event): void {
+  toggleOccurrencesExpansion(character: string, event: Event): void {
     event.stopPropagation();
-    if (this.expandedCharacters[character]) {
-      this.expandedCharacters[character] = false;
+    if (this.expandedOccurrences[character]) {
+      this.expandedOccurrences[character] = false;
     } else {
-      this.expandedCharacters = { [character]: true };
-      this.expandedDetails = {};
+      this.expandedOccurrences = { [character]: true };
+      this.expandedHeisigDetails = {};
     }
   }
 
-  toggleDetails(character: string, event: Event): void {
+  toggleHeisigDetailsExpansion(character: string, event: Event): void {
     event.stopPropagation();
-    if (this.expandedDetails[character]) {
-      this.expandedDetails[character] = false;
+    if (this.expandedHeisigDetails[character]) {
+      this.expandedHeisigDetails[character] = false;
     } else {
-      this.expandedDetails = { [character]: true };
-      this.expandedCharacters = {};
+      this.expandedHeisigDetails = { [character]: true };
+      this.expandedOccurrences = {};
     }
   }
 
-  isExpanded(character: string): boolean {
-    return this.expandedCharacters[character];
+  isOccurrencesExpanded(character: string): boolean {
+    return this.expandedOccurrences[character];
   }
 
-  isDetailsExpanded(character: string): boolean {
-    return this.expandedDetails[character];
+  isHeisigDetailsExpanded(character: string): boolean {
+    return this.expandedHeisigDetails[character];
   }
 
   playAudio(event: Event, text: string, lang: string = 'en-US'): void {
     event.stopPropagation();
     this.audioService.playAudio(text, lang);
-  }
-
-  cropTranslation(translation: string): string {
-    return translation.length > 60
-      ? `${translation.slice(0, 60)}...`
-      : translation;
-  }
-
-  getTranslationsContainingCharacter(character: string): Observable<
-    {
-      hanzi: string;
-      pinyin?: string;
-      translations: string[];
-      usedApi: boolean;
-    }[]
-  > {
-    return this.companion.getTranslationsContainingCharacter(character);
   }
 
   isPrimitiveWithImage(): boolean {
