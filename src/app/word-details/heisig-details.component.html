@@ -1,10 +1,11 @@
 <div *ngIf="detail" class="heisig-item">
   <span class="heisig-text">
-    {{ detail.hanzi }} - {{ detail.keyword }}
+    {{ detail.hanzi }} {{ detail.pinyin }} - {{ detail.keyword }}
+    <small class="heisig-number">[{{ detail.heisigNumber }}]</small>
     <button (click)="playAudio($event, detail.keyword)">🔊</button>
   </span>
   <button class="toggle-button" (click)="toggleExpansion(detail.hanzi, $event)">
-    {{ isExpanded(detail.hanzi) ? "▲" : "▼" }}
+    📖 {{ isExpanded(detail.hanzi) ? "▲" : "▼" }}
   </button>
   <button
     class="toggle-details-button"
@@ -33,22 +34,21 @@
     </ng-container>
   </div>
   <div *ngIf="isDetailsExpanded(detail.hanzi)" class="heisig-details">
-    <p><strong>Keyword:</strong> {{ detail.keyword }}</p>
-    <p><strong>Keyword (DE):</strong> {{ detail.keywordDe }}</p>
-    <p><strong>Hanzi:</strong> {{ detail.hanzi }}</p>
-    <p><strong>Traditional:</strong> {{ detail.traditional }}</p>
-    <p><strong>Heisig Number:</strong> {{ detail.heisigNumber }}</p>
-    <p><strong>Heisig Sequence:</strong> {{ detail.heisigSequence }}</p>
-    <p><strong>Story:</strong> {{ detail.story }}</p>
-    <p><strong>Story (DE):</strong> {{ detail.storyDe }}</p>
-    <p><strong>Stroke Count:</strong> {{ detail.strokeCount }}</p>
-    <p><strong>Pinyin:</strong> {{ detail.pinyin }}</p>
-    <p><strong>Components Hanzi:</strong> {{ detail.componentsHanzi }}</p>
-    <p><strong>Components Pinyin:</strong> {{ detail.componentsPinyin }}</p>
-    <p><strong>Components Keywords:</strong> {{ detail.componentsKeywords }}</p>
-    <p>
-      <strong>Components Keywords (DE):</strong>
-      {{ detail.componentsKeywordsDe }}
+    <h3>
+      {{ detail.keywordDe }}
+      <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>
+    </h3>
+    <p *ngIf="detail.story" class="story">
+      <span class="quote">”</span>{{ detail.story }}
     </p>
+    <p *ngIf="detail.storyDe" class="story">
+      <span class="quote">”</span>{{ detail.storyDe }}
+    </p>
+    <div class="components" *ngIf="detail.components.length > 0">
+      <p>Components:</p>
+      <ng-container *ngFor="let component of detail.components">
+        <app-heisig-details [hanzi]="component.hanzi"></app-heisig-details>
+      </ng-container>
+    </div>
   </div>
 </div>

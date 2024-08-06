@@ -33,10 +33,7 @@ export interface HeisigEntry {
   storyDe: string;
   strokeCount: number;
   pinyin: string;
-  componentsHanzi: string;
-  componentsPinyin: string;
-  componentsKeywords: string;
-  componentsKeywordsDe: string;
+  components: HeisigEntry[];
 }
 
 @Injectable({
@@ -66,6 +63,29 @@ export class HeisigService {
     return this.heisigLoaded.asObservable();
   }
 
+  private mapEntry(entry: HeisigEntryInternal): HeisigEntry {
+    return {
+      keyword: entry.Keyword,
+      keywordDe: entry.KeyworddeDEGoogleTranslate,
+      hanzi: entry.Hanzi,
+      traditional: entry.Traditional,
+      heisigNumber: entry.HeisigNumber,
+      heisigSequence: entry.HeisigSequence,
+      story: entry.Story,
+      storyDe: entry.StorydeDEGoogleTranslate,
+      strokeCount: entry.StrokeCount,
+      pinyin: entry.Pinyin,
+      components: this.mapComponents(entry.ComponentsKeywords),
+    };
+  }
+
+  private mapComponents(componentsKeywords: string): HeisigEntry[] {
+    const keywordsArray = componentsKeywords.split('\n').map((k) => k.trim());
+    return keywordsArray
+      .map((keyword) => this.getHeisigEntryByKeyword(keyword))
+      .filter((entry): entry is HeisigEntry => entry !== undefined);
+  }
+
   getHeisigEn(hanzi: string): string {
     const entry = this.heisigData.find((e) => e.Hanzi === hanzi);
     return entry ? entry.Keyword : hanzi;
@@ -83,24 +103,11 @@ export class HeisigService {
 
   getHeisigEntry(hanzi: string): HeisigEntry | undefined {
     const entry = this.heisigData.find((e) => e.Hanzi === hanzi);
-    if (entry) {
-      return {
-        keyword: entry.Keyword,
-        keywordDe: entry.KeyworddeDEGoogleTranslate,
-        hanzi: entry.Hanzi,
-        traditional: entry.Traditional,
-        heisigNumber: entry.HeisigNumber,
-        heisigSequence: entry.HeisigSequence,
-        story: entry.Story,
-        storyDe: entry.StorydeDEGoogleTranslate,
-        strokeCount: entry.StrokeCount,
-        pinyin: entry.Pinyin,
-        componentsHanzi: entry.ComponentsHanzi,
-        componentsPinyin: entry.ComponentsPinyin,
-        componentsKeywords: entry.ComponentsKeywords,
-        componentsKeywordsDe: entry.ComponentsKeywordsdeDE,
-      };
-    }
-    return undefined;
+    return entry ? this.mapEntry(entry) : undefined;
+  }
+
+  getHeisigEntryByKeyword(keyword: string): HeisigEntry | undefined {
+    const entry = this.heisigData.find((e) => e.Keyword === keyword);
+    return entry ? this.mapEntry(entry) : undefined;
   }
 }

@@ -28,11 +28,15 @@ button:hover {
   cursor: pointer;
   color: #e0e0e0;
   margin-left: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
 }
 
 .toggle-button:hover,
 .toggle-details-button:hover {
   color: #80cbc4;
+  border-color: #80cbc4;
 }
 
 .expanded-translations {
@@ -63,4 +67,42 @@ button:hover {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.heisig-number {
+  font-size: 0.8em;
+  color: #999;
+  margin-left: 5px;
+}
+
+.stroke-count {
+  font-size: 0.8em;
+  color: #999;
+}
+
+.heisig-details h3 {
+  font-size: 1.2em;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.heisig-details p {
+  margin: 1em 0 0.2em 0;
+  position: relative;
+}
+
+.heisig-details .story {
+  padding-left: 1.5em;
+}
+
+.heisig-details .quote {
+  font-size: 4em;
+  line-height: 0.8em;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.components,
+.story {
 }
