@@ -1,65 +1,83 @@
-<div class="container">
-  <div class="input-group">
-    <input
-      [(ngModel)]="newKey"
-      type="text"
-      placeholder="Enter key"
-      (keydown.enter)="saveItem()"
-      (keyup.enter)="saveItem()"
-      class="input-field input-editable"
-    />
-    <input
-      [(ngModel)]="newValue"
-      type="text"
-      placeholder="Enter value"
-      (keydown.enter)="saveItem()"
-      (keyup.enter)="saveItem()"
-      class="input-field input-editable"
-    />
-    <button (click)="saveItem()" class="button button-create">Create</button>
-  </div>
-</div>
+<button
+  (click)="toggleLocalStorageVisibility()"
+  class="button button-toggle-local-storage"
+>
+  {{ showLocalStorage ? "▼ Hide Local Storage" : "▶ Show Local Storage" }}
+</button>
 
-<!-- Display localStorage content -->
-<div *ngFor="let item of localStorageItems" class="container">
-  <div class="input-group">
-    <input
-      [(ngModel)]="item.editableKey"
-      type="text"
-      (ngModelChange)="onInputChange(item)"
-      (keydown.enter)="saveEditedItem(item)"
-      (keyup.enter)="saveEditedItem(item)"
-      [class.input-editable]="true"
-      [class.input-edited]="item.edited"
-      class="input-field"
-    />
-    <input
-      [(ngModel)]="item.editableValue"
-      type="text"
-      [disabled]="item.isJson"
-      (ngModelChange)="onInputChange(item)"
-      (keydown.enter)="saveEditedItem(item)"
-      (keyup.enter)="saveEditedItem(item)"
-      [class.input-editable]="!item.isJson"
-      [class.input-readonly]="item.isJson"
-      [class.input-edited]="item.edited"
-      class="input-field"
-    />
-    <button
-      (click)="saveEditedItem(item)"
-      [disabled]="!item.edited"
-      class="button button-save"
-    >
-      Save
-    </button>
-    <button (click)="deleteItem(item.key)" class="button button-delete">
-      Delete
-    </button>
+<div *ngIf="showLocalStorage">
+  <div class="container">
+    <div class="input-group">
+      <input
+        [(ngModel)]="newKey"
+        type="text"
+        placeholder="Enter key"
+        (keydown.enter)="saveItem()"
+        (keyup.enter)="saveItem()"
+        class="input-field input-editable"
+      />
+      <input
+        [(ngModel)]="newValue"
+        type="text"
+        placeholder="Enter value"
+        (keydown.enter)="saveItem()"
+        (keyup.enter)="saveItem()"
+        class="input-field input-editable"
+      />
+      <button (click)="saveItem()" class="button button-create">Create</button>
+    </div>
   </div>
-  <div *ngIf="item.isJson" style="margin-left: 20px">
-    <app-json-editor
-      [jsonObject]="item.value"
-      (jsonObjectChange)="updateJson(item.key, $event)"
-    ></app-json-editor>
+
+  <!-- Display localStorage content -->
+  <div *ngFor="let item of localStorageItems" class="container">
+    <div class="input-group">
+      <input
+        [(ngModel)]="item.editableKey"
+        type="text"
+        (ngModelChange)="onInputChange(item)"
+        (keydown.enter)="saveEditedItem(item)"
+        (keyup.enter)="saveEditedItem(item)"
+        [class.input-editable]="true"
+        [class.input-edited]="item.edited"
+        class="input-field input-editable"
+      />
+      <button
+        *ngIf="item.isJson"
+        (click)="toggleEditorVisibility(item)"
+        class="button button-toggle-editor"
+        [ngClass]="{ 'toggle-expanded': item.editorVisible }"
+      >
+        {{ item.editorVisible ? "▼ Hide Editor" : "▶ Show Editor" }}
+      </button>
+      <input
+        *ngIf="!item.isJson"
+        [(ngModel)]="item.editableValue"
+        type="text"
+        (ngModelChange)="onInputChange(item)"
+        (keydown.enter)="saveEditedItem(item)"
+        (keyup.enter)="saveEditedItem(item)"
+        [class.input-editable]="true"
+        [class.input-edited]="item.edited"
+        class="input-field"
+      />
+      <button
+        (click)="saveEditedItem(item)"
+        [disabled]="!item.edited"
+        class="button button-save"
+      >
+        Save
+      </button>
+      <button (click)="deleteItem(item.key)" class="button button-delete">
+        Delete
+      </button>
+    </div>
+    <div *ngIf="item.isJson && item.editorVisible" class="textarea-container">
+      <textarea
+        [(ngModel)]="item.editableValue"
+        (ngModelChange)="onInputChange(item)"
+        class="textarea-editor"
+        rows="10"
+      ></textarea>
+    </div>
   </div>
 </div>

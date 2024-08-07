@@ -1,34 +1,41 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { JsonEditorComponent } from '../json-editor/json-editor.component';
 
 @Component({
   selector: 'app-local-storage',
   standalone: true,
-  imports: [CommonModule, FormsModule, JsonEditorComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './local-storage.component.html',
   styleUrls: ['./local-storage.component.scss'],
 })
-export class LocalStorageComponent implements OnInit {
+export class LocalStorageComponent implements OnInit, OnDestroy {
   newKey: string = '';
   newValue: string = '';
+  showLocalStorage: boolean = false; // Toggle for showing/hiding the entire form
   localStorageItems: {
     key: string;
-    value: string;
+    value: any;
     isJson: boolean;
     editableKey: string;
     editableValue: string;
     edited: boolean;
+    editorVisible: boolean;
   }[] = [];
 
   ngOnInit() {
     this.loadLocalStorageItems();
+    window.addEventListener('storage', this.handleStorageChange);
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('storage', this.handleStorageChange);
   }
 
   saveItem() {
     if (this.newKey && this.newValue) {
-      localStorage.setItem(this.newKey, this.newValue);
+      const parsedValue = this.parseJson(this.newValue);
+      localStorage.setItem(this.newKey, parsedValue);
       this.newKey = '';
       this.newValue = '';
       this.loadLocalStorageItems();
@@ -44,11 +51,14 @@ export class LocalStorageComponent implements OnInit {
         const isJson = this.isJsonString(value);
         this.localStorageItems.push({
           key,
-          value,
+          value: isJson ? JSON.parse(value) : value,
           isJson,
           editableKey: key,
-          editableValue: value,
+          editableValue: isJson
+            ? JSON.stringify(JSON.parse(value), null, 2)
+            : value,
           edited: false,
+          editorVisible: false,
         });
       }
     }
@@ -67,10 +77,11 @@ export class LocalStorageComponent implements OnInit {
     editableKey: string;
     editableValue: string;
   }) {
+    const parsedValue = this.parseJson(item.editableValue);
     if (item.key !== item.editableKey) {
       localStorage.removeItem(item.key);
     }
-    localStorage.setItem(item.editableKey, item.editableValue);
+    localStorage.setItem(item.editableKey, parsedValue);
     this.loadLocalStorageItems();
   }
 
@@ -83,11 +94,11 @@ export class LocalStorageComponent implements OnInit {
     return true;
   }
 
-  updateJson(key: string, updatedJson: any) {
-    const item = this.localStorageItems.find((item) => item.key === key);
-    if (item) {
-      item.editableValue = JSON.stringify(updatedJson, null, 2);
-      item.edited = true;
+  parseJson(value: string): string {
+    try {
+      return JSON.stringify(JSON.parse(value));
+    } catch {
+      return value;
     }
   }
 
@@ -101,4 +112,18 @@ export class LocalStorageComponent implements OnInit {
     item.edited =
       item.key !== item.editableKey || item.value !== item.editableValue;
   }
+
+  toggleEditorVisibility(item: any): void {
+    item.editorVisible = !item.editorVisible;
+  }
+
+  toggleLocalStorageVisibility(): void {
+    this.showLocalStorage = !this.showLocalStorage;
+  }
+
+  handleStorageChange = (event: StorageEvent) => {
+    if (event.storageArea === localStorage) {
+      this.loadLocalStorageItems();
+    }
+  };
 }
