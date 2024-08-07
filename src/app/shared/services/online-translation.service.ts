@@ -8,19 +8,24 @@ import { shareReplay, tap } from 'rxjs/operators';
 })
 export class OnlineTranslationService {
   private myMemoryUrl = 'https://api.mymemory.translated.net/get';
-  private cache = new Map<string, any>();
+  private cacheEN = new Map<string, string>();
+  private cacheDE = new Map<string, string>();
   private ongoingRequests = new Map<string, Observable<any>>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.loadCacheFromLocalStorage();
+  }
 
   translate(text: string, langpair: string): Observable<any> {
     const url = `${this.myMemoryUrl}?q=${encodeURIComponent(
       text
     )}&langpair=${langpair}`;
 
+    const cache = this.getCacheByLangpair(langpair);
+
     // Check if the translation is in the cache
-    if (this.cache.has(url)) {
-      return of(this.cache.get(url));
+    if (cache && cache.has(text)) {
+      return of({ responseData: { translatedText: cache.get(text) } });
     }
 
     // Check if there is an ongoing request for the same URL
@@ -33,7 +38,8 @@ export class OnlineTranslationService {
     // const request = this.http.get<any>(url).pipe(
     const request = of({ responseData: { translatedText: 'MOCK' } }).pipe(
       tap((response) => {
-        this.cache.set(url, response); // Cache the response
+        cache?.set(text, response.responseData.translatedText); // Cache the response
+        this.saveCacheToLocalStorage(); // Save the cache to localStorage
         this.ongoingRequests.delete(url); // Remove from ongoing requests
       }),
       shareReplay(1) // Ensure the observable is shared among subscribers
@@ -43,5 +49,44 @@ export class OnlineTranslationService {
     this.ongoingRequests.set(url, request);
 
     return request;
+  }
+
+  private getCacheByLangpair(langpair: string): Map<string, string> | null {
+    if (langpair.endsWith('en')) {
+      return this.cacheEN;
+    } else if (langpair.endsWith('de')) {
+      return this.cacheDE;
+    }
+    return null;
+  }
+
+  private loadCacheFromLocalStorage(): void {
+    const cacheENString = localStorage.getItem('onlineTranslationCacheEN');
+    const cacheDEString = localStorage.getItem('onlineTranslationCacheDE');
+    if (cacheENString) {
+      const cacheENObject = JSON.parse(cacheENString);
+      for (const [key, value] of Object.entries(cacheENObject)) {
+        this.cacheEN.set(key, value as string);
+      }
+    }
+    if (cacheDEString) {
+      const cacheDEObject = JSON.parse(cacheDEString);
+      for (const [key, value] of Object.entries(cacheDEObject)) {
+        this.cacheDE.set(key, value as string);
+      }
+    }
+  }
+
+  private saveCacheToLocalStorage(): void {
+    const cacheENObject = Object.fromEntries(this.cacheEN);
+    localStorage.setItem(
+      'onlineTranslationCacheEN',
+      JSON.stringify(cacheENObject)
+    );
+    const cacheDEObject = Object.fromEntries(this.cacheDE);
+    localStorage.setItem(
+      'onlineTranslationCacheDE',
+      JSON.stringify(cacheDEObject)
+    );
   }
 }
