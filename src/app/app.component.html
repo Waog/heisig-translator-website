@@ -20,4 +20,56 @@
     *ngIf="selectedWord"
     [wordHanzi]="selectedWord"
   ></app-word-details>
+
+  <!-- New input section -->
+  <div
+    style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px"
+  >
+    <input
+      [(ngModel)]="newInput"
+      type="text"
+      placeholder="Enter text"
+      style="
+        padding: 10px;
+        border: 1px solid #555;
+        border-radius: 4px;
+        background-color: #333;
+        color: white;
+      "
+    />
+    <button
+      (click)="saveInput()"
+      style="
+        padding: 10px;
+        background-color: #444;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      "
+    >
+      Save
+    </button>
+  </div>
+
+  <!-- Display localStorage content -->
+  <div
+    *ngFor="let item of localStorageItems"
+    style="margin-top: 10px; display: flex; align-items: center; gap: 10px"
+  >
+    <span style="flex-grow: 1; color: white">{{ item.value }}</span>
+    <button
+      (click)="deleteItem(item.key)"
+      style="
+        padding: 5px 10px;
+        background-color: #ff5555;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      "
+    >
+      Delete
+    </button>
+  </div>
 </div>

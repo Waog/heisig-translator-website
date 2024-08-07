@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { InputTextComponent } from './input-text/input-text.component';
@@ -32,9 +32,15 @@ import { WordDetailsComponent } from './word-details/word-details.component';
     TranslationService,
   ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   userInput: string = '';
   selectedWord: string = '';
+  newInput: string = '';
+  localStorageItems: { key: string; value: string }[] = [];
+
+  ngOnInit() {
+    this.loadLocalStorageItems();
+  }
 
   onUserInputChange(newInput: string): void {
     this.userInput = newInput;
@@ -43,5 +49,31 @@ export class AppComponent {
 
   onWordSelected(word: string): void {
     this.selectedWord = word;
+  }
+
+  saveInput() {
+    if (this.newInput) {
+      localStorage.setItem(`input-${Date.now()}`, this.newInput);
+      this.newInput = '';
+      this.loadLocalStorageItems();
+    }
+  }
+
+  loadLocalStorageItems() {
+    this.localStorageItems = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('input-')) {
+        this.localStorageItems.push({
+          key,
+          value: localStorage.getItem(key) || '',
+        });
+      }
+    }
+  }
+
+  deleteItem(key: string) {
+    localStorage.removeItem(key);
+    this.loadLocalStorageItems();
   }
 }
