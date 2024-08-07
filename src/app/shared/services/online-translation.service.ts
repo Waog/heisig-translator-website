@@ -29,7 +29,9 @@ export class OnlineTranslationService {
     }
 
     // If not in cache or ongoing request, make the HTTP request
-    const request = this.http.get<any>(url).pipe(
+    // TODO: restore actual HTTP request
+    // const request = this.http.get<any>(url).pipe(
+    const request = of({ responseData: { translatedText: 'MOCK' } }).pipe(
       tap((response) => {
         this.cache.set(url, response); // Cache the response
         this.ongoingRequests.delete(url); // Remove from ongoing requests
