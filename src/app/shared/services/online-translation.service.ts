@@ -17,6 +17,8 @@ export class OnlineTranslationService {
   }
 
   translate(text: string, langpair: string): Observable<any> {
+    this.loadCacheFromLocalStorage(); // Load cache before each request
+
     const url = `${this.myMemoryUrl}?q=${encodeURIComponent(
       text
     )}&langpair=${langpair}`;
@@ -65,12 +67,14 @@ export class OnlineTranslationService {
     const cacheDEString = localStorage.getItem('onlineTranslationCacheDE');
     if (cacheENString) {
       const cacheENObject = JSON.parse(cacheENString);
+      this.cacheEN.clear();
       for (const [key, value] of Object.entries(cacheENObject)) {
         this.cacheEN.set(key, value as string);
       }
     }
     if (cacheDEString) {
       const cacheDEObject = JSON.parse(cacheDEString);
+      this.cacheDE.clear();
       for (const [key, value] of Object.entries(cacheDEObject)) {
         this.cacheDE.set(key, value as string);
       }
