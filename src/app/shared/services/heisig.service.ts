@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { removeBraces } from '../helper';
 
 // Internal interface for the JSON structure
 interface HeisigEntryInternal {
@@ -35,6 +36,8 @@ export interface HeisigEntry {
   strokeCount: number;
   pinyin: string;
   components: HeisigEntry[];
+  storyWithMarkedKeywords: string;
+  storyWithMarkedKeywordsDe: string;
 }
 
 @Injectable({
@@ -65,6 +68,7 @@ export class HeisigService {
   }
 
   private mapEntry(entry: HeisigEntryInternal): HeisigEntry {
+    const components = this.mapComponents(entry.ComponentsFlatKeywords);
     return {
       keyword: entry.Keyword,
       keywordDe: entry.KeyworddeDEGoogleTranslate,
@@ -77,7 +81,9 @@ export class HeisigService {
       storyDe: entry.StorydeDEGoogleTranslate,
       strokeCount: entry.StrokeCount,
       pinyin: entry.Pinyin,
-      components: this.mapComponents(entry.ComponentsFlatKeywords),
+      components: components,
+      storyWithMarkedKeywords: this.markKeywordsInStory(entry, components),
+      storyWithMarkedKeywordsDe: this.markKeywordsInStoryDe(entry, components),
     };
   }
 
@@ -107,6 +113,58 @@ export class HeisigService {
     return components.filter(
       (component) => !childKeywords.has(component.keyword)
     );
+  }
+
+  private markKeywordsInStory(
+    entry: HeisigEntryInternal,
+    children: HeisigEntry[]
+  ): string {
+    if (!entry.Story) {
+      return entry.Story;
+    }
+
+    const selfKeyword = removeBraces(entry.Keyword);
+    let result = entry.Story.replace(
+      new RegExp(selfKeyword, 'gi'),
+      (match) => `«${match}»`
+    );
+
+    // note: only marking keywords of the top-level children
+    for (const child of children) {
+      const keyword = removeBraces(child.keyword);
+      result = result.replace(
+        new RegExp(keyword, 'gi'),
+        (match) => `‹${match}›`
+      );
+    }
+
+    return result;
+  }
+
+  private markKeywordsInStoryDe(
+    entry: HeisigEntryInternal,
+    children: HeisigEntry[]
+  ): string {
+    if (!entry.StorydeDEGoogleTranslate) {
+      return entry.StorydeDEGoogleTranslate;
+    }
+
+    const selfKeyword = removeBraces(entry.KeyworddeDEGoogleTranslate);
+    let result = entry.StorydeDEGoogleTranslate.replace(
+      new RegExp(selfKeyword, 'gi'),
+      (match) => `«${match}»`
+    );
+
+    // note: only marking keywords of the top-level children
+    for (const child of children) {
+      const keyword = removeBraces(child.keywordDe);
+      result = result.replace(
+        new RegExp(keyword, 'gi'),
+        (match) => `‹${match}›`
+      );
+    }
+
+    return result;
   }
 
   getHeisigEn(hanzi: string): string {

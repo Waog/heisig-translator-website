@@ -35,8 +35,9 @@
     <div *ngIf="isHeisigDetailsExpanded(detail.hanzi)" class="heisig-details">
       <span class="keyword-de">
         <span *ngIf="detail.isPrimitive" class="primitive-label"
-          >Primitive: </span
-        >{{ detail.keywordDe }}
+          >Primitive:
+        </span>
+        {{ detail.keywordDe }}
         <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>
         <small class="heisig-number" *ngIf="detail.heisigNumber !== null">
           [{{ detail.heisigNumber }}]
@@ -64,7 +65,8 @@
         class="primitive-image large-image"
       />
       <p *ngIf="detail.story" class="story">
-        <span class="quote">”</span>{{ detail.story }}
+        <span class="quote">”</span>
+        {{ detail.storyWithMarkedKeywords }}
         <button
           class="audio-button-story"
           (click)="playAudio($event, detail.story, 'en-US')"
@@ -73,7 +75,8 @@
         </button>
       </p>
       <p *ngIf="detail.storyDe" class="story">
-        <span class="quote">”</span>{{ detail.storyDe }}
+        <span class="quote">”</span>
+        {{ detail.storyWithMarkedKeywordsDe }}
         <button
           class="audio-button-story"
           (click)="playAudio($event, detail.storyDe, 'de-DE')"
