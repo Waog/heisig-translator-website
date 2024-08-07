@@ -1,10 +1,13 @@
 <div class="input-container">
-  <input
-    id="userInput"
-    type="text"
-    [(ngModel)]="userInput"
-    (input)="onUserInputChange()"
-  />
-  <button class="paste-button" (click)="pasteFromClipboard()">📋</button>
-  <button class="reset-button" (click)="resetInput()">&#x2715;</button>
+  <div class="input-wrapper">
+    <label for="userInput">Enter Chinese Text:</label>
+    <input
+      id="userInput"
+      type="text"
+      [(ngModel)]="userInput"
+      (input)="onUserInputChange()"
+    />
+    <button class="paste-button" (click)="pasteFromClipboard()">📋</button>
+    <button class="reset-button" (click)="resetInput()">&#x2715;</button>
+  </div>
 </div>

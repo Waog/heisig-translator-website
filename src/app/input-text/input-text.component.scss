@@ -1,6 +1,44 @@
 .input-container {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 840px;
+  background-color: #1e1e1e;
+  padding: 10px 20px;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.input-wrapper {
   position: relative;
   width: 100%;
+}
+
+label {
+  position: absolute;
+  top: -0.6em;
+  left: 10px;
+  padding: 0 5px;
+  font-size: 0.8em;
+  color: #a0a0a0;
+  background: transparent;
+  z-index: 1;
+  font-style: italic;
+}
+
+label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 50%;
+  background-color: #2c2c2c;
+  z-index: -1;
 }
 
 input[type="text"] {
@@ -45,4 +83,13 @@ button:hover {
 
 .reset-button {
   right: 10px;
+}
+
+@media (max-width: 600px) {
+  .input-container {
+    width: calc(100% - 8px);
+    padding: 10px 10px;
+    box-shadow: none;
+    border-radius: 0;
+  }
 }
