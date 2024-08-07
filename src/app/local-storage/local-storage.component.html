@@ -1,48 +1,65 @@
-<div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px">
-  <input
-    [(ngModel)]="newInput"
-    type="text"
-    placeholder="Enter text"
-    style="
-      padding: 10px;
-      border: 1px solid #555;
-      border-radius: 4px;
-      background-color: #333;
-      color: white;
-    "
-  />
-  <button
-    (click)="saveInput()"
-    style="
-      padding: 10px;
-      background-color: #444;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    "
-  >
-    Save
-  </button>
+<div class="container">
+  <div class="input-group">
+    <input
+      [(ngModel)]="newKey"
+      type="text"
+      placeholder="Enter key"
+      (keydown.enter)="saveItem()"
+      (keyup.enter)="saveItem()"
+      class="input-field input-editable"
+    />
+    <input
+      [(ngModel)]="newValue"
+      type="text"
+      placeholder="Enter value"
+      (keydown.enter)="saveItem()"
+      (keyup.enter)="saveItem()"
+      class="input-field input-editable"
+    />
+    <button (click)="saveItem()" class="button button-create">Create</button>
+  </div>
 </div>
 
 <!-- Display localStorage content -->
-<div
-  *ngFor="let item of localStorageItems"
-  style="margin-top: 10px; display: flex; align-items: center; gap: 10px"
->
-  <span style="flex-grow: 1; color: white">{{ item.value }}</span>
-  <button
-    (click)="deleteItem(item.key)"
-    style="
-      padding: 5px 10px;
-      background-color: #ff5555;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    "
-  >
-    Delete
-  </button>
+<div *ngFor="let item of localStorageItems" class="container">
+  <div class="input-group">
+    <input
+      [(ngModel)]="item.editableKey"
+      type="text"
+      (ngModelChange)="onInputChange(item)"
+      (keydown.enter)="saveEditedItem(item)"
+      (keyup.enter)="saveEditedItem(item)"
+      [class.input-editable]="true"
+      [class.input-edited]="item.edited"
+      class="input-field"
+    />
+    <input
+      [(ngModel)]="item.editableValue"
+      type="text"
+      [disabled]="item.isJson"
+      (ngModelChange)="onInputChange(item)"
+      (keydown.enter)="saveEditedItem(item)"
+      (keyup.enter)="saveEditedItem(item)"
+      [class.input-editable]="!item.isJson"
+      [class.input-readonly]="item.isJson"
+      [class.input-edited]="item.edited"
+      class="input-field"
+    />
+    <button
+      (click)="saveEditedItem(item)"
+      [disabled]="!item.edited"
+      class="button button-save"
+    >
+      Save
+    </button>
+    <button (click)="deleteItem(item.key)" class="button button-delete">
+      Delete
+    </button>
+  </div>
+  <div *ngIf="item.isJson" style="margin-left: 20px">
+    <app-json-editor
+      [jsonObject]="item.value"
+      (jsonObjectChange)="updateJson(item.key, $event)"
+    ></app-json-editor>
+  </div>
 </div>

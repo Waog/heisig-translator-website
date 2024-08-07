@@ -1,0 +1,74 @@
+:host {
+  --editable-bg: #1a1a1a;
+  --editable-color: white;
+
+  --readonly-bg: #444;
+  --readonly-color: lightgrey;
+
+  --edited-border-color: #fff;
+  --default-border-color: #555;
+
+  --save-button-enabled-bg: #28a745;
+  --save-button-disabled-bg: #666;
+  --delete-button-bg: #ff5555;
+  --create-button-bg: #28a745;
+}
+
+.container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.input-field {
+  padding: 5px;
+  border-radius: 4px;
+  flex-grow: 1;
+  border: 1px solid var(--default-border-color);
+}
+
+.input-editable {
+  background-color: var(--editable-bg);
+  color: var(--editable-color);
+}
+
+.input-readonly {
+  background-color: var(--readonly-bg);
+  color: var(--readonly-color);
+}
+
+.input-edited {
+  border-color: var(--edited-border-color);
+}
+
+.button {
+  padding: 5px 20px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-create {
+  padding: 5px 60px;
+  background-color: var(--create-button-bg);
+}
+
+.button-save {
+  background-color: var(--save-button-enabled-bg);
+}
+
+.button-save:disabled {
+  background-color: var(--save-button-disabled-bg);
+}
+
+.button-delete {
+  background-color: var(--delete-button-bg);
+}
