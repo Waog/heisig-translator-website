@@ -1,14 +1,20 @@
 <div>
   <div *ngIf="detail" class="heisig-item">
     <span class="heisig-text">
-      <img
-        style="filter: invert(1); height: 1.5em; margin-right: 0.5em"
-        *ngIf="isPrimitiveWithImage()"
-        [src]="getPrimitiveImageFileName()"
-      />
-      {{ !isPrimitiveWithImage() ? detail.hanzi : "" }}
+      <span class="fixed-width">
+        <img
+          *ngIf="isPrimitiveWithImage()"
+          [src]="getPrimitiveImageFileName()"
+          class="primitive-image"
+        />
+        <span *ngIf="!isPrimitiveWithImage()" class="hanzi-text">
+          {{ detail.hanzi }}
+        </span>
+      </span>
       <span class="subtle-separator">–</span>
-      {{ detail.keyword }}
+      <span [ngClass]="{ 'italic-keyword': detail && detail.isPrimitive }">
+        {{ detail.keyword }}
+      </span>
       <span class="right-buttons">
         <button
           class="audio-button-inline"
@@ -28,16 +34,22 @@
     </span>
     <div *ngIf="isHeisigDetailsExpanded(detail.hanzi)" class="heisig-details">
       <span class="keyword-de">
-        {{ detail.keywordDe }}
+        <span *ngIf="detail.isPrimitive" class="primitive-label"
+          >Primitive: </span
+        >{{ detail.keywordDe }}
         <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>
-        <small class="heisig-number">[{{ detail.heisigNumber }}]</small>
+        <small class="heisig-number" *ngIf="detail.heisigNumber !== null">
+          [{{ detail.heisigNumber }}]
+        </small>
+        <button
+          *ngIf="!detail.hanziIsFilename && !detail.pinyin"
+          class="audio-button-inline"
+          (click)="playAudio($event, detail.hanzi, 'zh-CN')"
+        >
+          🔊
+        </button>
       </span>
-      <img
-        style="filter: invert(1); margin-top: 10px"
-        *ngIf="isPrimitiveWithImage()"
-        [src]="getPrimitiveImageFileName()"
-      />
-      <p class="pinyin-line">
+      <p class="pinyin-line" *ngIf="detail.pinyin">
         {{ detail.pinyin }}
         <button
           class="audio-button-inline"
@@ -46,6 +58,11 @@
           🔊
         </button>
       </p>
+      <img
+        *ngIf="detail.hanziIsFilename"
+        [src]="getPrimitiveImageFileName()"
+        class="primitive-image large-image"
+      />
       <p *ngIf="detail.story" class="story">
         <span class="quote">”</span>{{ detail.story }}
         <button
@@ -66,6 +83,7 @@
       </p>
       <button
         class="toggle-occurrences-button"
+        *ngIf="!detail.isPrimitive"
         (click)="toggleOccurrencesExpansion(detail.hanzi, $event)"
       >
         {{
@@ -75,7 +93,7 @@
         }}
       </button>
       <app-dictionary-occurrences
-        *ngIf="isOccurrencesExpanded(detail.hanzi)"
+        *ngIf="isOccurrencesExpanded(detail.hanzi) && !detail.isPrimitive"
         [hanziChar]="detail.hanzi"
       ></app-dictionary-occurrences>
     </div>

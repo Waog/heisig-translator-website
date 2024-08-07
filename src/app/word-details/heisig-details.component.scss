@@ -18,6 +18,32 @@
   color: #ffffff;
 }
 
+.fixed-width {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.5em;
+}
+
+.primitive-image {
+  max-width: 100%;
+  max-height: 100%;
+  filter: invert(1);
+}
+
+.hanzi-text {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  line-height: 1.5em;
+}
+
+.italic-keyword {
+  font-style: italic;
+}
+
 .right-buttons {
   margin-left: auto;
   display: flex;
@@ -151,6 +177,11 @@ button:hover {
   display: block;
 }
 
+.primitive-label {
+  font-size: 0.9em;
+  color: #999;
+}
+
 .heisig-details p {
   margin: 1em 0 0.2em 0;
   position: relative;
@@ -179,4 +210,10 @@ button:hover {
 .sub-components {
   margin-left: 24px;
   margin-top: 10px;
+}
+
+.large-image {
+  margin-left: 80px;
+  border: 1px dashed #999;
+  padding: 5px;
 }

@@ -65,13 +65,12 @@ export class HeisigDetailsComponent implements OnInit {
   }
 
   isPrimitiveWithImage(): boolean {
-    return this.detail?.hanzi.startsWith('p.<img src="') || false;
+    return (this.detail?.isPrimitive && this.detail?.hanziIsFilename) || false;
   }
 
   getPrimitiveImageFileName(): string | undefined {
-    return `assets/primitives/${this.detail?.hanzi
-      .replace('p.<img src="', '')
-      .replace('.jpg">', '')
-      .replace('.jpg"/>', '')}.svg`;
+    return this.detail?.hanziIsFilename
+      ? `assets/primitives/rsh-${this.detail.hanzi}.svg`
+      : undefined;
   }
 }

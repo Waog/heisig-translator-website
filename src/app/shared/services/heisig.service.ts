@@ -5,12 +5,13 @@ import { tap } from 'rxjs/operators';
 
 // Internal interface for the JSON structure
 interface HeisigEntryInternal {
+  Hanzi: string;
   Keyword: string;
   KeyworddeDEGoogleTranslate: string;
-  Hanzi: string;
   Traditional: string | null;
   HeisigNumber: number;
-  HeisigSequence: number;
+  isPrimitive: boolean;
+  Hanziisfilename: boolean;
   Story: string;
   StorydeDEGoogleTranslate: string;
   StrokeCount: number;
@@ -18,7 +19,6 @@ interface HeisigEntryInternal {
   ComponentsFlatHanzi: string;
   ComponentsFlatPinyin: string;
   ComponentsFlatKeywords: string;
-  ComponentsFlatKeywordsdeDE: string;
 }
 
 // Public interface for service consumers
@@ -28,7 +28,8 @@ export interface HeisigEntry {
   hanzi: string;
   traditional: string | null;
   heisigNumber: number;
-  heisigSequence: number;
+  isPrimitive: boolean;
+  hanziIsFilename: boolean;
   story: string;
   storyDe: string;
   strokeCount: number;
@@ -70,7 +71,8 @@ export class HeisigService {
       hanzi: entry.Hanzi,
       traditional: entry.Traditional,
       heisigNumber: entry.HeisigNumber,
-      heisigSequence: entry.HeisigSequence,
+      isPrimitive: entry.isPrimitive,
+      hanziIsFilename: entry.Hanziisfilename,
       story: entry.Story,
       storyDe: entry.StorydeDEGoogleTranslate,
       strokeCount: entry.StrokeCount,
