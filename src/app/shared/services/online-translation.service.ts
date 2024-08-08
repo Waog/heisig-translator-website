@@ -36,9 +36,7 @@ export class OnlineTranslationService {
     }
 
     // If not in cache or ongoing request, make the HTTP request
-    // TODO: restore actual HTTP request
-    // const request = this.http.get<any>(url).pipe(
-    const request = of({ responseData: { translatedText: 'MOCK' } }).pipe(
+    const request = this.http.get<any>(url).pipe(
       tap((response) => {
         cache?.set(text, response.responseData.translatedText); // Cache the response
         this.saveCacheToLocalStorage(); // Save the cache to localStorage
