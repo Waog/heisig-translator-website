@@ -43,6 +43,10 @@ describe('Integration: AppComponent', () => {
     fixture.detectChanges();
   }));
 
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   afterEach(() => {
     httpTestingController.verify();
   });
@@ -203,6 +207,31 @@ describe('Integration: AppComponent', () => {
     ).toContain('you (informal)');
   });
 
+  it('should use cached translations from localStorage', async () => {
+    localStorage.setItem('onlineTranslationCacheDE', '{"你好":"Hallo"}');
+    localStorage.setItem('onlineTranslationCacheEN', '{"你好":"Hello"}');
+
+    const userInput = '你好';
+
+    await setUserInput(userInput);
+
+    mockHeisig([]);
+
+    const dictionary = [
+      { simplified: '你好', pinyin: 'ni3 hao3', english: ['hello', 'hi'] },
+    ];
+    mockLocalDictionary(dictionary);
+
+    await wait(1000);
+
+    expect(getSentenceComponentText(0)).toContain('Hello');
+    expect(getSentenceComponentText(1)).toContain('Hallo');
+
+    httpTestingController.expectNone((req) =>
+      req.url.includes('translated.net')
+    );
+  });
+
   async function setUserInput(input: string): Promise<void> {
     const inputElement = fixture.debugElement.query(
       By.css('input#userInput')
@@ -210,7 +239,7 @@ describe('Integration: AppComponent', () => {
     inputElement.value = input;
     inputElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    return new Promise((resolve) => setTimeout(resolve, 0)); // Ensure the input event is processed
+    return new Promise((resolve) => setTimeout(resolve, 0));
   }
 
   function getSentenceComponentText(index: number): string {
@@ -252,7 +281,7 @@ describe('Integration: AppComponent', () => {
       childIndex
     );
     element.click();
-    fixture.detectChanges(); // Update UI after the click event
+    fixture.detectChanges();
   }
 
   function getNativeElement(
@@ -304,22 +333,11 @@ describe('Integration: AppComponent', () => {
     mockHttpResponse('GET', expectedOnlineTranslationUrlDe, mockTranslationDe);
   }
 
-  /**
-   * Mocks an HTTP response for a specific method and URL.
-   *
-   * @param {string} method - The HTTP method (e.g., 'GET', 'POST').
-   * @param {string} url - The URL to mock.
-   * @param {any} body - The body of the mock response.
-   *
-   * Usage example:
-   *
-   * mockHttpResponse('GET', '/api/translate', { translation: 'Hello' });
-   */
   function mockHttpResponse(method: string, url: string, body: any): void {
     const req = httpTestingController.expectOne(url);
     if (req.request.method === method) {
       req.flush(body);
     }
-    fixture.detectChanges(); // Update UI after the mock response
+    fixture.detectChanges();
   }
 });
