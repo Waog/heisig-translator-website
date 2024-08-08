@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AudioService } from '../shared/services/audio.service';
 import { TranslationService } from '../shared/services/translation.service';
 
@@ -29,9 +29,12 @@ export class DictionaryOccurrencesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.translations$ =
-      this.translationService.getTranslationsContainingCharacter(
-        this.hanziChar
+    this.translations$ = this.translationService
+      .getTranslationsContainingCharacter(this.hanziChar)
+      .pipe(
+        map((translations) =>
+          translations.sort((a, b) => a.hanzi.length - b.hanzi.length)
+        )
       );
   }
 

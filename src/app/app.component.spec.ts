@@ -184,7 +184,7 @@ describe('Integration: AppComponent', () => {
 
     expect(
       getElementText(DictionaryOccurrencesComponent, 0, '.hanzi-column', 0)
-    ).toContain('你好');
+    ).toContain('你');
     expect(
       getElementText(
         DictionaryOccurrencesComponent,
@@ -192,11 +192,11 @@ describe('Integration: AppComponent', () => {
         '.translation-column',
         0
       )
-    ).toContain('hello');
+    ).toContain('you (informal)');
 
     expect(
       getElementText(DictionaryOccurrencesComponent, 0, '.hanzi-column', 1)
-    ).toContain('你');
+    ).toContain('你好');
     expect(
       getElementText(
         DictionaryOccurrencesComponent,
@@ -204,7 +204,7 @@ describe('Integration: AppComponent', () => {
         '.translation-column',
         1
       )
-    ).toContain('you (informal)');
+    ).toContain('hello');
   });
 
   it('should use cached translations from localStorage', async () => {
