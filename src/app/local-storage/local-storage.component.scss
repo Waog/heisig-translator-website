@@ -27,12 +27,14 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%; /* Ensures the container takes full width */
 }
 
 .input-group {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%; /* Ensures the input group takes full width */
 }
 
 .input-field {
@@ -40,6 +42,7 @@
   border-radius: 4px;
   flex-grow: 1;
   border: 1px solid var(--default-border-color);
+  min-width: 0; /* Prevents inputs from overflowing */
 }
 
 .input-editable {
@@ -77,6 +80,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  flex-shrink: 0; /* Prevents buttons from shrinking */
 }
 
 .button-create {
@@ -117,4 +121,11 @@
 
 .toggle-expanded {
   background-color: #5a6268; /* Slightly darker when expanded */
+}
+
+@media (max-width: 600px) {
+  .input-group {
+    flex-direction: column;
+    align-items: stretch; /* Align items to stretch to full width */
+  }
 }
