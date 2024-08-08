@@ -1,3 +1,4 @@
+/* General container styling */
 .translation-audio-container {
   position: relative;
   display: flex;
@@ -9,18 +10,11 @@
   font-size: 1.2em;
   color: #80cbc4;
   z-index: 1;
-}
-
-.filled-and-bordered {
   background-color: #1e1e1e;
   border: 1px solid #37474f;
 }
 
-.content {
-  flex-grow: 1;
-  width: 100%;
-}
-
+/* Audio buttons container styling */
 .audio-buttons {
   display: flex;
   justify-content: flex-end;
@@ -31,48 +25,16 @@
   right: 1em;
 }
 
-.audio-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: #b0bec5;
-  border-radius: 0.5em;
-  padding: 2px 5px;
-  cursor: pointer;
-  margin-left: 0.5em;
-  background-color: #2c2c2c;
-  border: 1px solid #455a64;
-  min-width: 2.5em;
-  user-select: none;
+/* Content container styling */
+.content {
+  flex-grow: 1;
+  width: 100%;
 }
 
-.audio-icon {
-  font-size: 0.8em;
-  margin-right: 0.5em;
-}
-
-.audio-label {
-  font-size: 0.8em;
-}
-
+/* Media queries for responsiveness */
 @media (max-width: 600px) {
   .translation-audio-container {
     padding-left: 3px;
     padding-right: 3px;
-  }
-
-  .audio-button {
-    padding: 2px 4px;
-    min-width: 2em;
-  }
-
-  .audio-icon {
-    font-size: 0.7em;
-    margin-right: 0.3em;
-  }
-
-  .audio-label {
-    font-size: 0.7em;
   }
 }

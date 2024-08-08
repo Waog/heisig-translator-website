@@ -1,13 +1,11 @@
 <div class="translation-audio-container filled-and-bordered">
   <div class="audio-buttons">
-    <div
+    <app-audio-button
       *ngFor="let config of buttonConfigs"
-      class="audio-button filled-and-bordered"
-      (click)="playAudio(config.text, config.language)"
-    >
-      <div class="audio-icon">🔊</div>
-      <div class="audio-label">{{ config.label }}</div>
-    </div>
+      [text]="config.text"
+      [language]="config.language"
+      [label]="config.label"
+    ></app-audio-button>
   </div>
   <div class="content">
     <ng-content></ng-content>

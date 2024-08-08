@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { AudioService } from '../shared/services/audio.service';
+import { AudioButtonComponent } from './audio-button.component';
 
 interface ButtonConfig {
   text: string;
@@ -11,17 +11,10 @@ interface ButtonConfig {
 @Component({
   selector: 'app-translation-and-audio-container',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AudioButtonComponent],
   templateUrl: './translation-and-audio-container.component.html',
   styleUrls: ['./translation-and-audio-container.component.scss'],
-  providers: [AudioService],
 })
 export class TranslationAndAudioContainerComponent {
   @Input() buttonConfigs: ButtonConfig[] = [];
-
-  constructor(private audioService: AudioService) {}
-
-  playAudio(text: string, language: string): void {
-    this.audioService.playAudio(text, language);
-  }
 }
