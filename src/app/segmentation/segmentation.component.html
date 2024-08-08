@@ -1,10 +1,23 @@
-<app-translation-and-audio-container
-  [buttonConfigs]="[
-    { text: wordsTTS, language: 'en-US', label: 'English' },
-    { text: userInput, language: 'zh-CN', label: 'Chinese' },
-    { text: heisigTTS, language: 'en-US', label: 'Heisig' }
-  ]"
->
+<app-translation-and-audio-container>
+  <app-audio-button
+    [text]="wordsTTS"
+    language="en-US"
+    label="English"
+    audio-buttons
+  ></app-audio-button>
+  <app-audio-button
+    [text]="userInput"
+    [language]="'zh-CN'"
+    label="Chinese"
+    audio-buttons
+  ></app-audio-button>
+  <app-audio-button
+    [text]="heisigTTS"
+    [language]="'en-US'"
+    label="Heisig"
+    audio-buttons
+  ></app-audio-button>
+
   <div class="word-group-container">
     <app-single-word
       *ngFor="let hanziWord of hanziWords"

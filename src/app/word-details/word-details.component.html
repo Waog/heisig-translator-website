@@ -1,14 +1,23 @@
-<app-translation-and-audio-container
-  [buttonConfigs]="[
-    {
-      text: (simpleTranslation$ | async) || '',
-      language: 'en-US',
-      label: 'English'
-    },
-    { text: wordHanzi, language: 'zh-CN', label: 'Chinese' },
-    { text: heisigTTSText, language: 'en-US', label: 'Heisig' }
-  ]"
->
+<app-translation-and-audio-container>
+  <app-audio-button
+    [text]="(simpleTranslation$ | async) || ''"
+    [language]="'en-US'"
+    label="English"
+    audio-buttons
+  ></app-audio-button>
+  <app-audio-button
+    [text]="wordHanzi"
+    [language]="'zh-CN'"
+    label="Chinese"
+    audio-buttons
+  ></app-audio-button>
+  <app-audio-button
+    [text]="heisigTTSText"
+    [language]="'en-US'"
+    label="Heisig"
+    audio-buttons
+  ></app-audio-button>
+
   <h1>{{ simpleTranslation$ | async }} - {{ wordHanzi }} - {{ pinyin }}</h1>
 
   <h2>Translations:</h2>

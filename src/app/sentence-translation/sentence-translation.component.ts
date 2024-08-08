@@ -2,18 +2,23 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Subject, debounceTime } from 'rxjs';
 import { OnlineTranslationService } from '../shared/services/online-translation.service';
+import { AudioButtonComponent } from '../translation-and-audio-container/audio-button.component';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 
 @Component({
   selector: 'app-sentence-translation',
   standalone: true,
-  imports: [CommonModule, TranslationAndAudioContainerComponent],
+  imports: [
+    CommonModule,
+    TranslationAndAudioContainerComponent,
+    AudioButtonComponent,
+  ],
   templateUrl: './sentence-translation.component.html',
   styleUrls: ['./sentence-translation.component.scss'],
 })
 export class SentenceTranslationComponent implements OnChanges {
   @Input() userInput: string = '';
-  @Input() targetLang: string = ''; // 'de-DE' oder 'en-US'
+  @Input() targetLang: string = '';
 
   translation: string = '';
   isLoading: boolean = false;

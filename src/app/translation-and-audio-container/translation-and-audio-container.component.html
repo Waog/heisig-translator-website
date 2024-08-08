@@ -1,11 +1,6 @@
 <div class="translation-audio-container filled-and-bordered">
   <div class="audio-buttons">
-    <app-audio-button
-      *ngFor="let config of buttonConfigs"
-      [text]="config.text"
-      [language]="config.language"
-      [label]="config.label"
-    ></app-audio-button>
+    <ng-content select="[audio-buttons]"></ng-content>
   </div>
   <div class="content">
     <ng-content></ng-content>

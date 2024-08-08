@@ -10,6 +10,7 @@ import {
   SimpleChanges,
   ViewChildren,
 } from '@angular/core';
+import { AudioButtonComponent } from '../translation-and-audio-container/audio-button.component';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 import { SingleWordComponent } from './single-word.component';
 
@@ -25,6 +26,7 @@ import { HeisigService } from '../shared/services/heisig.service';
     CommonModule,
     TranslationAndAudioContainerComponent,
     SingleWordComponent,
+    AudioButtonComponent,
   ],
   templateUrl: './segmentation.component.html',
   styleUrls: ['./segmentation.component.scss'],
@@ -55,12 +57,10 @@ export class SegmentationComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Subscribe to changes in the QueryList
     this.singleWordComponents.changes.subscribe(() => {
       setTimeout(() => this.updateTTS(), 1000);
     });
 
-    // Initial call to updateWordTranslation
     setTimeout(() => this.updateTTS(), 1000);
   }
 

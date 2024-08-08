@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AudioService } from '../shared/services/audio.service';
+import { AudioButtonComponent } from '../translation-and-audio-container/audio-button.component';
 import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 import { HeisigDetailsComponent } from './heisig-details.component';
 import { WordDetailsService } from './word-details.service';
@@ -19,6 +20,7 @@ import { WordDetailsService } from './word-details.service';
     CommonModule,
     TranslationAndAudioContainerComponent,
     HeisigDetailsComponent,
+    AudioButtonComponent,
   ],
   templateUrl: './word-details.component.html',
   styleUrls: ['./word-details.component.scss'],

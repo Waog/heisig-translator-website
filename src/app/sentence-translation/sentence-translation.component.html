@@ -1,8 +1,11 @@
-<app-translation-and-audio-container
-  [buttonConfigs]="[
-    { text: translation, language: targetLang, label: 'Translation' }
-  ]"
->
+<app-translation-and-audio-container>
+  <app-audio-button
+    [text]="translation"
+    [language]="targetLang"
+    label="Translation"
+    audio-buttons
+  ></app-audio-button>
+
   <div class="translation-content">
     <p *ngIf="!isLoading && !debounceInProgress">{{ translation }}</p>
     <p *ngIf="debounceInProgress">Waiting until input stops...</p>
