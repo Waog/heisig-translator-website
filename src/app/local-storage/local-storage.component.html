@@ -60,16 +60,18 @@
         [class.input-edited]="item.edited"
         class="input-field"
       />
-      <button
-        (click)="saveEditedItem(item)"
-        [disabled]="!item.edited"
-        class="button button-save"
-      >
-        Save
-      </button>
-      <button (click)="deleteItem(item.key)" class="button button-delete">
-        Delete
-      </button>
+      <div class="input-group-buttons">
+        <button
+          (click)="saveEditedItem(item)"
+          [disabled]="!item.edited"
+          class="button button-save"
+        >
+          Save
+        </button>
+        <button (click)="deleteItem(item.key)" class="button button-delete">
+          Delete
+        </button>
+      </div>
     </div>
     <div *ngIf="item.isJson && item.editorVisible" class="textarea-container">
       <textarea
