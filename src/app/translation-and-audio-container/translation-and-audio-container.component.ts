@@ -2,6 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { AudioService } from '../shared/services/audio.service';
 
+interface ButtonConfig {
+  text: string;
+  language: string;
+  label: string;
+}
+
 @Component({
   selector: 'app-translation-and-audio-container',
   standalone: true,
@@ -11,15 +17,7 @@ import { AudioService } from '../shared/services/audio.service';
   providers: [AudioService],
 })
 export class TranslationAndAudioContainerComponent {
-  @Input() text: string = '';
-  @Input() language: string = '';
-  @Input() text2: string = '';
-  @Input() language2: string = '';
-  @Input() text3: string = '';
-  @Input() language3: string = '';
-  @Input() label1: string = '';
-  @Input() label2: string = '';
-  @Input() label3: string = '';
+  @Input() buttonConfigs: ButtonConfig[] = [];
 
   constructor(private audioService: AudioService) {}
 

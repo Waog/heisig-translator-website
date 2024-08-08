@@ -1,13 +1,9 @@
 <app-translation-and-audio-container
-  [text]="wordsTTS"
-  [language]="'en-US'"
-  [label1]="'English'"
-  [text2]="userInput"
-  [language2]="'zh-CN'"
-  [label2]="'Chinese'"
-  [text3]="heisigTTS"
-  [language3]="'en-US'"
-  [label3]="'Heisig'"
+  [buttonConfigs]="[
+    { text: wordsTTS, language: 'en-US', label: 'English' },
+    { text: userInput, language: 'zh-CN', label: 'Chinese' },
+    { text: heisigTTS, language: 'en-US', label: 'Heisig' }
+  ]"
 >
   <div class="word-group-container">
     <app-single-word
