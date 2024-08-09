@@ -1,5 +1,9 @@
 <div>
-  <div *ngIf="detail" class="heisig-item">
+  <div
+    *ngIf="detail"
+    class="heisig-item"
+    [ngClass]="{ expanded: isHeisigDetailsExpanded(detail.hanzi) }"
+  >
     <span class="heisig-text">
       <span class="fixed-width">
         <img
@@ -32,96 +36,99 @@
         </button>
       </span>
     </span>
-    <div *ngIf="isHeisigDetailsExpanded(detail.hanzi)" class="heisig-details">
-      <span class="keyword-de">
-        <span *ngIf="detail.isPrimitive" class="primitive-label">
-          Primitive:
+    <div class="heisig-details-container">
+      <div *ngIf="isHeisigDetailsExpanded(detail.hanzi)" class="heisig-details">
+        <span class="keyword-de">
+          <span *ngIf="detail.isPrimitive" class="primitive-label">
+            Primitive:
+          </span>
+          {{ detail.keywordDe }}
+          <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>
+          <small class="heisig-number" *ngIf="detail.heisigNumber !== null">
+            [{{ detail.heisigNumber }}]
+          </small>
+          <button
+            *ngIf="!detail.hanziIsFilename && !detail.pinyin"
+            class="audio-button-inline"
+            (click)="playAudio($event, detail.hanzi, 'zh-CN')"
+          >
+            🔊
+          </button>
         </span>
-        {{ detail.keywordDe }}
-        <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>
-        <small class="heisig-number" *ngIf="detail.heisigNumber !== null">
-          [{{ detail.heisigNumber }}]
-        </small>
-        <button
-          *ngIf="!detail.hanziIsFilename && !detail.pinyin"
-          class="audio-button-inline"
-          (click)="playAudio($event, detail.hanzi, 'zh-CN')"
+        <p class="pinyin-line" *ngIf="detail.pinyin">
+          {{ detail.pinyin }}
+          <button
+            class="audio-button-inline"
+            (click)="playAudio($event, detail.hanzi, 'zh-CN')"
+          >
+            🔊
+          </button>
+        </p>
+        <img
+          *ngIf="detail.hanziIsFilename"
+          [src]="getPrimitiveImageFileName()"
+          class="primitive-image large-image"
+        />
+        <p *ngIf="detail.story" class="story">
+          <span class="quote">”</span>
+          {{ detail.storyWithMarkedKeywords }}
+          <button
+            class="audio-button-story"
+            (click)="playAudio($event, detail.story, 'en-US')"
+          >
+            🔊
+          </button>
+        </p>
+        <p *ngIf="detail.storyDe" class="story">
+          <span class="quote">”</span>
+          {{ detail.storyWithMarkedKeywordsDe }}
+          <button
+            class="audio-button-story"
+            (click)="playAudio($event, detail.storyDe, 'de-DE')"
+          >
+            🔊
+          </button>
+        </p>
+        <div
+          class="components-briefly"
+          *ngIf="
+            detail.components.length > 0 &&
+            !isSubComponentsExpanded(detail.hanzi)
+          "
         >
-          🔊
-        </button>
-      </span>
-      <p class="pinyin-line" *ngIf="detail.pinyin">
-        {{ detail.pinyin }}
+          <strong>Components:</strong>
+          <ul>
+            <li *ngFor="let component of detail.components">
+              {{ component.hanzi }} <span class="subtle-separator">–</span>
+              <span [ngClass]="{ 'italic-keyword': component.isPrimitive }">
+                {{ component.keyword }}
+              </span>
+              <button
+                class="expand-icon-button"
+                (click)="toggleSubComponentsExpansion(detail.hanzi, $event)"
+                title="Expand Subcomponents"
+              >
+                ▶
+              </button>
+            </li>
+          </ul>
+        </div>
         <button
-          class="audio-button-inline"
-          (click)="playAudio($event, detail.hanzi, 'zh-CN')"
+          class="toggle-occurrences-button"
+          *ngIf="!detail.isPrimitive"
+          (click)="toggleOccurrencesExpansion(detail.hanzi, $event)"
         >
-          🔊
+          {{
+            isOccurrencesExpanded(detail.hanzi)
+              ? "Hide Occurrences ▲"
+              : "Show Occurrences ▼"
+          }}
         </button>
-      </p>
-      <img
-        *ngIf="detail.hanziIsFilename"
-        [src]="getPrimitiveImageFileName()"
-        class="primitive-image large-image"
-      />
-      <p *ngIf="detail.story" class="story">
-        <span class="quote">”</span>
-        {{ detail.storyWithMarkedKeywords }}
-        <button
-          class="audio-button-story"
-          (click)="playAudio($event, detail.story, 'en-US')"
-        >
-          🔊
-        </button>
-      </p>
-      <p *ngIf="detail.storyDe" class="story">
-        <span class="quote">”</span>
-        {{ detail.storyWithMarkedKeywordsDe }}
-        <button
-          class="audio-button-story"
-          (click)="playAudio($event, detail.storyDe, 'de-DE')"
-        >
-          🔊
-        </button>
-      </p>
-      <div
-        class="components-briefly"
-        *ngIf="
-          detail.components.length > 0 && !isSubComponentsExpanded(detail.hanzi)
-        "
-      >
-        <strong>Components:</strong>
-        <ul>
-          <li *ngFor="let component of detail.components">
-            {{ component.hanzi }} <span class="subtle-separator">–</span>
-            <span [ngClass]="{ 'italic-keyword': component.isPrimitive }">
-              {{ component.keyword }}
-            </span>
-            <button
-              class="expand-icon-button"
-              (click)="toggleSubComponentsExpansion(detail.hanzi, $event)"
-              title="Expand Subcomponents"
-            >
-              ▶
-            </button>
-          </li>
-        </ul>
+        <app-dictionary-occurrences
+          *ngIf="isOccurrencesExpanded(detail.hanzi) && !detail.isPrimitive"
+          [hanziChar]="detail.hanzi"
+        ></app-dictionary-occurrences>
       </div>
-      <button
-        class="toggle-occurrences-button"
-        *ngIf="!detail.isPrimitive"
-        (click)="toggleOccurrencesExpansion(detail.hanzi, $event)"
-      >
-        {{
-          isOccurrencesExpanded(detail.hanzi)
-            ? "Hide Occurrences ▲"
-            : "Show Occurrences ▼"
-        }}
-      </button>
-      <app-dictionary-occurrences
-        *ngIf="isOccurrencesExpanded(detail.hanzi) && !detail.isPrimitive"
-        [hanziChar]="detail.hanzi"
-      ></app-dictionary-occurrences>
     </div>
     <div
       *ngIf="detail.components.length > 0"

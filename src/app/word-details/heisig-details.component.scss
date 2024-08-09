@@ -25,12 +25,15 @@
   width: 1.5em;
   height: 1.5em;
   margin-right: 0.5em;
+  /* No scaling applied here */
 }
 
 .primitive-image {
   max-width: 100%;
   max-height: 100%;
   filter: invert(1);
+  transition: transform 0.3s ease; /* Smooth scaling */
+  transform-origin: 30% 30%; /* Adjusted transform origin */
 }
 
 .hanzi-text {
@@ -38,6 +41,36 @@
   text-align: center;
   width: 100%;
   line-height: 1.5em;
+  transition: transform 0.3s ease; /* Smooth scaling */
+  transform-origin: 30% 30%; /* Adjusted transform origin */
+}
+
+.heisig-details-container {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.expanded .heisig-details-container {
+  max-height: 1000px; /* Large enough to accommodate the content */
+  opacity: 1;
+}
+
+.heisig-details {
+  margin-top: 25px; /* Increased margin-top to 25px */
+  margin-bottom: 15px;
+}
+
+/* Apply scaling only to the Hanzi and Primitive Image when the 'expanded' class is present */
+.expanded .primitive-image:not(.large-image) {
+  transform: scale(
+    1.75
+  ); /* Scale primitive images except those with the .large-image class */
+}
+
+.expanded .hanzi-text {
+  transform: scale(1.75); /* Scale the Hanzi text */
 }
 
 .italic-keyword {
@@ -154,11 +187,6 @@ button:hover {
   padding: 4px 8px;
 }
 
-.heisig-details {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
 .heisig-number {
   font-size: 0.8em;
   color: #999;
@@ -217,6 +245,7 @@ button:hover {
   margin-left: 80px;
   border: 1px dashed #999;
   padding: 5px;
+  /* Excluded from scaling */
 }
 
 .components-briefly {
