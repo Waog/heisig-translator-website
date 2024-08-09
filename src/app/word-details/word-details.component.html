@@ -3,19 +3,19 @@
     [text]="(simpleTranslation$ | async) || ''"
     [language]="'en-US'"
     label="English"
-    audio-buttons
+    container-buttons
   ></app-audio-button>
   <app-audio-button
     [text]="wordHanzi"
     [language]="'zh-CN'"
     label="Chinese"
-    audio-buttons
+    container-buttons
   ></app-audio-button>
   <app-audio-button
     [text]="heisigTTSText"
     [language]="'en-US'"
     label="Heisig"
-    audio-buttons
+    container-buttons
   ></app-audio-button>
 
   <h1>{{ simpleTranslation$ | async }} - {{ wordHanzi }} - {{ pinyin }}</h1>

@@ -8,26 +8,26 @@
     ]"
     [(ngModel)]="selectedToggleOption"
     (optionSelected)="onToggleOptionChange($event)"
-    audio-buttons
+    container-buttons
   ></app-toggle-button>
 
   <app-audio-button
     [text]="wordsTTS"
     [language]="'en-US'"
     label="English"
-    audio-buttons
+    container-buttons
   ></app-audio-button>
   <app-audio-button
     [text]="userInput"
     [language]="'zh-CN'"
     label="Chinese"
-    audio-buttons
+    container-buttons
   ></app-audio-button>
   <app-audio-button
     [text]="heisigTTS"
     [language]="'en-US'"
     label="Heisig"
-    audio-buttons
+    container-buttons
   ></app-audio-button>
 
   <div class="word-group-container">
