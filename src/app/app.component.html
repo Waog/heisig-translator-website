@@ -22,4 +22,38 @@
   ></app-word-details>
 
   <app-local-storage></app-local-storage>
+
+  <!-- New input for intent URI -->
+  <div class="debug-tools">
+    <label for="intentUri">Enter Intent URI:</label>
+    <input
+      id="intentUri"
+      type="text"
+      [(ngModel)]="intentUri"
+      (ngModelChange)="onIntentUriChange($event)"
+    />
+
+    <!-- Show the current URI -->
+    <p><strong>Current URI:</strong> {{ intentUri }}</p>
+
+    <!-- Anchor Tag -->
+    <a [href]="intentUri" target="_blank">Test Intent URI</a>
+
+    <!-- Buttons to test different methods -->
+    <div class="button-group">
+      <button (click)="openWithWindowHref()">
+        Open with window.location.href
+      </button>
+      <button (click)="openWithWindowOpen()">Open with window.open</button>
+      <button (click)="openWithAnchorClick()">Open with anchor click</button>
+    </div>
+  </div>
+
+  <!-- Console Outputs -->
+  <div class="console-outputs">
+    <h3>Console Output:</h3>
+    <ul>
+      <li *ngFor="let output of consoleOutputs">{{ output }}</li>
+    </ul>
+  </div>
 </div>
