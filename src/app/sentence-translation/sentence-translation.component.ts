@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Subject, debounceTime } from 'rxjs';
+import { AudioButtonComponent } from '../container-with-buttons/audio-button.component';
+import { ContainerWithButtonsComponent } from '../container-with-buttons/container-with-buttons.component';
 import { OnlineTranslationService } from '../shared/services/online-translation.service';
-import { AudioButtonComponent } from '../translation-and-audio-container/audio-button.component';
-import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 
 @Component({
   selector: 'app-sentence-translation',
   standalone: true,
   imports: [
     CommonModule,
-    TranslationAndAudioContainerComponent,
+    ContainerWithButtonsComponent,
     AudioButtonComponent,
   ],
   templateUrl: './sentence-translation.component.html',

@@ -10,9 +10,12 @@ import {
   SimpleChanges,
   ViewChildren,
 } from '@angular/core';
-import { AudioButtonComponent } from '../translation-and-audio-container/audio-button.component';
-import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
+import { FormsModule } from '@angular/forms';
+import { AudioButtonComponent } from '../container-with-buttons/audio-button.component';
+import { ToggleButtonComponent } from '../container-with-buttons/toggle-button.component';
+import { ContainerWithButtonsComponent } from '../container-with-buttons/container-with-buttons.component';
 import { SingleWordComponent } from './single-word.component';
+import { ToggleOptions } from './toggle-options.enum'; // Import the enum
 
 // @ts-ignore
 import { Segment, useDefault } from 'segmentit';
@@ -24,9 +27,11 @@ import { HeisigService } from '../shared/services/heisig.service';
   standalone: true,
   imports: [
     CommonModule,
-    TranslationAndAudioContainerComponent,
+    FormsModule,
+    ContainerWithButtonsComponent,
     SingleWordComponent,
     AudioButtonComponent,
+    ToggleButtonComponent,
   ],
   templateUrl: './segmentation.component.html',
   styleUrls: ['./segmentation.component.scss'],
@@ -38,6 +43,9 @@ export class SegmentationComponent implements OnChanges, AfterViewInit {
   hanziWords: string[] = [];
   wordsTTS: string = '';
   heisigTTS: string = '';
+  selectedToggleOption: ToggleOptions = ToggleOptions.Off;
+
+  public ToggleOptions = ToggleOptions; // Expose the enum to the template
 
   @ViewChildren(SingleWordComponent)
   singleWordComponents!: QueryList<SingleWordComponent>;

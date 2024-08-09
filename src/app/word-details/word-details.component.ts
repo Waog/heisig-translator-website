@@ -7,9 +7,9 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AudioButtonComponent } from '../container-with-buttons/audio-button.component';
+import { ContainerWithButtonsComponent } from '../container-with-buttons/container-with-buttons.component';
 import { AudioService } from '../shared/services/audio.service';
-import { AudioButtonComponent } from '../translation-and-audio-container/audio-button.component';
-import { TranslationAndAudioContainerComponent } from '../translation-and-audio-container/translation-and-audio-container.component';
 import { HeisigDetailsComponent } from './heisig-details.component';
 import { WordDetailsService } from './word-details.service';
 
@@ -18,7 +18,7 @@ import { WordDetailsService } from './word-details.service';
   standalone: true,
   imports: [
     CommonModule,
-    TranslationAndAudioContainerComponent,
+    ContainerWithButtonsComponent,
     HeisigDetailsComponent,
     AudioButtonComponent,
   ],

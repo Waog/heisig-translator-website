@@ -1,7 +1,18 @@
-<app-translation-and-audio-container>
+<app-container-with-buttons>
+  <app-toggle-button
+    [options]="[
+      ToggleOptions.Off,
+      ToggleOptions.Word,
+      ToggleOptions.Chinese,
+      ToggleOptions.Heisig
+    ]"
+    [(ngModel)]="selectedToggleOption"
+    audio-buttons
+  ></app-toggle-button>
+
   <app-audio-button
     [text]="wordsTTS"
-    language="en-US"
+    [language]="'en-US'"
     label="English"
     audio-buttons
   ></app-audio-button>
@@ -24,6 +35,7 @@
       [hanziWord]="hanziWord"
       (wordClicked)="onWordClick($event)"
       [isSelected]="hanziWord === selectedWord"
+      [toggleOption]="selectedToggleOption"
     ></app-single-word>
   </div>
-</app-translation-and-audio-container>
+</app-container-with-buttons>

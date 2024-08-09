@@ -9,13 +9,14 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { smoothenHeisig } from '../shared/helper';
+import { AudioService } from '../shared/services/audio.service';
 import { HeisigService } from '../shared/services/heisig.service';
-import { OnlineTranslationService } from '../shared/services/online-translation.service';
 import {
   Language,
   TranslationService,
 } from '../shared/services/translation.service';
 import { SingleCharacterComponent } from './single-character.component';
+import { ToggleOptions } from './toggle-options.enum';
 
 @Component({
   selector: 'app-single-word',
@@ -23,11 +24,12 @@ import { SingleCharacterComponent } from './single-character.component';
   imports: [CommonModule, SingleCharacterComponent],
   templateUrl: './single-word.component.html',
   styleUrls: ['./single-word.component.scss'],
-  providers: [OnlineTranslationService],
+  providers: [AudioService],
 })
 export class SingleWordComponent implements OnChanges, OnInit {
   @Input() hanziWord: string = '';
   @Input() isSelected: boolean = false;
+  @Input() toggleOption: ToggleOptions = ToggleOptions.Chinese;
   @Output() wordClicked: EventEmitter<string> = new EventEmitter<string>();
   hanziCharacters: string[] = [];
   public translation: string = '';
@@ -35,7 +37,8 @@ export class SingleWordComponent implements OnChanges, OnInit {
 
   constructor(
     private translationService: TranslationService,
-    private heisigService: HeisigService
+    private heisigService: HeisigService,
+    private audioService: AudioService
   ) {}
 
   ngOnInit(): void {
@@ -62,13 +65,27 @@ export class SingleWordComponent implements OnChanges, OnInit {
       });
   }
 
-  containsChineseCharacters(text: string): boolean {
-    const chineseCharacterRegex = /[\u4e00-\u9fff]/;
-    return chineseCharacterRegex.test(text);
-  }
-
   onWordClick(event: Event): void {
     event.stopPropagation();
     this.wordClicked.emit(this.hanziWord);
+
+    switch (this.toggleOption) {
+      case ToggleOptions.Off:
+        break;
+      case ToggleOptions.Word:
+        this.audioService.playAudio(this.translation, 'en-US');
+        break;
+      case ToggleOptions.Chinese:
+        this.audioService.playAudio(this.hanziWord, 'zh-CN');
+        break;
+      case ToggleOptions.Heisig:
+        const heisigSentence = smoothenHeisig(
+          this.heisigService.getHeisigSentenceEn(this.hanziWord)
+        );
+        this.audioService.playAudio(heisigSentence, 'en-US');
+        break;
+      default:
+        break;
+    }
   }
 }
