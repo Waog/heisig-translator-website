@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import { ConsoleComponent } from './console/console.component';
 import { InputTextComponent } from './input-text/input-text.component';
 import { LocalStorageComponent } from './local-storage/local-storage.component';
 import { SegmentationComponent } from './segmentation/segmentation.component';
@@ -24,6 +25,7 @@ import { WordDetailsComponent } from './word-details/word-details.component';
     InputTextComponent,
     WordDetailsComponent,
     LocalStorageComponent,
+    ConsoleComponent,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -40,7 +42,7 @@ export class AppComponent {
 
   onUserInputChange(newInput: string): void {
     this.userInput = newInput;
-    this.selectedWord = ''; // Reset selected word when input changes
+    this.selectedWord = '';
   }
 
   onWordSelected(word: string): void {

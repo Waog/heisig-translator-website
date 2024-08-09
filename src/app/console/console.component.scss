@@ -1,0 +1,54 @@
+.console-outputs {
+  margin-top: 20px;
+  background-color: #2e2e2e;
+  padding: 10px;
+  border-radius: 5px;
+  max-height: 300px;
+  overflow-y: auto;
+  color: #cccccc;
+
+  h3 {
+    margin-top: 0;
+    color: #ffffff;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  li {
+    font-family: monospace;
+    font-size: 14px;
+    margin-bottom: 5px;
+    word-break: break-word;
+  }
+}
+
+.header-buttons {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.button {
+  padding: 5px 20px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-toggle-console {
+  background-color: transparent;
+  color: #ddd;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #555;
+}
+
+.button-toggle-console:hover {
+  background-color: #495057;
+}

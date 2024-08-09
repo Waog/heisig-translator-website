@@ -1,0 +1,17 @@
+<!-- Toggle button for showing/hiding the console -->
+<div class="header-buttons">
+  <button
+    (click)="toggleConsoleVisibility()"
+    class="button button-toggle-console"
+  >
+    {{ showConsole ? "▼ Hide Console" : "▶ Show Console" }}
+  </button>
+</div>
+
+<!-- Console output, shown based on the toggle state -->
+<div *ngIf="showConsole" class="console-outputs">
+  <h3>Console Output:</h3>
+  <ul>
+    <li *ngFor="let output of consoleOutputs">{{ output }}</li>
+  </ul>
+</div>
