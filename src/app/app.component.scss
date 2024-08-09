@@ -7,20 +7,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.anki-share-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin: 20px 0;
-  font-size: 18px;
-  text-align: center;
-  color: #aaa;
-  background-color: #1e1e1e;
-  border: 1px solid #333333;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 @media (max-width: 600px) {
   .container {
     max-width: 100%;
