@@ -46,4 +46,25 @@ export class AppComponent {
   onWordSelected(word: string): void {
     this.selectedWord = word;
   }
+
+  shareToAnkiDroid(): void {
+    const intentUrl =
+      `intent:#Intent;` +
+      `action=android.intent.action.SEND;` +
+      `type=text/plain;` +
+      `S.subject=${encodeURIComponent('我对 Anki 的示例。')};` +
+      `S.text=${encodeURIComponent(
+        'English: My Example to Anki.\n' +
+          'Pinyin: Wǒ duì Anki de shìlì.\n' +
+          "Heisig English Keywords: I, that’s right, Anki, bull's eye, show (v.), example\n" +
+          'Notes: <p>This is a static example of a note that would be added to AnkiDroid. It includes several fields ' +
+          'to showcase how this would work:</p><ul><li><strong>Hanzi:</strong> 我对 Anki 的示例。</li>' +
+          '<li><strong>English:</strong> My Example to Anki.</li>' +
+          '<li><strong>Pinyin:</strong> Wǒ duì Anki de shìlì.</li>' +
+          "<li><strong>Heisig English Keywords:</strong> I, that's right, Anki, bull's eye, show (v.), example</li></ul>"
+      )};` +
+      `end`;
+
+    window.location.href = intentUrl;
+  }
 }
