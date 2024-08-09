@@ -218,3 +218,25 @@ button:hover {
   border: 1px dashed #999;
   padding: 5px;
 }
+
+.components-briefly {
+  margin-top: 15px;
+}
+
+.components-briefly ul {
+  margin-top: 5px;
+}
+
+.expand-icon-button {
+  margin-left: 10px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #b0bec5;
+  font-size: 0.9em;
+  padding: 0;
+}
+
+.expand-icon-button:hover {
+  color: #80cbc4;
+}

@@ -34,8 +34,8 @@
     </span>
     <div *ngIf="isHeisigDetailsExpanded(detail.hanzi)" class="heisig-details">
       <span class="keyword-de">
-        <span *ngIf="detail.isPrimitive" class="primitive-label"
-          >Primitive:
+        <span *ngIf="detail.isPrimitive" class="primitive-label">
+          Primitive:
         </span>
         {{ detail.keywordDe }}
         <small class="stroke-count">({{ detail.strokeCount }} Strokes)</small>
@@ -84,6 +84,29 @@
           🔊
         </button>
       </p>
+      <div
+        class="components-briefly"
+        *ngIf="
+          detail.components.length > 0 && !isSubComponentsExpanded(detail.hanzi)
+        "
+      >
+        <strong>Components:</strong>
+        <ul>
+          <li *ngFor="let component of detail.components">
+            {{ component.hanzi }} <span class="subtle-separator">–</span>
+            <span [ngClass]="{ 'italic-keyword': component.isPrimitive }">
+              {{ component.keyword }}
+            </span>
+            <button
+              class="expand-icon-button"
+              (click)="toggleSubComponentsExpansion(detail.hanzi, $event)"
+              title="Expand Subcomponents"
+            >
+              ▶
+            </button>
+          </li>
+        </ul>
+      </div>
       <button
         class="toggle-occurrences-button"
         *ngIf="!detail.isPrimitive"
