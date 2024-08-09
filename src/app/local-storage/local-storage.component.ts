@@ -67,6 +67,10 @@ export class LocalStorageComponent implements OnInit, OnDestroy {
     this.localStorageItems.sort((a, b) => a.key.localeCompare(b.key));
   }
 
+  refreshLocalStorage() {
+    this.loadLocalStorageItems();
+  }
+
   deleteItem(key: string) {
     localStorage.removeItem(key);
     this.loadLocalStorageItems();

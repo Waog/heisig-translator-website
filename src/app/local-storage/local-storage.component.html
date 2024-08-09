@@ -1,9 +1,19 @@
-<button
-  (click)="toggleLocalStorageVisibility()"
-  class="button button-toggle-local-storage"
->
-  {{ showLocalStorage ? "▼ Hide Local Storage" : "▶ Show Local Storage" }}
-</button>
+<!-- Toggle button for showing/hiding local storage -->
+<div class="header-buttons">
+  <button
+    (click)="toggleLocalStorageVisibility()"
+    class="button button-toggle-local-storage"
+  >
+    {{ showLocalStorage ? "▼ Hide Local Storage" : "▶ Show Local Storage" }}
+  </button>
+  <button
+    *ngIf="showLocalStorage"
+    (click)="refreshLocalStorage()"
+    class="button button-refresh"
+  >
+    ↻
+  </button>
+</div>
 
 <div *ngIf="showLocalStorage">
   <div class="container">
