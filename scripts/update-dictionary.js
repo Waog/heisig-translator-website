@@ -5,9 +5,17 @@ const unzipper = require("unzipper");
 
 const cedictUrl =
   "https://www.mdbg.net/chinese/export/cedict/cedict_1_0_ts_utf-8_mdbg.zip";
-const cedictZipPath = path.join(__dirname, "../cedict.zip");
-const cedictFilePath = path.join(__dirname, "../cedict_ts.u8");
+const rawDirPath = path.join(__dirname, "../raw");
+const cedictZipPath = path.join(rawDirPath, "cedict.zip");
+const cedictFilePath = path.join(rawDirPath, "cedict_ts.u8");
 const outputFilePath = path.join(__dirname, "../src/assets/cedict.json");
+
+// Funktion, um sicherzustellen, dass der "raw" Ordner existiert
+function ensureRawDirExists() {
+  if (!fs.existsSync(rawDirPath)) {
+    fs.mkdirSync(rawDirPath, { recursive: true });
+  }
+}
 
 function downloadCedict(url, dest, cb) {
   const file = fs.createWriteStream(dest);
@@ -53,6 +61,8 @@ function unzipCedict(zipPath, extractPath, cb) {
 }
 
 function updateDictionary() {
+  ensureRawDirExists();
+
   downloadCedict(cedictUrl, cedictZipPath, () => {
     console.log("Downloaded CEDICT zip file.");
 
@@ -66,10 +76,6 @@ function updateDictionary() {
         "utf-8"
       );
       console.log("Dictionary has been updated successfully.");
-
-      // Clean up temporary files
-      fs.unlinkSync(cedictZipPath);
-      fs.unlinkSync(cedictFilePath);
     });
   });
 }
