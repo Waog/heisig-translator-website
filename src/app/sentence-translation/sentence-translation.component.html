@@ -6,8 +6,24 @@
     container-buttons
   ></app-audio-button>
 
-  <div class="translation-content">
-    <p *ngIf="!isLoading && !debounceInProgress">{{ translation }}</p>
+  <app-toggle-button
+    [options]="[GuessModeToggleOptions.Hide, GuessModeToggleOptions.Show]"
+    [(ngModel)]="selectedGuessModeToggleOption"
+    (optionSelected)="onGuessModeToggleOptionChange($event)"
+    container-buttons
+  ></app-toggle-button>
+
+  <div class="translation-content" (click)="revealTranslation()">
+    <p
+      *ngIf="!isLoading && !debounceInProgress"
+      [ngClass]="{
+        blurred:
+          !isRevealed &&
+          selectedGuessModeToggleOption === GuessModeToggleOptions.Hide
+      }"
+    >
+      {{ translation }}
+    </p>
     <p *ngIf="debounceInProgress">Waiting until input stops...</p>
     <p *ngIf="isLoading">Translating...</p>
   </div>

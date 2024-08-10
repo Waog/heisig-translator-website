@@ -15,8 +15,9 @@ import { FormsModule } from '@angular/forms';
 import { AudioButtonComponent } from '../container-with-buttons/audio-button.component';
 import { ContainerWithButtonsComponent } from '../container-with-buttons/container-with-buttons.component';
 import { ToggleButtonComponent } from '../container-with-buttons/toggle-button.component';
+import { GuessModeToggleOptions } from '../shared/guess-mode-toggle-options.enum'; // Import the new enum
 import { SingleWordComponent } from './single-word.component';
-import { ToggleOptions } from './toggle-options.enum'; // Import the enum
+import { SoundToggleOptions } from './sound-toggle-options.enum'; // Import the renamed enum
 
 // @ts-ignore
 import { Segment, useDefault } from 'segmentit';
@@ -44,11 +45,16 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
   hanziWords: string[] = [];
   wordsTTS: string = '';
   heisigTTS: string = '';
-  selectedToggleOption: ToggleOptions = ToggleOptions.Off;
+  selectedSoundToggleOption: SoundToggleOptions = SoundToggleOptions.Off;
+  selectedGuessModeToggleOption: GuessModeToggleOptions =
+    GuessModeToggleOptions.Show;
 
-  private static readonly STORAGE_KEY = 'playWordAudioOption';
+  private static readonly SOUND_TOGGLE_STORAGE_KEY = 'playWordAudioOption';
+  private static readonly GUESS_MODE_TOGGLE_STORAGE_KEY =
+    'segmentationGuessModeOption';
 
-  public ToggleOptions = ToggleOptions;
+  public SoundToggleOptions = SoundToggleOptions;
+  public GuessModeToggleOptions = GuessModeToggleOptions;
 
   @ViewChildren(SingleWordComponent)
   singleWordComponents!: QueryList<SingleWordComponent>;
@@ -56,12 +62,29 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
   constructor(private heisigService: HeisigService) {}
 
   ngOnInit(): void {
-    const savedOption = localStorage.getItem(SegmentationComponent.STORAGE_KEY);
+    const savedSoundOption = localStorage.getItem(
+      SegmentationComponent.SOUND_TOGGLE_STORAGE_KEY
+    );
     if (
-      savedOption &&
-      Object.values(ToggleOptions).includes(savedOption as ToggleOptions)
+      savedSoundOption &&
+      Object.values(SoundToggleOptions).includes(
+        savedSoundOption as SoundToggleOptions
+      )
     ) {
-      this.selectedToggleOption = savedOption as ToggleOptions;
+      this.selectedSoundToggleOption = savedSoundOption as SoundToggleOptions;
+    }
+
+    const savedGuessModeOption = localStorage.getItem(
+      SegmentationComponent.GUESS_MODE_TOGGLE_STORAGE_KEY
+    );
+    if (
+      savedGuessModeOption &&
+      Object.values(GuessModeToggleOptions).includes(
+        savedGuessModeOption as GuessModeToggleOptions
+      )
+    ) {
+      this.selectedGuessModeToggleOption =
+        savedGuessModeOption as GuessModeToggleOptions;
     }
   }
 
@@ -103,10 +126,34 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  onToggleOptionChange(option: string): void {
-    if (Object.values(ToggleOptions).includes(option as ToggleOptions)) {
-      this.selectedToggleOption = option as ToggleOptions;
-      localStorage.setItem(SegmentationComponent.STORAGE_KEY, option);
+  onSoundToggleOptionChange(option: string): void {
+    if (
+      Object.values(SoundToggleOptions).includes(option as SoundToggleOptions)
+    ) {
+      this.selectedSoundToggleOption = option as SoundToggleOptions;
+      localStorage.setItem(
+        SegmentationComponent.SOUND_TOGGLE_STORAGE_KEY,
+        option
+      );
+    }
+  }
+
+  onGuessModeToggleOptionChange(option: string): void {
+    if (
+      Object.values(GuessModeToggleOptions).includes(
+        option as GuessModeToggleOptions
+      )
+    ) {
+      this.selectedGuessModeToggleOption = option as GuessModeToggleOptions;
+      localStorage.setItem(
+        SegmentationComponent.GUESS_MODE_TOGGLE_STORAGE_KEY,
+        option
+      );
+
+      // Emit an empty string when the guess mode is set to Hide
+      if (this.selectedGuessModeToggleOption === GuessModeToggleOptions.Hide) {
+        this.wordSelected.emit('');
+      }
     }
   }
 }

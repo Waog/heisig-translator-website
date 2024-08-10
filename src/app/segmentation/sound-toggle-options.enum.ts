@@ -1,4 +1,4 @@
-export enum ToggleOptions {
+export enum SoundToggleOptions {
   Off = 'Off',
   Word = 'Word',
   Chinese = 'Chinese',

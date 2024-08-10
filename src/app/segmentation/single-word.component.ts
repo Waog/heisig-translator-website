@@ -8,6 +8,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import { GuessModeToggleOptions } from '../shared/guess-mode-toggle-options.enum';
 import { smoothenHeisig } from '../shared/helper';
 import { AudioService } from '../shared/services/audio.service';
 import { HeisigService } from '../shared/services/heisig.service';
@@ -16,7 +17,7 @@ import {
   TranslationService,
 } from '../shared/services/translation.service';
 import { SingleCharacterComponent } from './single-character.component';
-import { ToggleOptions } from './toggle-options.enum';
+import { SoundToggleOptions } from './sound-toggle-options.enum';
 
 @Component({
   selector: 'app-single-word',
@@ -29,11 +30,14 @@ import { ToggleOptions } from './toggle-options.enum';
 export class SingleWordComponent implements OnChanges, OnInit {
   @Input() hanziWord: string = '';
   @Input() isSelected: boolean = false;
-  @Input() toggleOption: ToggleOptions = ToggleOptions.Chinese;
+  @Input() toggleOption: SoundToggleOptions = SoundToggleOptions.Chinese;
+  @Input() guessMode: GuessModeToggleOptions = GuessModeToggleOptions.Show;
   @Output() wordClicked: EventEmitter<string> = new EventEmitter<string>();
   hanziCharacters: string[] = [];
   public translation: string = '';
   isApiTranslation: boolean = false;
+  public GuessModeToggleOptions = GuessModeToggleOptions;
+  private revealed: boolean = false; // Track the revealed state
 
   constructor(
     private translationService: TranslationService,
@@ -54,6 +58,10 @@ export class SingleWordComponent implements OnChanges, OnInit {
       this.hanziCharacters = Array.from(this.hanziWord);
       this.translateWord();
     }
+
+    if (changes['guessMode']) {
+      this.revealed = this.guessMode === GuessModeToggleOptions.Show;
+    }
   }
 
   translateWord(): void {
@@ -65,20 +73,22 @@ export class SingleWordComponent implements OnChanges, OnInit {
       });
   }
 
-  onWordClick(event: Event): void {
-    event.stopPropagation();
+  onWordClick(): void {
+    if (!this.revealed) {
+      this.revealed = true;
+    }
     this.wordClicked.emit(this.hanziWord);
 
     switch (this.toggleOption) {
-      case ToggleOptions.Off:
+      case SoundToggleOptions.Off:
         break;
-      case ToggleOptions.Word:
+      case SoundToggleOptions.Word:
         this.audioService.playAudio(this.translation, 'en-US');
         break;
-      case ToggleOptions.Chinese:
+      case SoundToggleOptions.Chinese:
         this.audioService.playAudio(this.hanziWord, 'zh-CN');
         break;
-      case ToggleOptions.Heisig:
+      case SoundToggleOptions.Heisig:
         const heisigSentence = smoothenHeisig(
           this.heisigService.getHeisigSentenceEn(this.hanziWord)
         );
@@ -87,5 +97,9 @@ export class SingleWordComponent implements OnChanges, OnInit {
       default:
         break;
     }
+  }
+
+  isHidden(): boolean {
+    return this.guessMode === GuessModeToggleOptions.Hide && !this.revealed;
   }
 }

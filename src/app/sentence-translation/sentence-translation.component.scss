@@ -1,3 +1,9 @@
+.translation-content p.blurred {
+  filter: blur(5px);
+  cursor: pointer;
+  user-select: none;
+}
+
 .translation-content p {
   margin: 0;
   padding: 5px 10px;

@@ -1,5 +1,22 @@
-<div class="container" [ngClass]="{ chinese: isChinese }">
-  <div class="pinyin">{{ pinyin }}</div>
+<div
+  class="container"
+  [ngClass]="{
+    chinese: isChinese,
+    hidden: !isRevealed && guessMode === GuessModeToggleOptions.Hide
+  }"
+  (click)="onClick($event)"
+>
+  <div
+    class="pinyin"
+    *ngIf="isRevealed || guessMode === GuessModeToggleOptions.Show"
+  >
+    {{ pinyin }}
+  </div>
   <div class="hanzi">{{ hanzi }}</div>
-  <div class="heisig">{{ heisig }}</div>
+  <div
+    class="heisig"
+    *ngIf="isRevealed || guessMode === GuessModeToggleOptions.Show"
+  >
+    {{ heisig }}
+  </div>
 </div>

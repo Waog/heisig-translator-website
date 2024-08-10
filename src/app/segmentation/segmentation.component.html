@@ -1,28 +1,4 @@
 <app-container-with-buttons>
-  <app-toggle-button
-    [options]="[
-      ToggleOptions.Off,
-      ToggleOptions.Word,
-      ToggleOptions.Chinese,
-      ToggleOptions.Heisig
-    ]"
-    [(ngModel)]="selectedToggleOption"
-    (optionSelected)="onToggleOptionChange($event)"
-    container-buttons
-  ></app-toggle-button>
-
-  <app-audio-button
-    [text]="wordsTTS"
-    [language]="'en-US'"
-    label="English"
-    container-buttons
-  ></app-audio-button>
-  <app-audio-button
-    [text]="userInput"
-    [language]="'zh-CN'"
-    label="Chinese"
-    container-buttons
-  ></app-audio-button>
   <app-audio-button
     [text]="heisigTTS"
     [language]="'en-US'"
@@ -30,13 +6,47 @@
     container-buttons
   ></app-audio-button>
 
+  <app-audio-button
+    [text]="userInput"
+    [language]="'zh-CN'"
+    label="Chinese"
+    container-buttons
+  ></app-audio-button>
+
+  <app-audio-button
+    [text]="wordsTTS"
+    [language]="'en-US'"
+    label="English"
+    container-buttons
+  ></app-audio-button>
+
+  <app-toggle-button
+    [options]="[
+      SoundToggleOptions.Off,
+      SoundToggleOptions.Word,
+      SoundToggleOptions.Chinese,
+      SoundToggleOptions.Heisig
+    ]"
+    [(ngModel)]="selectedSoundToggleOption"
+    (optionSelected)="onSoundToggleOptionChange($event)"
+    container-buttons
+  ></app-toggle-button>
+
+  <app-toggle-button
+    [options]="[GuessModeToggleOptions.Hide, GuessModeToggleOptions.Show]"
+    [(ngModel)]="selectedGuessModeToggleOption"
+    (optionSelected)="onGuessModeToggleOptionChange($event)"
+    container-buttons
+  ></app-toggle-button>
+
   <div class="word-group-container">
     <app-single-word
       *ngFor="let hanziWord of hanziWords"
       [hanziWord]="hanziWord"
       (wordClicked)="onWordClick($event)"
       [isSelected]="hanziWord === selectedWord"
-      [toggleOption]="selectedToggleOption"
+      [toggleOption]="selectedSoundToggleOption"
+      [guessMode]="selectedGuessModeToggleOption"
     ></app-single-word>
   </div>
 </app-container-with-buttons>

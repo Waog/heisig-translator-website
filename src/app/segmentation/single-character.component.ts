@@ -7,6 +7,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { pinyin } from 'pinyin-pro';
+import { GuessModeToggleOptions } from '../shared/guess-mode-toggle-options.enum';
 import { HeisigService } from '../shared/services/heisig.service';
 
 @Component({
@@ -18,9 +19,12 @@ import { HeisigService } from '../shared/services/heisig.service';
 })
 export class SingleCharacterComponent implements OnChanges, OnInit {
   @Input() hanzi: string = '';
+  @Input() guessMode: GuessModeToggleOptions = GuessModeToggleOptions.Show;
   pinyin: string = '';
   heisig: string = '';
   isChinese: boolean = false;
+  isRevealed: boolean = false;
+  public GuessModeToggleOptions = GuessModeToggleOptions;
 
   constructor(private heisigService: HeisigService) {}
 
@@ -36,6 +40,10 @@ export class SingleCharacterComponent implements OnChanges, OnInit {
     if (changes['hanzi']) {
       this.updateCharacter();
     }
+
+    if (changes['guessMode']) {
+      this.isRevealed = false; // Reset reveal state when guessMode changes
+    }
   }
 
   updateCharacter(): void {
@@ -47,5 +55,12 @@ export class SingleCharacterComponent implements OnChanges, OnInit {
   isChineseCharacter(char: string): boolean {
     const chineseCharacterRegex = /[\u4e00-\u9fff]/;
     return chineseCharacterRegex.test(char);
+  }
+
+  onClick(event: Event): void {
+    if (!this.isRevealed && this.guessMode === GuessModeToggleOptions.Hide) {
+      this.isRevealed = true; // Reveal the character
+      event.stopPropagation(); // Stop the event from propagating
+    }
   }
 }

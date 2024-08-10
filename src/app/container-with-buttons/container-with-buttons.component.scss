@@ -1,9 +1,8 @@
-/* General container styling */
 .translation-audio-container {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   margin-top: 20px;
   padding: 20px;
   border-radius: 10px;
@@ -14,27 +13,38 @@
   border: 1px solid #37474f;
 }
 
-/* Audio buttons container styling */
 .container-buttons {
   display: flex;
-  justify-content: flex-end;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
   width: 100%;
-  position: absolute;
-  top: 0;
-  transform: translateY(-50%);
-  right: 1em;
+  padding-right: 1em;
+  box-sizing: border-box;
+  direction: rtl;
+  position: relative;
+  margin-top: -1.7em;
 }
 
-/* Content container styling */
+.container-buttons > * {
+  direction: ltr;
+  margin-left: 0.5em;
+}
+
 .content {
   flex-grow: 1;
   width: 100%;
+  margin-top: 0.2em;
 }
 
-/* Media queries for responsiveness */
 @media (max-width: 600px) {
   .translation-audio-container {
     padding-left: 3px;
     padding-right: 3px;
+  }
+
+  .container-buttons {
+    padding-right: 0.5em;
+    gap: 5px;
   }
 }

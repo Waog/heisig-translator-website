@@ -29,6 +29,19 @@
   color: #b0bec5;
 }
 
+.hidden .pinyin,
+.hidden .heisig {
+  display: none;
+}
+
+.hidden {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  padding-top: 1.2em;
+}
+
 @media (max-width: 600px) {
   .container {
     max-width: 2.5em;
@@ -49,5 +62,9 @@
 
   .heisig {
     font-size: 0.65em;
+  }
+
+  .hidden {
+    padding-top: 1em;
   }
 }

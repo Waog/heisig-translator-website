@@ -1,8 +1,8 @@
 <app-container-with-buttons>
   <app-audio-button
-    [text]="(simpleTranslation$ | async) || ''"
+    [text]="heisigTTSText"
     [language]="'en-US'"
-    label="English"
+    label="Heisig"
     container-buttons
   ></app-audio-button>
   <app-audio-button
@@ -12,9 +12,9 @@
     container-buttons
   ></app-audio-button>
   <app-audio-button
-    [text]="heisigTTSText"
+    [text]="(simpleTranslation$ | async) || ''"
     [language]="'en-US'"
-    label="Heisig"
+    label="English"
     container-buttons
   ></app-audio-button>
 

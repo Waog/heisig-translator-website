@@ -1,11 +1,14 @@
 <div
   class="word-container"
-  [ngClass]="{ selected: isSelected }"
-  [ngStyle]="{ 'min-width': translation.length * 8 + 'px' }"
-  (click)="onWordClick($event)"
+  [ngClass]="{
+    selected: isSelected,
+    hidden: isHidden()
+  }"
+  (click)="onWordClick()"
 >
   <span
     class="word-label"
+    *ngIf="!isHidden()"
     [ngClass]="{ 'api-translation': isApiTranslation }"
     >{{ translation }}</span
   >
@@ -13,6 +16,7 @@
     <app-single-character
       *ngFor="let hanziCharacter of hanziCharacters"
       [hanzi]="hanziCharacter"
+      [guessMode]="guessMode"
     ></app-single-character>
   </div>
 </div>
