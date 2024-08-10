@@ -54,6 +54,10 @@ function parseCedict(filePath) {
   return dictionary;
 }
 
+function findExampleEntry(dictionary, simplifiedHanzi) {
+  return dictionary.find((entry) => entry.simplified === simplifiedHanzi);
+}
+
 function unzipCedict(zipPath, extractPath, cb) {
   fs.createReadStream(zipPath)
     .pipe(unzipper.Extract({ path: extractPath }))
@@ -76,6 +80,13 @@ function updateDictionary() {
         "utf-8"
       );
       console.log("Dictionary has been updated successfully.");
+
+      const exampleEntry = findExampleEntry(cedictDict, "你好");
+      if (exampleEntry) {
+        console.log("Example entry:", exampleEntry);
+      } else {
+        console.log("Example entry with simplified Hanzi '你好' not found.");
+      }
     });
   });
 }
