@@ -27,3 +27,13 @@ button:hover {
   display: flex;
   flex-direction: column;
 }
+
+.word-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.frequency-container {
+  margin-left: auto;
+}

@@ -9,6 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { AudioButtonComponent } from '../container-with-buttons/audio-button.component';
 import { ContainerWithButtonsComponent } from '../container-with-buttons/container-with-buttons.component';
+import { FrequencyComponent } from '../frequency/frequency.component';
 import { AudioService } from '../shared/services/audio.service';
 import { HeisigDetailsComponent } from './heisig-details.component';
 import { WordDetailsService } from './word-details.service';
@@ -21,6 +22,7 @@ import { WordDetailsService } from './word-details.service';
     ContainerWithButtonsComponent,
     HeisigDetailsComponent,
     AudioButtonComponent,
+    FrequencyComponent, // Add FrequencyComponent here
   ],
   templateUrl: './word-details.component.html',
   styleUrls: ['./word-details.component.scss'],

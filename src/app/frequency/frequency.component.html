@@ -1,0 +1,25 @@
+<div class="container">
+  <div
+    class="box"
+    [ngClass]="{
+      emphasized:
+        (frequencyCategory$ | async) === 5 || (frequencyCategory$ | async) === 0
+    }"
+  ></div>
+  <div
+    class="box"
+    [ngClass]="{ emphasized: (frequencyCategory$ | async) === 4 }"
+  ></div>
+  <div
+    class="box"
+    [ngClass]="{ emphasized: (frequencyCategory$ | async) === 3 }"
+  ></div>
+  <div
+    class="box"
+    [ngClass]="{ emphasized: (frequencyCategory$ | async) === 2 }"
+  ></div>
+  <div
+    class="box"
+    [ngClass]="{ emphasized: (frequencyCategory$ | async) === 1 }"
+  ></div>
+</div>

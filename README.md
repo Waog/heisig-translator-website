@@ -48,15 +48,15 @@ ng e2e
 
 Note: You may need to add a package that implements end-to-end testing capabilities.
 
-### Updating the Dictionary and Heisig Data
+### Updating the Dictionary, Heisig Data, and SUBTLEX-CH Frequencies
 
-To update the CEDICT dictionary and Heisig data used by the application, run the following command:
+To update the CEDICT dictionary, Heisig data, and SUBTLEX-CH word frequencies used by the application, run the following command:
 
 ```bash
 npm run update-assets
 ```
 
-This will run the `update-dictionary` and `update-heisig` scripts to download the latest CEDICT file and fetch the Heisig data from the Google Sheets link, updating the `cedict.json` and `heisig.json` files in the `src/assets/` directory.
+This will run the `update-dictionary`, `update-heisig`, and `update-frequencies` scripts to download the latest CEDICT file, fetch the Heisig data from the Google Sheets link, and process the SUBTLEX-CH word frequencies, updating the corresponding JSON files in the `src/assets/` directory.
 
 Alternatively, you can run the scripts individually:
 
@@ -71,6 +71,21 @@ To update the Heisig data:
 ```bash
 npm run update-heisig
 ```
+
+To update the SUBTLEX-CH word frequencies:
+
+```bash
+npm run update-frequencies
+```
+
+### SUBTLEX-CH Documentation
+
+For more detailed information about the SUBTLEX-CH word frequencies and the data provided, refer to the documentation located in the [`doc/SUBTLEX-CH/`](doc/SUBTLEX-CH/) folder. This includes:
+
+- [`new combined word frequency and PoS file.md`](doc/SUBTLEX-CH/new%20combined%20word%20frequency%20and%20PoS%20file.md): Information about the combined word frequency and part-of-speech file.
+- [`PKU PoS system labels.txt`](doc/SUBTLEX-CH/PKU%20PoS%20system%20labels.txt): Descriptions of the labels used in the PKU part-of-speech tagging system.
+- [`Plos ONE article of Cai & Brysbaert.pdf`](doc/SUBTLEX-CH/Plos%20ONE%20article%20of%20Cai%20&%20Brysbaert.pdf): The article describing the methodology behind SUBTLEX-CH.
+- [`the lexical decision data we collected and used in this study.csv`](doc/SUBTLEX-CH/the%20lexical%20decision%20data%20we%20collected%20and%20used%20in%20this%20study.csv): The lexical decision data used in the study.
 
 ## Additional Help
 

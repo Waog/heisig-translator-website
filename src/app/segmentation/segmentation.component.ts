@@ -15,14 +15,14 @@ import { FormsModule } from '@angular/forms';
 import { AudioButtonComponent } from '../container-with-buttons/audio-button.component';
 import { ContainerWithButtonsComponent } from '../container-with-buttons/container-with-buttons.component';
 import { ToggleButtonComponent } from '../container-with-buttons/toggle-button.component';
-import { GuessModeToggleOptions } from '../shared/guess-mode-toggle-options.enum'; // Import the new enum
+import { GuessModeToggleOptions } from '../shared/guess-mode-toggle-options.enum';
+import { smoothenHeisig } from '../shared/helper';
+import { HeisigService } from '../shared/services/heisig.service';
 import { SingleWordComponent } from './single-word.component';
-import { SoundToggleOptions } from './sound-toggle-options.enum'; // Import the renamed enum
+import { SoundToggleOptions } from './sound-toggle-options.enum';
 
 // @ts-ignore
 import { Segment, useDefault } from 'segmentit';
-import { smoothenHeisig } from '../shared/helper';
-import { HeisigService } from '../shared/services/heisig.service';
 
 @Component({
   selector: 'app-segmentation',
@@ -42,16 +42,20 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() userInput: string = '';
   @Input() selectedWord: string = '';
   @Output() wordSelected: EventEmitter<string> = new EventEmitter<string>();
+
   hanziWords: string[] = [];
   wordsTTS: string = '';
   heisigTTS: string = '';
   selectedSoundToggleOption: SoundToggleOptions = SoundToggleOptions.Off;
   selectedGuessModeToggleOption: GuessModeToggleOptions =
     GuessModeToggleOptions.Show;
+  showWordFrequency: string = 'Hiding Frequency';
 
   private static readonly SOUND_TOGGLE_STORAGE_KEY = 'playWordAudioOption';
   private static readonly GUESS_MODE_TOGGLE_STORAGE_KEY =
     'segmentationGuessModeOption';
+  private static readonly SHOW_WORD_FREQUENCY_STORAGE_KEY =
+    'showWordFrequencyOption';
 
   public SoundToggleOptions = SoundToggleOptions;
   public GuessModeToggleOptions = GuessModeToggleOptions;
@@ -85,6 +89,18 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
     ) {
       this.selectedGuessModeToggleOption =
         savedGuessModeOption as GuessModeToggleOptions;
+    }
+
+    const savedShowWordFrequencyOption = localStorage.getItem(
+      SegmentationComponent.SHOW_WORD_FREQUENCY_STORAGE_KEY
+    );
+    if (
+      savedShowWordFrequencyOption &&
+      ['Hiding Frequency', 'Showing Frequency'].includes(
+        savedShowWordFrequencyOption
+      )
+    ) {
+      this.showWordFrequency = savedShowWordFrequencyOption;
     }
   }
 
@@ -154,6 +170,16 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
       if (this.selectedGuessModeToggleOption === GuessModeToggleOptions.Hide) {
         this.wordSelected.emit('');
       }
+    }
+  }
+
+  onShowWordFrequencyToggleOptionChange(option: string): void {
+    if (['Hiding Frequency', 'Showing Frequency'].includes(option)) {
+      this.showWordFrequency = option;
+      localStorage.setItem(
+        SegmentationComponent.SHOW_WORD_FREQUENCY_STORAGE_KEY,
+        option
+      );
     }
   }
 }

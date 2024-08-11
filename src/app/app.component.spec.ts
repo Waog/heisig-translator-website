@@ -60,6 +60,7 @@ describe('Integration: AppComponent', () => {
     await setUserInput('你');
     mockLocalDictionary([]);
     mockHeisig([]);
+    mockFrequencyData([]);
     await wait(500);
     const text1 = getElementText(SentenceTranslationComponent, 0);
     const text2 = getElementText(SentenceTranslationComponent, 1);
@@ -161,6 +162,8 @@ describe('Integration: AppComponent', () => {
       translation: 'Hidiho!',
     });
 
+    mockFrequencyData([]);
+
     expect(getElementText(WordDetailsComponent, 0, 'h1')).toBe(
       'hello - 你好 - nǐ hǎo'
     );
@@ -216,6 +219,7 @@ describe('Integration: AppComponent', () => {
     await setUserInput(userInput);
 
     mockHeisig([]);
+    mockFrequencyData([]);
 
     const dictionary = [
       { simplified: '你好', pinyin: 'ni3 hao3', english: ['hello', 'hi'] },
@@ -314,6 +318,10 @@ describe('Integration: AppComponent', () => {
 
   function mockHeisig(heisigJson: any[]): void {
     mockHttpResponse('GET', 'assets/heisig.json', heisigJson);
+  }
+
+  function mockFrequencyData(frequencyJson: any[]): void {
+    mockHttpResponse('GET', 'assets/subtlexch.json', frequencyJson);
   }
 
   function mockOnlineDictionaryResponse({

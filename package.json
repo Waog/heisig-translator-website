@@ -7,8 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "update-assets": "npm run update-dictionary && npm run update-heisig",
+    "update-assets": "npm run update-dictionary && npm run update-frequencies && npm run update-heisig",
     "update-dictionary": "node scripts/update-dictionary.js",
+    "update-frequencies": "node scripts/update-frequencies.js",
     "update-heisig": "node scripts/update-heisig.js"
   },
   "private": true,

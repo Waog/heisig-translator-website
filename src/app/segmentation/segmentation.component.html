@@ -39,6 +39,13 @@
     container-buttons
   ></app-toggle-button>
 
+  <app-toggle-button
+    [options]="['Hiding Frequency', 'Showing Frequency']"
+    [(ngModel)]="showWordFrequency"
+    (optionSelected)="onShowWordFrequencyToggleOptionChange($event)"
+    container-buttons
+  ></app-toggle-button>
+
   <div class="word-group-container">
     <app-single-word
       *ngFor="let hanziWord of hanziWords"
@@ -47,6 +54,7 @@
       [isSelected]="hanziWord === selectedWord"
       [toggleOption]="selectedSoundToggleOption"
       [guessMode]="selectedGuessModeToggleOption"
+      [showWordFrequency]="showWordFrequency === 'Showing Frequency'"
     ></app-single-word>
   </div>
 </app-container-with-buttons>

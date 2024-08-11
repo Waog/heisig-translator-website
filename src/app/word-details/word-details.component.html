@@ -18,7 +18,12 @@
     container-buttons
   ></app-audio-button>
 
-  <h1>{{ simpleTranslation$ | async }} - {{ wordHanzi }} - {{ pinyin }}</h1>
+  <div class="word-details-header">
+    <h1>{{ simpleTranslation$ | async }} - {{ wordHanzi }} - {{ pinyin }}</h1>
+    <div class="frequency-container">
+      <app-frequency [hanziWord]="wordHanzi"></app-frequency>
+    </div>
+  </div>
 
   <h2>Translations:</h2>
   <ng-container *ngFor="let entry of allTranslations$ | async">
