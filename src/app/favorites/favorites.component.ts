@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   FavoriteService,
   SentenceFavorite,
@@ -17,7 +18,10 @@ export class FavoritesComponent implements OnInit {
   favoriteSentences: SentenceFavorite[] = [];
   favoriteWords: WordFavorite[] = [];
 
-  constructor(private favoriteService: FavoriteService) {}
+  constructor(
+    private favoriteService: FavoriteService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadFavorites();
@@ -36,5 +40,9 @@ export class FavoritesComponent implements OnInit {
   deleteWordFavorite(hanzi: string): void {
     this.favoriteService.removeWordFavorite(hanzi);
     this.loadFavorites();
+  }
+
+  navigateToTranslator(hanzi: string): void {
+    this.router.navigate(['/translator'], { queryParams: { input: hanzi } });
   }
 }

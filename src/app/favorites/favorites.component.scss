@@ -42,18 +42,36 @@ li .translation {
   margin-top: 5px;
 }
 
-li .delete-button {
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+li .delete-button,
+li .navigate-button {
   background: none;
   border: none;
-  color: #ff6b6b;
   cursor: pointer;
   font-size: 1.2em;
   margin-left: 20px;
-  align-self: flex-start;
+}
+
+li .delete-button {
+  color: #ff6b6b;
+}
+
+li .navigate-button {
+  color: #80cbc4;
 }
 
 li .delete-button:hover {
   color: #ff4c4c;
+}
+
+li .navigate-button:hover {
+  color: #4db6ac;
 }
 
 p {

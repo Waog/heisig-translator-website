@@ -6,10 +6,11 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AudioButtonComponent } from '../container-with-buttons/audio-button.component';
 import { ContainerWithButtonsComponent } from '../container-with-buttons/container-with-buttons.component';
-import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component'; // Import FavoriteButtonComponent
+import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component';
 import { FrequencyComponent } from '../frequency/frequency.component';
 import { AudioService } from '../shared/services/audio.service';
 import { HeisigDetailsComponent } from './heisig-details.component';
@@ -47,7 +48,8 @@ export class WordDetailsComponent implements OnInit, OnChanges {
 
   constructor(
     private companion: WordDetailsService,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -73,5 +75,11 @@ export class WordDetailsComponent implements OnInit, OnChanges {
   playAudio(event: Event, text: string, lang: string = 'en-US'): void {
     event.stopPropagation();
     this.audioService.playAudio(text, lang);
+  }
+
+  navigateToTranslator(): void {
+    this.router.navigate(['/translator'], {
+      queryParams: { input: this.wordHanzi },
+    });
   }
 }

@@ -43,10 +43,16 @@ button:hover {
   position: relative;
 }
 
-.favorite-button {
+.button-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
   position: absolute;
   top: -30px;
   right: 0;
+}
+
+.favorite-button {
   font-size: 1.5em;
   color: #b0bec5;
   cursor: pointer;
@@ -58,4 +64,14 @@ button:hover {
 
 .favorite-button:hover {
   color: #e0c066;
+}
+
+.navigate-button {
+  font-size: 1.5em;
+  color: #80cbc4;
+  cursor: pointer;
+}
+
+.navigate-button:hover {
+  color: #4db6ac;
 }

@@ -8,9 +8,17 @@
           {{ word.translations.join("; ") }}
         </span>
       </div>
-      <button class="delete-button" (click)="deleteWordFavorite(word.hanzi)">
-        ❌
-      </button>
+      <div class="button-container">
+        <button class="delete-button" (click)="deleteWordFavorite(word.hanzi)">
+          ❌
+        </button>
+        <button
+          class="navigate-button"
+          (click)="navigateToTranslator(word.hanzi)"
+        >
+          🔍
+        </button>
+      </div>
     </li>
   </ul>
   <ng-template #noWordFavorites>
@@ -24,12 +32,20 @@
         <span class="hanzi">{{ sentence.hanzi }}</span>
         <span class="translation">{{ sentence.translation }}</span>
       </div>
-      <button
-        class="delete-button"
-        (click)="deleteSentenceFavorite(sentence.hanzi)"
-      >
-        ❌
-      </button>
+      <div class="button-container">
+        <button
+          class="delete-button"
+          (click)="deleteSentenceFavorite(sentence.hanzi)"
+        >
+          ❌
+        </button>
+        <button
+          class="navigate-button"
+          (click)="navigateToTranslator(sentence.hanzi)"
+        >
+          🔍
+        </button>
+      </div>
     </li>
   </ul>
   <ng-template #noSentenceFavorites>

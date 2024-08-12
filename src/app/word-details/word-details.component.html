@@ -21,11 +21,16 @@
   <div class="word-details-header">
     <h1>{{ simpleTranslation$ | async }} - {{ wordHanzi }} - {{ pinyin }}</h1>
     <div class="frequency-container">
-      <app-favorite-button
-        [hanziString]="wordHanzi"
-        type="word"
-        class="favorite-button"
-      ></app-favorite-button>
+      <div class="button-group">
+        <app-favorite-button
+          [hanziString]="wordHanzi"
+          type="word"
+          class="favorite-button"
+        ></app-favorite-button>
+        <button class="navigate-button" (click)="navigateToTranslator()">
+          🔍
+        </button>
+      </div>
       <app-frequency [hanziWord]="wordHanzi"></app-frequency>
     </div>
   </div>
