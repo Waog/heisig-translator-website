@@ -7,7 +7,10 @@
       [(ngModel)]="userInput"
       (input)="onUserInputChange()"
     />
-    <app-favorite-button [hanziString]="userInput"></app-favorite-button>
+    <app-favorite-button
+      [hanziString]="userInput"
+      [type]="'sentence'"
+    ></app-favorite-button>
     <button class="paste-button" (click)="pasteFromClipboard()">📋</button>
     <button class="reset-button" (click)="resetInput()">&#x2715;</button>
   </div>

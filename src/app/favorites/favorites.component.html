@@ -1,17 +1,38 @@
 <div class="favorites-container">
+  <h2>Favorite Words</h2>
+  <ul *ngIf="favoriteWords.length > 0; else noWordFavorites">
+    <li *ngFor="let word of favoriteWords">
+      <div class="text-container">
+        <span class="hanzi">{{ word.hanzi }}</span>
+        <span class="translation">
+          {{ word.translations.join("; ") }}
+        </span>
+      </div>
+      <button class="delete-button" (click)="deleteWordFavorite(word.hanzi)">
+        ❌
+      </button>
+    </li>
+  </ul>
+  <ng-template #noWordFavorites>
+    <p>No favorite words yet.</p>
+  </ng-template>
+
   <h2>Favorite Sentences</h2>
-  <ul *ngIf="favoriteSentences.length > 0; else noFavorites">
+  <ul *ngIf="favoriteSentences.length > 0; else noSentenceFavorites">
     <li *ngFor="let sentence of favoriteSentences">
       <div class="text-container">
         <span class="hanzi">{{ sentence.hanzi }}</span>
         <span class="translation">{{ sentence.translation }}</span>
       </div>
-      <button class="delete-button" (click)="deleteFavorite(sentence.hanzi)">
+      <button
+        class="delete-button"
+        (click)="deleteSentenceFavorite(sentence.hanzi)"
+      >
         ❌
       </button>
     </li>
   </ul>
-  <ng-template #noFavorites>
+  <ng-template #noSentenceFavorites>
     <p>No favorite sentences yet.</p>
   </ng-template>
 </div>

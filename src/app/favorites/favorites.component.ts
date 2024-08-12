@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import {
+  FavoriteService,
+  SentenceFavorite,
+  WordFavorite,
+} from '../shared/services/favorite.service';
 
 @Component({
   selector: 'app-favorites',
@@ -9,28 +14,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./favorites.component.scss'],
 })
 export class FavoritesComponent implements OnInit {
-  favoriteSentences: { hanzi: string; translation: string }[] = [];
+  favoriteSentences: SentenceFavorite[] = [];
+  favoriteWords: WordFavorite[] = [];
+
+  constructor(private favoriteService: FavoriteService) {}
 
   ngOnInit(): void {
     this.loadFavorites();
   }
 
   loadFavorites(): void {
-    const favorites = localStorage.getItem('favoriteSentencesV1');
-    this.favoriteSentences = favorites ? JSON.parse(favorites) : [];
+    this.favoriteSentences = this.favoriteService.getAllSentenceFavorites();
+    this.favoriteWords = this.favoriteService.getAllWordFavorites();
   }
 
-  deleteFavorite(hanzi: string): void {
-    this.favoriteSentences = this.favoriteSentences.filter(
-      (sentence) => sentence.hanzi !== hanzi
-    );
-    this.updateFavoritesInLocalStorage();
+  deleteSentenceFavorite(hanzi: string): void {
+    this.favoriteService.removeSentenceFavorite(hanzi);
+    this.loadFavorites();
   }
 
-  updateFavoritesInLocalStorage(): void {
-    localStorage.setItem(
-      'favoriteSentencesV1',
-      JSON.stringify(this.favoriteSentences)
-    );
+  deleteWordFavorite(hanzi: string): void {
+    this.favoriteService.removeWordFavorite(hanzi);
+    this.loadFavorites();
   }
 }

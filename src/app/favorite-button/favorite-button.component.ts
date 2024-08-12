@@ -6,10 +6,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import {
-  Language,
-  TranslationService,
-} from '../shared/services/translation.service';
+import { FavoriteService } from '../shared/services/favorite.service';
 
 @Component({
   selector: 'app-favorite-button',
@@ -20,66 +17,48 @@ import {
 })
 export class FavoriteButtonComponent implements OnInit, OnChanges {
   @Input() hanziString: string = '';
+  @Input() type: 'word' | 'sentence' = 'sentence'; // New input to specify the type
   isFavorite: boolean = false;
 
-  constructor(private translationService: TranslationService) {}
+  constructor(private favoriteService: FavoriteService) {}
 
   ngOnInit(): void {
     this.loadFavoriteStatus();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['hanziString'] && !changes['hanziString'].firstChange) {
+    if (
+      (changes['hanziString'] && !changes['hanziString'].firstChange) ||
+      changes['type']
+    ) {
       this.loadFavoriteStatus();
     }
   }
 
   loadFavoriteStatus(): void {
-    const favorites = this.getFavoritesFromLocalStorage();
-    this.isFavorite = favorites.some((fav) => fav.hanzi === this.hanziString);
+    if (this.type === 'sentence') {
+      this.isFavorite = this.favoriteService.isSentenceFavorite(
+        this.hanziString
+      );
+    } else {
+      this.isFavorite = this.favoriteService.isWordFavorite(this.hanziString);
+    }
   }
 
   toggleFavorite(): void {
     this.isFavorite = !this.isFavorite;
     if (this.isFavorite) {
-      this.addFavorite();
+      if (this.type === 'sentence') {
+        this.favoriteService.addSentenceFavorite(this.hanziString);
+      } else {
+        this.favoriteService.addWordFavorite(this.hanziString);
+      }
     } else {
-      this.removeFavorite();
+      if (this.type === 'sentence') {
+        this.favoriteService.removeSentenceFavorite(this.hanziString);
+      } else {
+        this.favoriteService.removeWordFavorite(this.hanziString);
+      }
     }
-  }
-
-  addFavorite(): void {
-    this.translationService
-      .getTranslation(this.hanziString, Language.EN)
-      .subscribe((translationResult) => {
-        if (translationResult.translation !== 'Loading...') {
-          const favorites = this.getFavoritesFromLocalStorage();
-          favorites.push({
-            hanzi: this.hanziString,
-            translation: translationResult.translation,
-          });
-          this.updateFavoritesInLocalStorage(favorites);
-        }
-      });
-  }
-
-  removeFavorite(): void {
-    const favorites = this.getFavoritesFromLocalStorage();
-    const index = favorites.findIndex((fav) => fav.hanzi === this.hanziString);
-    if (index > -1) {
-      favorites.splice(index, 1);
-      this.updateFavoritesInLocalStorage(favorites);
-    }
-  }
-
-  getFavoritesFromLocalStorage(): { hanzi: string; translation: string }[] {
-    const favorites = localStorage.getItem('favoriteSentencesV1');
-    return favorites ? JSON.parse(favorites) : [];
-  }
-
-  updateFavoritesInLocalStorage(
-    favorites: { hanzi: string; translation: string }[]
-  ): void {
-    localStorage.setItem('favoriteSentencesV1', JSON.stringify(favorites));
   }
 }
