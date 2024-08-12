@@ -1,0 +1,16 @@
+<div class="anki-container">
+  <h2>Anki Flashcards</h2>
+  <h3>Marked for export from Vocabulary</h3>
+  <ul *ngIf="ankiCards.length > 0; else noAnkiCards">
+    <li *ngFor="let card of ankiCards">
+      <div class="text-container">
+        <span class="hanzi">{{ card.hanzi }}</span>
+        <span class="translation">{{ card.english }}</span>
+      </div>
+    </li>
+  </ul>
+  <ng-template #noAnkiCards>
+    <p>No Vocabulary marked for Anki export.</p>
+  </ng-template>
+  <button (click)="exportDeck()">Export to Anki</button>
+</div>

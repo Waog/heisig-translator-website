@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
-import { FavoritesComponent } from './favorites/favorites.component';
+import { AnkiComponent } from './anki/anki.component';
 import { TranslatorComponent } from './translator/translator.component';
+import { VocabularyComponent } from './vocabulary/vocabulary.component';
 
 export const routes: Routes = [
   {
@@ -13,7 +14,11 @@ export const routes: Routes = [
     component: TranslatorComponent,
   },
   {
-    path: 'favorites',
-    component: FavoritesComponent,
+    path: 'vocabulary',
+    component: VocabularyComponent,
+  },
+  {
+    path: 'anki',
+    component: AnkiComponent,
   },
 ];

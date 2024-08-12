@@ -1,0 +1,38 @@
+.vocabulary-container {
+  padding: 20px;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.filter-btn {
+  margin-right: 10px;
+  padding: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #3a3a3a;
+  color: #80cbc4;
+  border: none;
+  border-radius: 4px;
+}
+
+.vocab-item-wrapper {
+  margin-bottom: 20px;
+  background-color: #2e2e2e;
+  border-radius: 8px;
+  padding: 10px;
+}

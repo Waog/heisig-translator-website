@@ -1,0 +1,50 @@
+<div class="vocabulary-container">
+  <h2>Vocabulary List</h2>
+
+  <div class="filters">
+    <div
+      class="filter-row"
+      *ngFor="
+        let flag of [
+          'importedFromAnki',
+          'exportedToAnki',
+          'markedForAnkiExport'
+        ]
+      "
+    >
+      <button (click)="toggleFilter(flag)" class="filter-btn">
+        {{
+          filters[flag] === 0
+            ? "No Filter"
+            : filters[flag] === 1
+            ? "True"
+            : "False"
+        }}
+      </button>
+      <label>
+        {{ flag }}
+      </label>
+    </div>
+
+    <!-- New Filter for Words and Sentences -->
+    <div class="filter-row">
+      <button (click)="toggleWordSentenceFilter()" class="filter-btn">
+        {{
+          wordSentenceFilter === 0
+            ? "No Filter"
+            : wordSentenceFilter === 1
+            ? "Words"
+            : "Sentences"
+        }}
+      </button>
+      <label>Word/Sentence</label>
+    </div>
+  </div>
+
+  <div class="vocab-item-wrapper" *ngFor="let vocabItem of vocabItems">
+    <app-vocab-item-form
+      [vocabItem]="vocabItem"
+      (delete)="deleteVocabItem(vocabItem)"
+    ></app-vocab-item-form>
+  </div>
+</div>

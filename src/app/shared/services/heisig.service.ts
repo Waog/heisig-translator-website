@@ -174,12 +174,13 @@ export class HeisigService {
 
   getHeisigSentenceEn(
     hanziSentence: string,
-    replacementForUnknown: string | undefined = undefined
+    replacementForUnknown: string | undefined = undefined,
+    delimiter: string = ' '
   ): string {
     return hanziSentence
       .split('')
       .map((hanzi) => this.getHeisigEn(hanzi) || replacementForUnknown || hanzi)
-      .join(' ');
+      .join(delimiter);
   }
 
   getHeisigEntry(hanzi: string): HeisigEntry | undefined {

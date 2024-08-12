@@ -18,11 +18,9 @@ import { ToggleButtonComponent } from '../container-with-buttons/toggle-button.c
 import { GuessModeToggleOptions } from '../shared/guess-mode-toggle-options.enum';
 import { smoothenHeisig } from '../shared/helper';
 import { HeisigService } from '../shared/services/heisig.service';
+import { SegmentationService } from '../shared/services/segmentation.service';
 import { SingleWordComponent } from './single-word.component';
 import { SoundToggleOptions } from './sound-toggle-options.enum';
-
-// @ts-ignore
-import { Segment, useDefault } from 'segmentit';
 
 @Component({
   selector: 'app-segmentation',
@@ -63,7 +61,10 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
   @ViewChildren(SingleWordComponent)
   singleWordComponents!: QueryList<SingleWordComponent>;
 
-  constructor(private heisigService: HeisigService) {}
+  constructor(
+    private heisigService: HeisigService,
+    private segmentationService: SegmentationService
+  ) {}
 
   ngOnInit(): void {
     const savedSoundOption = localStorage.getItem(
@@ -107,9 +108,7 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['userInput']) {
       if (this.userInput.length > 0) {
-        const segmentit = useDefault(new Segment());
-        const result = segmentit.doSegment(this.userInput);
-        this.hanziWords = result.map((segment: { w: string }) => segment.w);
+        this.hanziWords = this.segmentationService.toHanziWords(this.userInput);
       } else {
         this.hanziWords = [];
       }

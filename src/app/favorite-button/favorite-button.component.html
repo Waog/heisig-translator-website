@@ -1,3 +1,5 @@
 <button (click)="toggleFavorite()">
-  <span [ngClass]="{ filled: isFavorite }">{{ isFavorite ? "★" : "☆" }}</span>
+  <span [ngClass]="{ filled: isVocabItem }">{{
+    isVocabItem ? (vocabItemHasSameFromInput ? "❤️" : "💗") : "🤍"
+  }}</span>
 </button>

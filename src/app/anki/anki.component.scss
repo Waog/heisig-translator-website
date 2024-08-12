@@ -1,4 +1,4 @@
-.favorites-container {
+.anki-container {
   padding: 20px;
   background-color: #1e1e1e;
   color: #e0e0e0;
@@ -33,7 +33,6 @@ li .text-container {
 
 li .hanzi {
   font-size: 1.4em;
-  font-weight: normal;
 }
 
 li .translation {
@@ -41,44 +40,20 @@ li .translation {
   margin-top: 5px;
 }
 
-li .context {
-  color: #80cbc4;
-  margin-top: 5px;
-  font-style: italic;
-}
-
-.button-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-
-li .delete-button,
-li .navigate-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2em;
-  margin-left: 20px;
-}
-
-li .delete-button {
-  color: #ff6b6b;
-}
-
-li .navigate-button {
-  color: #80cbc4;
-}
-
-li .delete-button:hover {
-  color: #ff4c4c;
-}
-
-li .navigate-button:hover {
-  color: #4db6ac;
-}
-
 p {
   color: #b0bec5;
+}
+
+button {
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #555555;
 }

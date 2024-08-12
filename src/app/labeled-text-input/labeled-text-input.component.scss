@@ -1,0 +1,28 @@
+:host {
+  box-sizing: border-box;
+}
+
+label {
+  display: block;
+  position: relative;
+  z-index: 2;
+  margin-left: 0.5em;
+  font-size: 0.7em;
+  background-color: #3a3a3a;
+  color: #b7b7b7;
+  width: fit-content;
+  padding: 0.1em;
+}
+
+input {
+  box-sizing: border-box;
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+  border: none;
+  padding: 5px;
+  padding-top: 0.7em;
+  padding-left: 0.5em;
+  border-radius: 4px;
+  margin-top: -0.7em;
+  width: 100%;
+}

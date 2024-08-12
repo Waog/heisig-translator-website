@@ -7,6 +7,10 @@ import { pinyin } from 'pinyin-pro';
 export class PinyinService {
   constructor() {}
 
+  toPinyinString(text: string): string {
+    return pinyin(text);
+  }
+
   convertToPinyin(text: string): { hanzi: string; pinyin: string }[] {
     return Array.from(text).map((char) => ({
       hanzi: char,
