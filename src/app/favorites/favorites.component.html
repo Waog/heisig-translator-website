@@ -7,6 +7,9 @@
         <span class="translation">
           {{ word.translations.join("; ") }}
         </span>
+        <span class="context" *ngIf="word.context">
+          (Context: {{ word.context }})
+        </span>
       </div>
       <div class="button-container">
         <button class="delete-button" (click)="deleteWordFavorite(word.hanzi)">
@@ -14,7 +17,7 @@
         </button>
         <button
           class="navigate-button"
-          (click)="navigateToTranslator(word.hanzi)"
+          (click)="navigateToTranslator(word.hanzi, word.context)"
         >
           🔍
         </button>

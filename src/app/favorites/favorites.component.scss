@@ -24,7 +24,6 @@ li {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  position: relative;
 }
 
 li .text-container {
@@ -40,6 +39,12 @@ li .hanzi {
 li .translation {
   color: #b0bec5;
   margin-top: 5px;
+}
+
+li .context {
+  color: #80cbc4;
+  margin-top: 5px;
+  font-style: italic;
 }
 
 .button-container {

@@ -17,7 +17,9 @@ import { FavoriteService } from '../shared/services/favorite.service';
 })
 export class FavoriteButtonComponent implements OnInit, OnChanges {
   @Input() hanziString: string = '';
-  @Input() type: 'word' | 'sentence' = 'sentence'; // New input to specify the type
+  @Input() type: 'word' | 'sentence' = 'sentence';
+  @Input() context?: string;
+
   isFavorite: boolean = false;
 
   constructor(private favoriteService: FavoriteService) {}
@@ -51,7 +53,7 @@ export class FavoriteButtonComponent implements OnInit, OnChanges {
       if (this.type === 'sentence') {
         this.favoriteService.addSentenceFavorite(this.hanziString);
       } else {
-        this.favoriteService.addWordFavorite(this.hanziString);
+        this.favoriteService.addWordFavorite(this.hanziString, this.context);
       }
     } else {
       if (this.type === 'sentence') {

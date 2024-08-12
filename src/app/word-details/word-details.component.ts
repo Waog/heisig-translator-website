@@ -33,6 +33,7 @@ import { WordDetailsService } from './word-details.service';
 })
 export class WordDetailsComponent implements OnInit, OnChanges {
   @Input() wordHanzi: string = '';
+  @Input() context: string = '';
   pinyin: string = '';
   heisigTTSText: string = '';
   simpleTranslation$!: Observable<string>;

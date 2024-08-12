@@ -42,7 +42,8 @@ export class FavoritesComponent implements OnInit {
     this.loadFavorites();
   }
 
-  navigateToTranslator(hanzi: string): void {
-    this.router.navigate(['/translator'], { queryParams: { input: hanzi } });
+  navigateToTranslator(hanzi: string, context?: string): void {
+    const queryParams: any = { input: context ?? hanzi };
+    this.router.navigate(['/translator'], { queryParams });
   }
 }

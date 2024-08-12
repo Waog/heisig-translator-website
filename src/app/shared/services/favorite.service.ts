@@ -9,6 +9,7 @@ export interface SentenceFavorite {
 export interface WordFavorite {
   hanzi: string;
   translations: string[];
+  context?: string;
 }
 
 @Injectable({
@@ -71,13 +72,13 @@ export class FavoriteService {
     return favorites.some((fav) => fav.hanzi === hanzi);
   }
 
-  addWordFavorite(hanzi: string): void {
+  addWordFavorite(hanzi: string, context?: string): void {
     this.translationService
       .getAllTranslations(hanzi, Language.EN)
       .subscribe((translations) => {
         const allTranslations = translations.flatMap((t) => t.translations);
         const favorites = this.getWordFavoritesFromLocalStorage();
-        favorites.push({ hanzi, translations: allTranslations });
+        favorites.push({ hanzi, translations: allTranslations, context });
         this.updateWordFavoritesInLocalStorage(favorites);
       });
   }
