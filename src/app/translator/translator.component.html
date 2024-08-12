@@ -1,0 +1,19 @@
+<app-input-text (userInputChange)="onUserInputChange($event)"></app-input-text>
+
+<app-sentence-translation
+  [userInput]="userInput"
+  targetLang="en-US"
+></app-sentence-translation>
+<app-sentence-translation
+  [userInput]="userInput"
+  targetLang="de-DE"
+></app-sentence-translation>
+<app-segmentation
+  [userInput]="userInput"
+  (wordSelected)="onWordSelected($event)"
+  [selectedWord]="selectedWord"
+></app-segmentation>
+<app-word-details
+  *ngIf="selectedWord"
+  [wordHanzi]="selectedWord"
+></app-word-details>
