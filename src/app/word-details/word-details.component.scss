@@ -41,6 +41,8 @@ button:hover {
   align-items: flex-end;
   margin-left: auto;
   position: relative;
+  margin-top: 1em;
+  margin-left: 1em;
 }
 
 .button-group {
@@ -50,6 +52,10 @@ button:hover {
   position: absolute;
   top: -30px;
   right: 0;
+}
+
+app-frequency {
+  margin-top: 1em;
 }
 
 .favorite-button {
