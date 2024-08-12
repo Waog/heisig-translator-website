@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import {
   HttpTestingController,
@@ -5,12 +6,17 @@ import {
 } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { AppComponent } from './app.component';
+import { routes } from './app.routes';
+import { FavoritesComponent } from './favorites/favorites.component';
+import { NavigationComponent } from './navigation/navigation.component';
 import { SingleCharacterComponent } from './segmentation/single-character.component';
 import { SingleWordComponent } from './segmentation/single-word.component';
 import { SentenceTranslationComponent } from './sentence-translation/sentence-translation.component';
+import { TranslatorComponent } from './translator/translator.component';
 import { DictionaryOccurrencesComponent } from './word-details/dictionary-occurrences.component';
 import { HeisigDetailsComponent } from './word-details/heisig-details.component';
 import { WordDetailsComponent } from './word-details/word-details.component';
@@ -19,10 +25,16 @@ describe('Integration: AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let httpTestingController: HttpTestingController;
+  let router: Router;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [AppComponent, RouterModule.forRoot([])],
+      imports: [
+        CommonModule,
+        RouterTestingModule.withRoutes(routes), // Use the predefined routes
+        AppComponent,
+        NavigationComponent,
+      ],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -40,6 +52,8 @@ describe('Integration: AppComponent', () => {
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
     httpTestingController = TestBed.inject(HttpTestingController);
+    router = TestBed.inject(Router);
+    router.initialNavigation();
     fixture.detectChanges();
   }));
 
@@ -53,10 +67,44 @@ describe('Integration: AppComponent', () => {
 
   it('should create the app', async () => {
     mockHeisig([]);
+    mockLocalDictionary([]);
     expect(component).toBeTruthy();
   });
 
+  it('should navigate to /translator on load', waitForAsync(() => {
+    router.navigate(['/translator']).then(() => {
+      fixture.detectChanges();
+      expect(router.url).toBe('/translator');
+
+      const translatorComponent = fixture.debugElement.query(
+        By.directive(TranslatorComponent)
+      );
+      expect(translatorComponent).not.toBeNull();
+
+      mockLocalDictionary([]);
+      mockHeisig([]);
+    });
+  }));
+
+  it('should navigate to /favorites on clicking favorites link', waitForAsync(() => {
+    router.navigate(['/favorites']).then(() => {
+      fixture.detectChanges();
+      expect(router.url).toBe('/favorites');
+
+      const favoritesComponent = fixture.debugElement.query(
+        By.directive(FavoritesComponent)
+      );
+      expect(favoritesComponent).not.toBeNull();
+
+      mockLocalDictionary([]);
+      mockHeisig([]);
+    });
+  }));
+
   it('should wait for the user input to finish', async () => {
+    await router.navigate(['/translator']);
+    fixture.detectChanges();
+
     await setUserInput('你');
     mockLocalDictionary([]);
     mockHeisig([]);
@@ -70,6 +118,9 @@ describe('Integration: AppComponent', () => {
   });
 
   it('Golden Path: input 你好 -> click 你好-word -> click 你-heisig', async () => {
+    await router.navigate(['/translator']);
+    fixture.detectChanges();
+
     const userInput = '你好Oli!';
 
     await setUserInput(userInput);
@@ -211,6 +262,9 @@ describe('Integration: AppComponent', () => {
   });
 
   it('should use cached translations from localStorage', async () => {
+    await router.navigate(['/translator']);
+    fixture.detectChanges();
+
     localStorage.setItem('onlineTranslationCacheDE', '{"你好":"Hallo"}');
     localStorage.setItem('onlineTranslationCacheEN', '{"你好":"Hello"}');
 
