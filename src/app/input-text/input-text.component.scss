@@ -48,7 +48,7 @@ label::after {
 
 input[type="text"] {
   width: 100%;
-  padding: 10px 70px 10px 10px;
+  padding: 10px 100px 10px 10px;
   font-size: 1.2em;
   border: 1px solid #37474f;
   border-radius: 5px;
@@ -76,6 +76,7 @@ button {
   font-size: 1.2em;
   cursor: pointer;
   color: #b0bec5;
+  padding: 0;
 }
 
 button:hover {

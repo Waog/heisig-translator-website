@@ -1,0 +1,3 @@
+<button (click)="toggleFavorite()">
+  <span [ngClass]="{ filled: isFavorite }">{{ isFavorite ? "★" : "☆" }}</span>
+</button>

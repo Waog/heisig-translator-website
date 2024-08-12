@@ -1,4 +1,17 @@
 <div class="favorites-container">
-  <h2>Your Favorites</h2>
-  <!-- Add content here for the favorites page -->
+  <h2>Favorite Sentences</h2>
+  <ul *ngIf="favoriteSentences.length > 0; else noFavorites">
+    <li *ngFor="let sentence of favoriteSentences">
+      <div class="text-container">
+        <span class="hanzi">{{ sentence.hanzi }}</span>
+        <span class="translation">{{ sentence.translation }}</span>
+      </div>
+      <button class="delete-button" (click)="deleteFavorite(sentence.hanzi)">
+        ❌
+      </button>
+    </li>
+  </ul>
+  <ng-template #noFavorites>
+    <p>No favorite sentences yet.</p>
+  </ng-template>
 </div>

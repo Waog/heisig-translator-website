@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component';
 import { UrlParamService } from './url-param.service';
 
 @Component({
   selector: 'app-input-text',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FavoriteButtonComponent],
   templateUrl: './input-text.component.html',
   styleUrls: ['./input-text.component.scss'],
 })
