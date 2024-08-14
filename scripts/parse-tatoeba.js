@@ -15,6 +15,7 @@ const sentencesWithAudioFilePath = path.join(
   "sentences_with_audio.csv"
 );
 const tagsFilePath = path.join(downloadDir, "tags.csv");
+const usersSentencesFilePath = path.join(downloadDir, "users_sentences.csv");
 
 function parseTatoeba() {
   const sentenceMap = new Map();
@@ -22,6 +23,7 @@ function parseTatoeba() {
   const baseMap = new Map();
   const audioMap = new Map();
   const tagsMap = new Map();
+  const reviewMap = new Map();
 
   console.log("Parsing sentence base information...");
 
@@ -93,6 +95,53 @@ function parseTatoeba() {
       })
       .on("end", () => {
         console.log("Finished parsing tags information.");
+        parseReviews();
+      });
+  }
+
+  // Step 4: Parse users' reviews
+  function parseReviews() {
+    console.log("Parsing users' reviews...");
+
+    fs.createReadStream(usersSentencesFilePath)
+      .pipe(
+        csv({
+          separator: "\t",
+          headers: [
+            "username",
+            "sentence_id",
+            "review",
+            "date_added",
+            "date_modified",
+          ],
+          skipLines: 0,
+        })
+      )
+      .on("data", (row) => {
+        const sentenceId = parseInt(row.sentence_id, 10);
+        const review = parseInt(row.review, 10);
+
+        if (!reviewMap.has(sentenceId)) {
+          reviewMap.set(sentenceId, {
+            reviewPositiveCount: 0,
+            reviewNeutralCount: 0,
+            reviewNegativeCount: 0,
+          });
+        }
+
+        const reviewData = reviewMap.get(sentenceId);
+        if (review === 1) {
+          reviewData.reviewPositiveCount += 1;
+        } else if (review === 0) {
+          reviewData.reviewNeutralCount += 1;
+        } else if (review === -1) {
+          reviewData.reviewNegativeCount += 1;
+        }
+
+        reviewMap.set(sentenceId, reviewData);
+      })
+      .on("end", () => {
+        console.log("Finished parsing users' reviews.");
         parseChineseSentences();
       });
   }
@@ -100,7 +149,7 @@ function parseTatoeba() {
   function parseChineseSentences() {
     console.log("Parsing Chinese sentences...");
 
-    // Step 4: Parse Chinese sentences
+    // Step 5: Parse Chinese sentences
     fs.createReadStream(cmnSentencesFilePath)
       .pipe(
         csv({ separator: "\t", headers: ["id", "lang", "text"], skipLines: 0 })
@@ -113,11 +162,17 @@ function parseTatoeba() {
         };
         const audioId = audioMap.get(sentenceId) || null;
         const tags = tagsMap.get(sentenceId) || [];
+        const reviews = reviewMap.get(sentenceId) || {
+          reviewPositiveCount: 0,
+          reviewNeutralCount: 0,
+          reviewNegativeCount: 0,
+        };
         sentenceMap.set(sentenceId, {
           text: row.text,
           translations: [],
           audioId,
           tags,
+          ...reviews,
           ...baseInfo,
         });
       })
@@ -150,12 +205,18 @@ function parseTatoeba() {
             };
             const audioId = audioMap.get(translationId) || null;
             const tags = tagsMap.get(translationId) || [];
+            const reviews = reviewMap.get(translationId) || {
+              reviewPositiveCount: 0,
+              reviewNeutralCount: 0,
+              reviewNegativeCount: 0,
+            };
             translationMap.set(translationId, {
               id: translationId,
               lang,
               text: row.text,
               audioId,
               tags,
+              ...reviews,
               ...baseInfo,
             });
           })
@@ -200,6 +261,9 @@ function parseTatoeba() {
               text: translation.text,
               audioId: translation.audioId,
               tags: translation.tags,
+              reviewPositiveCount: translation.reviewPositiveCount,
+              reviewNeutralCount: translation.reviewNeutralCount,
+              reviewNegativeCount: translation.reviewNegativeCount,
               isOriginal: translation.isOriginal,
               originalId: translation.originalId,
             });
@@ -225,7 +289,18 @@ function parseTatoeba() {
       };
       const audioId = audioMap.get(key) || null;
       const tags = tagsMap.get(key) || [];
-      sentenceMap.set(key, { ...value, ...baseInfo, audioId, tags });
+      const reviews = reviewMap.get(key) || {
+        reviewPositiveCount: 0,
+        reviewNeutralCount: 0,
+        reviewNegativeCount: 0,
+      };
+      sentenceMap.set(key, {
+        ...value,
+        ...baseInfo,
+        audioId,
+        tags,
+        ...reviews,
+      });
     });
 
     fs.writeFileSync(
