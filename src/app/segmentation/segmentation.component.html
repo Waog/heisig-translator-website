@@ -57,4 +57,9 @@
       [showWordFrequency]="showWordFrequency === 'Showing Frequency'"
     ></app-single-word>
   </div>
+
+  <app-custom-segmentation
+    [(text)]="customSegmentation"
+    (input)="onCustomSegmentationChange()"
+  ></app-custom-segmentation>
 </app-container-with-buttons>

@@ -1,0 +1,13 @@
+<button
+  *ngIf="!showCustomSegmentation"
+  class="toggle-btn"
+  (click)="onShowCustomSegmentation()"
+>
+  Customize Segmentation ▶
+</button>
+<app-labeled-text-input
+  *ngIf="showCustomSegmentation"
+  label="Custom Segmentation"
+  [(text)]="text"
+  (input)="onInputChange()"
+/>

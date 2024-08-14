@@ -79,6 +79,22 @@
     />
 
     <!-- Arrays -->
+    <label for="fromInputSentence">Segmentation:</label>
+    <div
+      class="array-item"
+      *ngFor="let segment of modifiedItem.segmentation; let i = index"
+    >
+      <input
+        [(ngModel)]="modifiedItem.segmentation[i]"
+        (input)="onInputChange()"
+        type="text"
+      />
+      <button (click)="removeArrayItem('segmentation', i)">❌</button>
+    </div>
+    <button class="array-add-button" (click)="addArrayItem('segmentation')">
+      Add Segment
+    </button>
+
     <label for="fromInputSentence">From Input Sentence:</label>
     <div
       class="array-item"

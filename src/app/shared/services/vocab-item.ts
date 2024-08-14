@@ -18,6 +18,7 @@ export class VocabItem {
   skill?: string;
   lesson?: string;
   notes?: string;
+  segmentation: string[] = [];
   fromInputSentence: string[] = [];
   allTranslations: string[] = [];
   examples: string[] = [];
@@ -34,6 +35,7 @@ export class VocabItem {
   ) {
     this.hanzi = init.hanzi;
     Object.assign(this, init);
+    this.segmentation = [...(init.segmentation || [])];
     this.fromInputSentence = [...(init.fromInputSentence || [])];
     this.allTranslations = [...(init.allTranslations || [])];
     this.examples = [...(init.examples || [])];
@@ -95,6 +97,8 @@ export class VocabItem {
         this.exportedToAnki === partial.exportedToAnki) &&
       (!partial.markedForAnkiExport ||
         this.markedForAnkiExport === partial.markedForAnkiExport) &&
+      (!partial.segmentation ||
+        isSubset(partial.segmentation, this.segmentation)) &&
       (!partial.fromInputSentence ||
         isSubset(partial.fromInputSentence, this.fromInputSentence)) &&
       (!partial.allTranslations ||
@@ -113,7 +117,7 @@ export class VocabItem {
   }
 
   async autoFillEmptyFields(): Promise<void> {
-    this.english ||= await this.getAutoFillEnglish();
+    this.english ||= await this.getTranslation(this.hanzi, Language.EN);
     this.pinyin ||= this.services.pinyinService.toPinyinString(this.hanzi);
     this.sound ||= ''; // TODO: Implement sound fetching
     this.heisigKeywords ||= this.services.heisigService.getHeisigSentenceEn(
@@ -125,6 +129,11 @@ export class VocabItem {
     this.skill ||= 'Waog-Heisig';
     this.lesson ||= '';
 
+    this.segmentation =
+      this.segmentation.length > 0
+        ? this.segmentation
+        : this.services.segmentationService.toHanziWords(this.hanzi);
+
     await this.addAutoFillAllTranslations();
 
     // TODO: Implement example fetching
@@ -132,10 +141,6 @@ export class VocabItem {
     this.notes ||= await this.getAutoFillNotes();
 
     this.updateLastChange();
-  }
-
-  private async getAutoFillEnglish(): Promise<string> {
-    return await this.getTranslation(this.hanzi, Language.EN);
   }
 
   private async getTranslation(hanzi: string, lang: Language): Promise<string> {
@@ -183,9 +188,10 @@ export class VocabItem {
   private async getAutoFillSentenceNotes(): Promise<string> {
     let result = '';
 
-    const segmentedWords = this.services.segmentationService.toHanziWords(
-      this.hanzi
-    );
+    const segmentedWords =
+      this.segmentation.length > 0
+        ? this.segmentation
+        : this.services.segmentationService.toHanziWords(this.hanzi);
     if (segmentedWords.length > 1) {
       result += '<h2>Segments:</h2>\n';
       result += '<ul>\n';

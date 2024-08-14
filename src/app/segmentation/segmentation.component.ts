@@ -19,6 +19,7 @@ import { GuessModeToggleOptions } from '../shared/guess-mode-toggle-options.enum
 import { smoothenHeisig } from '../shared/helper';
 import { HeisigService } from '../shared/services/heisig.service';
 import { SegmentationService } from '../shared/services/segmentation.service';
+import { CustomSegmentationComponent } from './custom-segmentation.component';
 import { SingleWordComponent } from './single-word.component';
 import { SoundToggleOptions } from './sound-toggle-options.enum';
 
@@ -32,6 +33,7 @@ import { SoundToggleOptions } from './sound-toggle-options.enum';
     SingleWordComponent,
     AudioButtonComponent,
     ToggleButtonComponent,
+    CustomSegmentationComponent,
   ],
   templateUrl: './segmentation.component.html',
   styleUrls: ['./segmentation.component.scss'],
@@ -40,6 +42,9 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() userInput: string = '';
   @Input() selectedWord: string = '';
   @Output() wordSelected: EventEmitter<string> = new EventEmitter<string>();
+  @Input() customSegmentation: string = '';
+  @Output() customSegmentationChange: EventEmitter<string> =
+    new EventEmitter<string>();
 
   hanziWords: string[] = [];
   wordsTTS: string = '';
@@ -109,9 +114,17 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
     if (changes['userInput']) {
       if (this.userInput.length > 0) {
         this.hanziWords = this.segmentationService.toHanziWords(this.userInput);
+        this.customSegmentation = this.hanziWords.join('.');
       } else {
         this.hanziWords = [];
       }
+    }
+  }
+
+  onCustomSegmentationChange(): void {
+    if (this.customSegmentation.length > 0) {
+      this.hanziWords = this.customSegmentation.split('.');
+      this.customSegmentationChange.emit(this.customSegmentation);
     }
   }
 

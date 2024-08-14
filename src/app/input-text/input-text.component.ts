@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component';
 import { UrlParamService } from './url-param.service';
@@ -12,6 +12,7 @@ import { UrlParamService } from './url-param.service';
   styleUrls: ['./input-text.component.scss'],
 })
 export class InputTextComponent implements OnInit {
+  @Input() customSegmentation: string = '';
   @Output() userInputChange = new EventEmitter<string>();
   userInput: string = '';
 

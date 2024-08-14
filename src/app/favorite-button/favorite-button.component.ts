@@ -19,6 +19,7 @@ export class FavoriteButtonComponent implements OnInit, OnChanges {
   @Input() hanziString: string = '';
   @Input() type: 'word' | 'sentence' = 'sentence';
   @Input() context?: string;
+  @Input() customSegmentation?: string = '';
 
   isVocabItem: boolean = false;
   vocabItemHasSameFromInput: boolean = false;
@@ -102,6 +103,9 @@ export class FavoriteButtonComponent implements OnInit, OnChanges {
           hanzi: this.hanziString,
           isSentence: true,
           markedForAnkiExport: true,
+          segmentation: this.customSegmentation
+            ? this.customSegmentation.split('.')
+            : undefined,
         });
         this.isVocabItem = true;
         this.vocabItemHasSameFromInput = true;

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { InputTextComponent } from '../input-text/input-text.component';
@@ -25,6 +25,7 @@ import { WordDetailsComponent } from '../word-details/word-details.component';
 export class TranslatorComponent {
   userInput: string = '';
   selectedWord: string = '';
+  @Input() customSegmentation: string = '';
 
   onUserInputChange(newInput: string): void {
     this.userInput = newInput;
