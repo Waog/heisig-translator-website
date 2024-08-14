@@ -7,9 +7,12 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "update-assets": "npm run update-dictionary && npm run update-frequencies && npm run update-heisig",
+    "update-assets": "npm run update-dictionary && npm run update-frequencies && npm run update-tatoeba && npm run update-heisig",
     "update-dictionary": "node scripts/update-dictionary.js",
     "update-frequencies": "node scripts/update-frequencies.js",
+    "update-tatoeba": "npm run download-tatoeba && npm run parse-tatoeba",
+    "download-tatoeba": "node scripts/download-tatoeba.js",
+    "parse-tatoeba": "node scripts/parse-tatoeba.js",
     "update-heisig": "node scripts/update-heisig.js"
   },
   "private": true,
@@ -40,12 +43,14 @@
     "@types/jasmine": "~5.1.0",
     "angular-cli-ghpages": "^2.0.1",
     "axios": "^1.7.3",
+    "csv-parser": "^3.0.0",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.5.2"
+    "typescript": "~5.5.2",
+    "unbzip2-stream": "^1.4.3"
   }
 }
