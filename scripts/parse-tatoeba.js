@@ -14,12 +14,14 @@ const sentencesWithAudioFilePath = path.join(
   downloadDir,
   "sentences_with_audio.csv"
 );
+const tagsFilePath = path.join(downloadDir, "tags.csv");
 
 function parseTatoeba() {
   const sentenceMap = new Map();
   const translationMap = new Map();
   const baseMap = new Map();
   const audioMap = new Map();
+  const tagsMap = new Map();
 
   console.log("Parsing sentence base information...");
 
@@ -70,6 +72,27 @@ function parseTatoeba() {
       })
       .on("end", () => {
         console.log("Finished parsing audio information.");
+        parseTags();
+      });
+  }
+
+  // Step 3: Parse tags information
+  function parseTags() {
+    console.log("Parsing tags information...");
+
+    fs.createReadStream(tagsFilePath)
+      .pipe(
+        csv({ separator: "\t", headers: ["sentence_id", "tag"], skipLines: 0 })
+      )
+      .on("data", (row) => {
+        const sentenceId = parseInt(row.sentence_id, 10);
+        if (!tagsMap.has(sentenceId)) {
+          tagsMap.set(sentenceId, []);
+        }
+        tagsMap.get(sentenceId).push(row.tag);
+      })
+      .on("end", () => {
+        console.log("Finished parsing tags information.");
         parseChineseSentences();
       });
   }
@@ -77,7 +100,7 @@ function parseTatoeba() {
   function parseChineseSentences() {
     console.log("Parsing Chinese sentences...");
 
-    // Step 3: Parse Chinese sentences
+    // Step 4: Parse Chinese sentences
     fs.createReadStream(cmnSentencesFilePath)
       .pipe(
         csv({ separator: "\t", headers: ["id", "lang", "text"], skipLines: 0 })
@@ -89,10 +112,12 @@ function parseTatoeba() {
           originalId: null,
         };
         const audioId = audioMap.get(sentenceId) || null;
+        const tags = tagsMap.get(sentenceId) || [];
         sentenceMap.set(sentenceId, {
           text: row.text,
           translations: [],
           audioId,
+          tags,
           ...baseInfo,
         });
       })
@@ -124,11 +149,13 @@ function parseTatoeba() {
               originalId: null,
             };
             const audioId = audioMap.get(translationId) || null;
+            const tags = tagsMap.get(translationId) || [];
             translationMap.set(translationId, {
               id: translationId,
               lang,
               text: row.text,
               audioId,
+              tags,
               ...baseInfo,
             });
           })
@@ -172,6 +199,7 @@ function parseTatoeba() {
               lang: translation.lang,
               text: translation.text,
               audioId: translation.audioId,
+              tags: translation.tags,
               isOriginal: translation.isOriginal,
               originalId: translation.originalId,
             });
@@ -196,7 +224,8 @@ function parseTatoeba() {
         originalId: null,
       };
       const audioId = audioMap.get(key) || null;
-      sentenceMap.set(key, { ...value, ...baseInfo, audioId });
+      const tags = tagsMap.get(key) || [];
+      sentenceMap.set(key, { ...value, ...baseInfo, audioId, tags });
     });
 
     fs.writeFileSync(
