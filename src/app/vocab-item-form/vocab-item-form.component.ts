@@ -66,22 +66,14 @@ export class VocabItemFormComponent implements OnInit {
   }
 
   addArrayItem(
-    arrayName:
-      | 'segmentation'
-      | 'fromInputSentence'
-      | 'allTranslations'
-      | 'examples'
+    arrayName: 'segmentation' | 'fromInputSentence' | 'allTranslations'
   ): void {
     this.modifiedItem[arrayName].push('');
     this.onInputChange();
   }
 
   removeArrayItem(
-    arrayName:
-      | 'segmentation'
-      | 'fromInputSentence'
-      | 'allTranslations'
-      | 'examples',
+    arrayName: 'segmentation' | 'fromInputSentence' | 'allTranslations',
     index: number
   ): void {
     this.modifiedItem[arrayName].splice(index, 1);

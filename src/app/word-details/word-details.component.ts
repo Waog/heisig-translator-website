@@ -13,6 +13,10 @@ import { ContainerWithButtonsComponent } from '../container-with-buttons/contain
 import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component';
 import { FrequencyComponent } from '../frequency/frequency.component';
 import { AudioService } from '../shared/services/audio.service';
+import {
+  ExampleSentence,
+  ExampleSentencesService,
+} from '../shared/services/example-sentences.service';
 import { HeisigDetailsComponent } from './heisig-details.component';
 import { WordDetailsService } from './word-details.service';
 
@@ -46,11 +50,13 @@ export class WordDetailsComponent implements OnInit, OnChanges {
     }[]
   >;
   displayPinyin$!: Observable<boolean>;
+  exampleSentences!: Promise<ExampleSentence[]>;
 
   constructor(
     private companion: WordDetailsService,
     private audioService: AudioService,
-    private router: Router
+    private router: Router,
+    private exampleSentencesService: ExampleSentencesService // Inject the service
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +77,9 @@ export class WordDetailsComponent implements OnInit, OnChanges {
     this.allTranslations$ = this.companion.getAllTranslations(this.wordHanzi);
     this.displayPinyin$ = this.companion.getDisplayPinyin(this.wordHanzi);
     this.heisigTTSText = this.companion.getHeisigTTSText(this.wordHanzi);
+
+    this.exampleSentences =
+      this.exampleSentencesService.getSentencesContainingWord(this.wordHanzi);
   }
 
   playAudio(event: Event, text: string, lang: string = 'en-US'): void {
@@ -78,9 +87,9 @@ export class WordDetailsComponent implements OnInit, OnChanges {
     this.audioService.playAudio(text, lang);
   }
 
-  navigateToTranslator(): void {
+  navigateToTranslator(hanzi: string = this.wordHanzi): void {
     this.router.navigate(['/translator'], {
-      queryParams: { input: this.wordHanzi },
+      queryParams: { input: hanzi },
     });
   }
 }

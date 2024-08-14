@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable, of } from 'rxjs';
-import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { firstValueFrom, forkJoin, Observable, of } from 'rxjs';
+import { catchError, filter, map, startWith, switchMap } from 'rxjs/operators';
 import { containsChineseCharacters } from '../helper';
 import { DictionaryService } from './dictionary.service';
 import { HeisigService } from './heisig.service';
@@ -27,6 +27,20 @@ export class TranslationService {
     private heisigService: HeisigService,
     private onlineTranslationService: OnlineTranslationService
   ) {}
+
+  async getTranslationProm(
+    chineseString: string,
+    language: Language,
+    contextSentence?: string
+  ): Promise<{ translation: string; usedApi: boolean }> {
+    return firstValueFrom(
+      this.getTranslation(chineseString, language, contextSentence).pipe(
+        filter(
+          (translationResult) => translationResult.translation !== 'Loading...'
+        )
+      )
+    );
+  }
 
   getTranslation(
     chineseString: string,

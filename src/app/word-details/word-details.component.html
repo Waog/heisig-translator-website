@@ -52,6 +52,25 @@
     </ul>
   </ng-container>
 
+  <h2>Example Sentences:</h2>
+  <ul *ngIf="exampleSentences | async as exampleSentences">
+    <li *ngFor="let sentence of exampleSentences">
+      <div>
+        <button
+          class="navigate-button small"
+          (click)="navigateToTranslator(sentence.hanzi)"
+        >
+          🔍
+        </button>
+        {{ sentence.hanzi }}
+      </div>
+      <div>
+        <i>{{ sentence.pinyin }}</i>
+      </div>
+      <div>{{ sentence.english }}</div>
+    </li>
+  </ul>
+
   <h2>Heisig:</h2>
   <div class="heisig-list">
     <app-heisig-details

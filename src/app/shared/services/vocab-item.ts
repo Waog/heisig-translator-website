@@ -1,5 +1,6 @@
 import { filter, firstValueFrom, map } from 'rxjs';
 import { AnkiCard } from './anki-export.service';
+import { ExampleSentence } from './example-sentences.service';
 import { Language } from './translation.service';
 import { VocabServiceCollectionService } from './vocab-service-collection.service';
 
@@ -21,7 +22,7 @@ export class VocabItem {
   segmentation: string[] = [];
   fromInputSentence: string[] = [];
   allTranslations: string[] = [];
-  examples: string[] = [];
+  examples: ExampleSentence[] = [];
   lastChange?: Date;
   importedFromAnki: boolean = false;
   exportedToAnki: boolean = false;
@@ -43,11 +44,6 @@ export class VocabItem {
 
   update(updatedItem: VocabItem): void {
     Object.assign(this, updatedItem);
-    this.updateLastChange();
-  }
-
-  addExample(example: string): void {
-    this.examples.push(example);
     this.updateLastChange();
   }
 
@@ -79,6 +75,11 @@ export class VocabItem {
     const isSubset = (subset: string[], set: string[]) =>
       subset.every((value) => set.includes(value));
 
+    const isExampleSubset = (
+      subset: ExampleSentence[],
+      set: ExampleSentence[]
+    ) => subset.every((value) => set.includes(value));
+
     return (
       (!partial.hanzi || this.hanzi === partial.hanzi) &&
       (!partial.english || this.english === partial.english) &&
@@ -103,7 +104,7 @@ export class VocabItem {
         isSubset(partial.fromInputSentence, this.fromInputSentence)) &&
       (!partial.allTranslations ||
         isSubset(partial.allTranslations, this.allTranslations)) &&
-      (!partial.examples || isSubset(partial.examples, this.examples)) &&
+      (!partial.examples || isExampleSubset(partial.examples, this.examples)) &&
       (partial.importedFromAnki == undefined ||
         this.importedFromAnki === partial.importedFromAnki) &&
       (partial.exportedToAnki == undefined ||
@@ -136,7 +137,12 @@ export class VocabItem {
 
     await this.addAutoFillAllTranslations();
 
-    // TODO: Implement example fetching
+    this.examples =
+      this.examples.length > 0
+        ? this.examples
+        : await this.services.exampleSentencesService.getSentencesContainingWord(
+            this.hanzi
+          );
 
     this.notes ||= await this.getAutoFillNotes();
 
@@ -224,7 +230,7 @@ export class VocabItem {
       result += '<h2>Examples:</h2>\n';
       result += '<ul>\n';
       for (const example of this.examples) {
-        result += `  <li>${await this.toNoteEntry(example)}</li>\n`;
+        result += `  <li>${example.hanzi} <i>(${example.pinyin})</i> ${example.english}</li>\n`;
       }
       result += '</ul>\n';
       result += '\n';

@@ -68,6 +68,7 @@ describe('Integration: AppComponent', () => {
   it('should create the app', async () => {
     mockHeisig([]);
     mockLocalDictionary([]);
+    mockTatoebaData([]);
     expect(component).toBeTruthy();
   });
 
@@ -83,6 +84,7 @@ describe('Integration: AppComponent', () => {
 
       mockLocalDictionary([]);
       mockHeisig([]);
+      mockTatoebaData([]);
     });
   }));
 
@@ -98,6 +100,7 @@ describe('Integration: AppComponent', () => {
 
       mockLocalDictionary([]);
       mockHeisig([]);
+      mockTatoebaData([]);
     });
   }));
 
@@ -109,6 +112,7 @@ describe('Integration: AppComponent', () => {
     mockLocalDictionary([]);
     mockHeisig([]);
     mockFrequencyData([]);
+    mockTatoebaData([]);
     await wait(500);
     const text1 = getElementText(SentenceTranslationComponent, 0);
     const text2 = getElementText(SentenceTranslationComponent, 1);
@@ -171,6 +175,8 @@ describe('Integration: AppComponent', () => {
       },
     ];
     mockLocalDictionary(dictionary);
+
+    mockTatoebaData([]);
 
     expect(getWordComponentText(0)).toBe('hello');
     expect(getWordComponentText(1)).toBe('Oli');
@@ -274,6 +280,7 @@ describe('Integration: AppComponent', () => {
 
     mockHeisig([]);
     mockFrequencyData([]);
+    mockTatoebaData([]);
 
     const dictionary = [
       { simplified: '你好', pinyin: 'ni3 hao3', english: ['hello', 'hi'] },
@@ -376,6 +383,10 @@ describe('Integration: AppComponent', () => {
 
   function mockFrequencyData(frequencyJson: any[]): void {
     mockHttpResponse('GET', 'assets/subtlexch.json', frequencyJson);
+  }
+
+  function mockTatoebaData(tatoebaJson: any[]): void {
+    mockHttpResponse('GET', 'assets/tatoeba.json', tatoebaJson);
   }
 
   function mockOnlineDictionaryResponse({

@@ -130,22 +130,6 @@
       Add Translation
     </button>
 
-    <label for="examples">Examples:</label>
-    <div
-      class="array-item"
-      *ngFor="let example of modifiedItem.examples; let i = index"
-    >
-      <input
-        [(ngModel)]="modifiedItem.examples[i]"
-        (input)="onInputChange()"
-        type="text"
-      />
-      <button (click)="removeArrayItem('examples', i)">❌</button>
-    </div>
-    <button class="array-add-button" (click)="addArrayItem('examples')">
-      Add Example
-    </button>
-
     <!-- Flags -->
     <label>
       <input
