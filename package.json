@@ -10,9 +10,10 @@
     "update-assets": "npm run update-dictionary && npm run update-frequencies && npm run update-tatoeba && npm run update-heisig",
     "update-dictionary": "node scripts/update-dictionary.js",
     "update-frequencies": "node scripts/update-frequencies.js",
-    "update-tatoeba": "npm run download-tatoeba && npm run parse-tatoeba",
-    "download-tatoeba": "node scripts/download-tatoeba.js",
-    "parse-tatoeba": "node scripts/parse-tatoeba.js",
+    "update-tatoeba": "npm run update-tatoeba:download-raw && update-tatoeba:parse-raw && update-tatoeba:map-to-asset",
+    "update-tatoeba:download-raw": "node scripts/tatoeba-download-raw.js",
+    "update-tatoeba:parse-raw": "node scripts/tatoeba-parse-raw.js",
+    "update-tatoeba:map-to-asset": "node scripts/tatoeba-map-to-asset.js",
     "update-heisig": "node scripts/update-heisig.js"
   },
   "private": true,
