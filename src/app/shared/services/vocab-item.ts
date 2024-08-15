@@ -199,12 +199,14 @@ export class VocabItem {
         ? this.segmentation
         : this.services.segmentationService.toHanziWords(this.hanzi);
     if (segmentedWords.length > 1) {
+      result += '<!-- begin segments -->\n';
       result += '<h2>Segments:</h2>\n';
       result += '<ul>\n';
       for (const word of segmentedWords) {
         result += `  <li>${await this.toNoteEntry(word)}</li>\n`;
       }
       result += '</ul>\n';
+      result += '<!-- end segments -->\n';
       result += '\n';
     } else {
       result += this.getAutoFillWordNotes();
@@ -217,32 +219,38 @@ export class VocabItem {
     let result = '';
 
     if (this.allTranslations.length > 0) {
+      result += '<!-- begin translations -->\n';
       result += '<h2>Translations:</h2>\n';
       result += '<ul>\n';
       for (const translation of this.allTranslations) {
         result += `  <li>${translation}</li>\n`;
       }
       result += '</ul>\n';
+      result += '<!-- end translations -->\n';
       result += '\n';
     }
 
     if (this.examples.length > 0) {
+      result += '<!-- begin examples -->\n';
       result += '<h2>Examples:</h2>\n';
       result += '<ul>\n';
       for (const example of this.examples) {
         result += `  <li>${example.hanzi} <i>(${example.pinyin})</i> ${example.english}</li>\n`;
       }
       result += '</ul>\n';
+      result += '<!-- end examples -->\n';
       result += '\n';
     }
 
     if (this.fromInputSentence.length > 0) {
+      result += '<!-- begin fromInputSentence -->\n';
       result += '<h2>First found in:</h2>\n';
       result += '<ul>\n';
       for (const fromInputSentence of this.fromInputSentence) {
         result += `  <li>${await this.toNoteEntry(fromInputSentence)}</li>\n`;
       }
       result += '</ul>\n';
+      result += '<!-- end fromInputSentence -->\n';
       result += '\n';
     }
 
@@ -252,7 +260,7 @@ export class VocabItem {
   async toNoteEntry(hanziSentence: string): Promise<string> {
     return `${hanziSentence} <i>(${this.services.pinyinService.toPinyinString(
       hanziSentence
-    )})</i> - ${await this.getTranslation(hanziSentence, Language.EN)}`;
+    )})</i> ${await this.getTranslation(hanziSentence, Language.EN)}`;
   }
 
   toAnkiCard(): AnkiCard {
