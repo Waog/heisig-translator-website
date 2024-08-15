@@ -209,7 +209,7 @@ export class VocabItem {
       result += '<!-- end segments -->\n';
       result += '\n';
     } else {
-      result += this.getAutoFillWordNotes();
+      result += await this.getAutoFillWordNotes();
     }
 
     return result;
