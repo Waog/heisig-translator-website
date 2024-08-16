@@ -6,6 +6,8 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root',
 })
 export class HttpPromiseService {
+  private cache: Map<string, Promise<any>> = new Map();
+
   constructor(private httpClient: HttpClient) {}
 
   get<T>(...args: Parameters<HttpClient['get']>): Promise<T> {
@@ -22,5 +24,17 @@ export class HttpPromiseService {
 
   delete<T>(...args: Parameters<HttpClient['delete']>): Promise<T> {
     return firstValueFrom(this.httpClient.delete<T>(...args));
+  }
+
+  getOnce<T>(url: string, forceReload = false): Promise<T> {
+    if (forceReload || !this.cache.has(url)) {
+      const requestPromise = this.get<T>(url).catch((error) => {
+        this.cache.delete(url); // Remove from cache if the request fails
+        throw error;
+      });
+      this.cache.set(url, requestPromise);
+    }
+
+    return this.cache.get(url) as Promise<T>;
   }
 }

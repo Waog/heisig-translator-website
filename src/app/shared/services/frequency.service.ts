@@ -24,27 +24,17 @@ interface FrequencyData {
 })
 export class FrequencyService {
   private frequencyData: FrequencyData[] = [];
-  private loadPromise: Promise<void> | null = null;
 
   constructor(private httpPromiseService: HttpPromiseService) {
     this.loadFrequencyData();
   }
 
-  private loadFrequencyData(): Promise<void> {
-    if (this.loadPromise) {
-      return this.loadPromise;
+  private async loadFrequencyData(): Promise<void> {
+    if (this.frequencyData.length === 0) {
+      this.frequencyData = await this.httpPromiseService.getOnce<
+        FrequencyData[]
+      >('assets/subtlexch.json');
     }
-
-    this.loadPromise = this.httpPromiseService
-      .get<FrequencyData[]>('assets/subtlexch.json')
-      .then((data) => {
-        this.frequencyData = data;
-      })
-      .catch((error) => {
-        console.error('Failed to load frequency data:', error);
-      });
-
-    return this.loadPromise;
   }
 
   public async getFrequencyCategory(hanziWord: string): Promise<number> {
