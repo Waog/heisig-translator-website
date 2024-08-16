@@ -4,12 +4,11 @@
     selected: isSelected,
     hidden: isHidden(),
     'category-5':
-      (showWordFrequency && (frequencyCategory$ | async) === 5) ||
-      (frequencyCategory$ | async) === 0,
-    'category-4': showWordFrequency && (frequencyCategory$ | async) === 4,
-    'category-3': showWordFrequency && (frequencyCategory$ | async) === 3,
-    'category-2': showWordFrequency && (frequencyCategory$ | async) === 2,
-    'category-1': showWordFrequency && (frequencyCategory$ | async) === 1
+      (showWordFrequency && frequencyCategory === 5) || frequencyCategory === 0,
+    'category-4': showWordFrequency && frequencyCategory === 4,
+    'category-3': showWordFrequency && frequencyCategory === 3,
+    'category-2': showWordFrequency && frequencyCategory === 2,
+    'category-1': showWordFrequency && frequencyCategory === 1
   }"
   (click)="onWordClick()"
 >

@@ -1,46 +1,64 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { HttpPromiseService } from './http-promise.service';
+
+interface FrequencyData {
+  Word: string;
+  Length: number;
+  Pinyin: string;
+  PinyinInput: string;
+  WCount: number;
+  Wmillion: number;
+  log10W: number;
+  WCD: number;
+  WCDPercentage: number;
+  log10CD: number;
+  DominantPoS: string;
+  DominantPoSFreq: number;
+  AllPoS: string;
+  AllPoSFreq: number | null;
+  EngTran: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class FrequencyService {
-  private frequencyDataSubject: BehaviorSubject<any[]> = new BehaviorSubject<
-    any[]
-  >([]);
-  private frequencyData$: Observable<any[]> =
-    this.frequencyDataSubject.asObservable();
+  private frequencyData: FrequencyData[] = [];
+  private loadPromise: Promise<void> | null = null;
 
-  constructor(private http: HttpClient) {
+  constructor(private httpPromiseService: HttpPromiseService) {
     this.loadFrequencyData();
   }
 
-  private loadFrequencyData(): void {
-    this.http.get<any[]>('assets/subtlexch.json').subscribe(
-      (data) => {
-        this.frequencyDataSubject.next(data);
-      },
-      (error) => {
+  private loadFrequencyData(): Promise<void> {
+    if (this.loadPromise) {
+      return this.loadPromise;
+    }
+
+    this.loadPromise = this.httpPromiseService
+      .get<FrequencyData[]>('assets/subtlexch.json')
+      .then((data) => {
+        this.frequencyData = data;
+      })
+      .catch((error) => {
         console.error('Failed to load frequency data:', error);
-      }
-    );
+      });
+
+    return this.loadPromise;
   }
 
-  public getFrequencyCategory(hanziWord: string): Observable<number> {
-    return this.frequencyData$.pipe(
-      filter((data) => data.length > 0), // Ensure data is loaded
-      map((data) => {
-        const entryIndex = data.findIndex((item) => item.Word === hanziWord);
+  public async getFrequencyCategory(hanziWord: string): Promise<number> {
+    await this.loadFrequencyData();
 
-        if (entryIndex === -1) {
-          return 0; // Word not found in the frequency data
-        }
-
-        return this.calculateCategory(entryIndex + 1); // Rank is 1-based
-      })
+    const entryIndex = this.frequencyData.findIndex(
+      (item) => item.Word === hanziWord
     );
+
+    if (entryIndex === -1) {
+      return 0;
+    }
+
+    return this.calculateCategory(entryIndex + 1);
   }
 
   private calculateCategory(rank: number): number {

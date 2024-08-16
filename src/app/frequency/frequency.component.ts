@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common'; // Import CommonModule
+import { CommonModule } from '@angular/common';
 import {
   Component,
   Input,
@@ -6,19 +6,18 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { Observable } from 'rxjs';
 import { FrequencyService } from '../shared/services/frequency.service';
 
 @Component({
   selector: 'app-frequency',
   standalone: true,
-  imports: [CommonModule], // Add CommonModule to the imports
+  imports: [CommonModule],
   templateUrl: './frequency.component.html',
   styleUrls: ['./frequency.component.scss'],
 })
 export class FrequencyComponent implements OnInit, OnChanges {
   @Input() hanziWord!: string;
-  frequencyCategory$!: Observable<number>;
+  frequencyCategory: number | null = null;
 
   constructor(private frequencyService: FrequencyService) {}
 
@@ -32,8 +31,8 @@ export class FrequencyComponent implements OnInit, OnChanges {
     }
   }
 
-  private calculateFrequencyCategory(): void {
-    this.frequencyCategory$ = this.frequencyService.getFrequencyCategory(
+  private async calculateFrequencyCategory(): Promise<void> {
+    this.frequencyCategory = await this.frequencyService.getFrequencyCategory(
       this.hanziWord
     );
   }

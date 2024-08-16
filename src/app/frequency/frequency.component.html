@@ -2,24 +2,11 @@
   <div
     class="box"
     [ngClass]="{
-      emphasized:
-        (frequencyCategory$ | async) === 5 || (frequencyCategory$ | async) === 0
+      emphasized: frequencyCategory === 5 || frequencyCategory === 0
     }"
   ></div>
-  <div
-    class="box"
-    [ngClass]="{ emphasized: (frequencyCategory$ | async) === 4 }"
-  ></div>
-  <div
-    class="box"
-    [ngClass]="{ emphasized: (frequencyCategory$ | async) === 3 }"
-  ></div>
-  <div
-    class="box"
-    [ngClass]="{ emphasized: (frequencyCategory$ | async) === 2 }"
-  ></div>
-  <div
-    class="box"
-    [ngClass]="{ emphasized: (frequencyCategory$ | async) === 1 }"
-  ></div>
+  <div class="box" [ngClass]="{ emphasized: frequencyCategory === 4 }"></div>
+  <div class="box" [ngClass]="{ emphasized: frequencyCategory === 3 }"></div>
+  <div class="box" [ngClass]="{ emphasized: frequencyCategory === 2 }"></div>
+  <div class="box" [ngClass]="{ emphasized: frequencyCategory === 1 }"></div>
 </div>

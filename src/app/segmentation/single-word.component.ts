@@ -8,7 +8,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { Observable } from 'rxjs';
 import { GuessModeToggleOptions } from '../shared/guess-mode-toggle-options.enum';
 import { smoothenHeisig } from '../shared/helper';
 import { AudioService } from '../shared/services/audio.service';
@@ -43,7 +42,7 @@ export class SingleWordComponent implements OnChanges, OnInit {
   isApiTranslation: boolean = false;
   public GuessModeToggleOptions = GuessModeToggleOptions;
   private revealed: boolean = false; // Track the revealed state
-  frequencyCategory$: Observable<number | null> | undefined;
+  frequencyCategory: number | null = null;
 
   constructor(
     private translationService: TranslationService,
@@ -60,26 +59,24 @@ export class SingleWordComponent implements OnChanges, OnInit {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
     if (changes['hanziWord']) {
       this.hanziCharacters = Array.from(this.hanziWord);
       this.translateWord();
       if (this.showWordFrequency) {
-        this.frequencyCategory$ = this.frequencyService.getFrequencyCategory(
-          this.hanziWord
-        );
+        this.frequencyCategory =
+          await this.frequencyService.getFrequencyCategory(this.hanziWord);
       } else {
-        this.frequencyCategory$ = undefined;
+        this.frequencyCategory = null;
       }
     }
 
     if (changes['showWordFrequency']) {
       if (this.showWordFrequency) {
-        this.frequencyCategory$ = this.frequencyService.getFrequencyCategory(
-          this.hanziWord
-        );
+        this.frequencyCategory =
+          await this.frequencyService.getFrequencyCategory(this.hanziWord);
       } else {
-        this.frequencyCategory$ = undefined;
+        this.frequencyCategory = null;
       }
     }
 
