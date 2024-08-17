@@ -14,7 +14,10 @@
     "update-tatoeba:download-raw": "node scripts/tatoeba-download-raw.js",
     "update-tatoeba:parse-raw": "node scripts/tatoeba-parse-raw.js",
     "update-tatoeba:map-to-asset": "node scripts/tatoeba-map-to-asset.js",
-    "update-heisig": "node scripts/update-heisig.js"
+    "update-heisig": "node scripts/update-heisig.js",
+    "e2e": "ng e2e",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +43,7 @@
     "@angular-devkit/build-angular": "^18.1.2",
     "@angular/cli": "^18.1.2",
     "@angular/compiler-cli": "^18.1.0",
+    "@cypress/schematic": "^2.5.2",
     "@types/file-saver": "^2.0.7",
     "@types/jasmine": "~5.1.0",
     "angular-cli-ghpages": "^2.0.1",
@@ -52,6 +56,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.5.2",
-    "unbzip2-stream": "^1.4.3"
+    "unbzip2-stream": "^1.4.3",
+    "cypress": "latest"
   }
 }
