@@ -1,6 +1,31 @@
 describe('Golden Path: Translator Feature', () => {
+  const cacheFiles = {
+    EN: 'cypress/fixtures/onlineTranslationCacheEN.json',
+    DE: 'cypress/fixtures/onlineTranslationCacheDE.json',
+  };
+
+  let accumulatedCache = { EN: {}, DE: {} };
+
+  before(() => {
+    cy.log(`RECORD_MODE is set to: ${Cypress.env('RECORD_MODE')}`);
+
+    if (Cypress.env('RECORD_MODE')) {
+      emptyCache(cacheFiles);
+    }
+  });
+
   beforeEach(() => {
+    if (!Cypress.env('RECORD_MODE')) {
+      fillCacheFromFixture();
+    }
+
     cy.visit('/');
+  });
+
+  afterEach(() => {
+    if (Cypress.env('RECORD_MODE')) {
+      addCacheToFixture();
+    }
   });
 
   it('should navigate to the Translator when entering /', () => {
@@ -82,5 +107,52 @@ describe('Golden Path: Translator Feature', () => {
 
     cy.contains('Hallo Mock!');
     cy.contains('Hello Mock!');
+
+    cy.window().then((win) => {
+      win.localStorage.removeItem('onlineTranslationCacheDE');
+      win.localStorage.removeItem('onlineTranslationCacheEN');
+    });
   });
+
+  function addCacheToFixture() {
+    cy.window().then((win) => {
+      const cacheEN = JSON.parse(
+        win.localStorage.getItem('onlineTranslationCacheEN') || '{}'
+      );
+      const cacheDE = JSON.parse(
+        win.localStorage.getItem('onlineTranslationCacheDE') || '{}'
+      );
+
+      accumulatedCache.EN = { ...accumulatedCache.EN, ...cacheEN };
+      accumulatedCache.DE = { ...accumulatedCache.DE, ...cacheDE };
+
+      cy.writeFile(cacheFiles.EN, accumulatedCache.EN);
+      cy.writeFile(cacheFiles.DE, accumulatedCache.DE);
+    });
+  }
+
+  function fillCacheFromFixture() {
+    cy.fixture('onlineTranslationCacheEN').then((data) => {
+      cy.window().then((win) => {
+        win.localStorage.setItem(
+          'onlineTranslationCacheEN',
+          JSON.stringify(data)
+        );
+      });
+    });
+
+    cy.fixture('onlineTranslationCacheDE').then((data) => {
+      cy.window().then((win) => {
+        win.localStorage.setItem(
+          'onlineTranslationCacheDE',
+          JSON.stringify(data)
+        );
+      });
+    });
+  }
+
+  function emptyCache(cacheFiles: { EN: string; DE: string }) {
+    cy.writeFile(cacheFiles.EN, {});
+    cy.writeFile(cacheFiles.DE, {});
+  }
 });
