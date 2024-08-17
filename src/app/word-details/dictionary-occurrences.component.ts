@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { map, Observable } from 'rxjs';
 import { AudioService } from '../shared/services/audio.service';
-import { TranslationService } from '../shared/services/translation.service';
+import {
+  Translation,
+  TranslationService,
+} from '../shared/services/translation.service';
 
 @Component({
   selector: 'app-dictionary-occurrences',
@@ -14,28 +16,21 @@ import { TranslationService } from '../shared/services/translation.service';
 })
 export class DictionaryOccurrencesComponent implements OnInit {
   @Input() hanziChar: string = '';
-  translations$!: Observable<
-    {
-      hanzi: string;
-      pinyin?: string;
-      translations: string[];
-      usedApi: boolean;
-    }[]
-  >;
+  translations: Translation[] = [];
 
   constructor(
     private translationService: TranslationService,
     private audioService: AudioService
   ) {}
 
-  ngOnInit(): void {
-    this.translations$ = this.translationService
-      .getTranslationsContainingCharacter(this.hanziChar)
-      .pipe(
-        map((translations) =>
-          translations.sort((a, b) => a.hanzi.length - b.hanzi.length)
-        )
+  async ngOnInit(): Promise<void> {
+    const translations =
+      await this.translationService.getTranslationsContainingCharacter(
+        this.hanziChar
       );
+    this.translations = translations.sort(
+      (a, b) => a.hanzi.length - b.hanzi.length
+    );
   }
 
   playAudio(event: Event, text: string, lang: string = 'zh-CN'): void {

@@ -28,17 +28,13 @@ export class SingleCharacterComponent implements OnChanges, OnInit {
 
   constructor(private heisigService: HeisigService) {}
 
-  ngOnInit(): void {
-    this.heisigService.isLoaded().subscribe((loaded) => {
-      if (loaded) {
-        this.updateCharacter();
-      }
-    });
+  async ngOnInit(): Promise<void> {
+    await this.updateCharacter();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
     if (changes['hanzi']) {
-      this.updateCharacter();
+      await this.updateCharacter();
     }
 
     if (changes['guessMode']) {
@@ -46,13 +42,13 @@ export class SingleCharacterComponent implements OnChanges, OnInit {
     }
   }
 
-  updateCharacter(): void {
+  private async updateCharacter(): Promise<void> {
     this.pinyin = pinyin(this.hanzi);
-    this.heisig = this.heisigService.getHeisigEn(this.hanzi) || this.hanzi;
+    this.heisig = await this.heisigService.getHeisigEn(this.hanzi);
     this.isChinese = this.isChineseCharacter(this.hanzi);
   }
 
-  isChineseCharacter(char: string): boolean {
+  private isChineseCharacter(char: string): boolean {
     const chineseCharacterRegex = /[\u4e00-\u9fff]/;
     return chineseCharacterRegex.test(char);
   }

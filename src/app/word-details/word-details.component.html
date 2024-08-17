@@ -12,14 +12,14 @@
     container-buttons
   ></app-audio-button>
   <app-audio-button
-    [text]="(simpleTranslation$ | async) || ''"
+    [text]="simpleTranslation"
     [language]="'en-US'"
     label="English"
     container-buttons
   ></app-audio-button>
 
   <div class="word-details-header">
-    <h1>{{ simpleTranslation$ | async }} - {{ wordHanzi }} - {{ pinyin }}</h1>
+    <h1>{{ simpleTranslation }} - {{ wordHanzi }} - {{ pinyin }}</h1>
     <div class="frequency-container">
       <div class="button-group">
         <app-favorite-button
@@ -37,10 +37,8 @@
   </div>
 
   <h2>Translations:</h2>
-  <ng-container *ngFor="let entry of allTranslations$ | async">
-    <div *ngIf="entry.pinyin && (displayPinyin$ | async)">
-      {{ entry.pinyin }}:
-    </div>
+  <ng-container *ngFor="let entry of allTranslations">
+    <div *ngIf="entry.pinyin && displayPinyin">{{ entry.pinyin }}:</div>
     <ul class="translations">
       <li
         *ngFor="let translation of entry.translations"

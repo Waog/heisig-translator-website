@@ -3,7 +3,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AudioService } from '../shared/services/audio.service';
 import { HeisigEntry, HeisigService } from '../shared/services/heisig.service';
 import { DictionaryOccurrencesComponent } from './dictionary-occurrences.component';
-import { WordDetailsService } from './word-details.service';
 
 @Component({
   selector: 'app-heisig-details',
@@ -11,7 +10,7 @@ import { WordDetailsService } from './word-details.service';
   imports: [CommonModule, DictionaryOccurrencesComponent],
   templateUrl: './heisig-details.component.html',
   styleUrls: ['./heisig-details.component.scss'],
-  providers: [AudioService, WordDetailsService],
+  providers: [AudioService],
 })
 export class HeisigDetailsComponent implements OnInit {
   @Input() hanzi: string = '';
@@ -22,12 +21,11 @@ export class HeisigDetailsComponent implements OnInit {
 
   constructor(
     private heisigService: HeisigService,
-    private audioService: AudioService,
-    public companion: WordDetailsService
+    private audioService: AudioService
   ) {}
 
-  ngOnInit(): void {
-    this.detail = this.heisigService.getHeisigEntry(this.hanzi);
+  async ngOnInit(): Promise<void> {
+    this.detail = await this.heisigService.getHeisigEntry(this.hanzi);
   }
 
   toggleOccurrencesExpansion(character: string, event: Event): void {

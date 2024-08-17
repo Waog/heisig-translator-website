@@ -100,24 +100,20 @@ export class SentenceTranslationComponent implements OnChanges, OnInit {
     }
   }
 
-  translateText(input: string): void {
+  async translateText(input: string): Promise<void> {
     this.isLoading = true;
     const langPair = this.targetLang === 'de-DE' ? 'zh|de' : 'zh|en';
 
-    this.translationService.translate(input, langPair).subscribe(
-      (response: any) => {
-        this.isLoading = false;
-        if (response.responseData) {
-          this.translation = response.responseData.translatedText;
-        } else {
-          this.translation = 'Translation error';
-        }
-      },
-      (error: any) => {
-        this.isLoading = false;
-        this.translation = 'Translation error';
-      }
-    );
+    try {
+      const response = await this.translationService.translate(input, langPair);
+      this.translation =
+        response.responseData.translatedText || 'Translation error';
+    } catch (error) {
+      console.error('Translation error:', error);
+      this.translation = 'Translation error';
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   revealTranslation(): void {

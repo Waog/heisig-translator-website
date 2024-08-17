@@ -52,17 +52,13 @@ export class SingleWordComponent implements OnChanges, OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.heisigService.isLoaded().subscribe((loaded) => {
-      if (loaded) {
-        this.translateWord();
-      }
-    });
+    this.translateWord();
   }
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
     if (changes['hanziWord']) {
       this.hanziCharacters = Array.from(this.hanziWord);
-      this.translateWord();
+      await this.translateWord();
       if (this.showWordFrequency) {
         this.frequencyCategory =
           await this.frequencyService.getFrequencyCategory(this.hanziWord);
@@ -85,16 +81,16 @@ export class SingleWordComponent implements OnChanges, OnInit {
     }
   }
 
-  translateWord(): void {
-    this.translationService
-      .getTranslation(this.hanziWord, Language.EN)
-      .subscribe((translationResult) => {
-        this.translation = smoothenHeisig(translationResult.translation);
-        this.isApiTranslation = translationResult.usedApi;
-      });
+  async translateWord(): Promise<void> {
+    const translationResult = await this.translationService.getTranslation(
+      this.hanziWord,
+      Language.EN
+    );
+    this.translation = smoothenHeisig(translationResult.translation);
+    this.isApiTranslation = translationResult.usedApi;
   }
 
-  onWordClick(): void {
+  async onWordClick(): Promise<void> {
     if (!this.revealed) {
       this.revealed = true;
     }
@@ -111,7 +107,7 @@ export class SingleWordComponent implements OnChanges, OnInit {
         break;
       case SoundToggleOptions.Heisig:
         const heisigSentence = smoothenHeisig(
-          this.heisigService.getHeisigSentenceEn(this.hanziWord)
+          await this.heisigService.getHeisigSentenceEn(this.hanziWord)
         );
         this.audioService.playAudio(heisigSentence, 'en-US');
         break;

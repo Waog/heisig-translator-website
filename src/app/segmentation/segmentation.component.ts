@@ -140,14 +140,14 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
     this.wordSelected.emit(word);
   }
 
-  updateTTS(): void {
+  async updateTTS(): Promise<void> {
     this.wordsTTS = smoothenHeisig(
       this.singleWordComponents
         .map((component) => component.translation)
         .join(' ')
     );
     this.heisigTTS = smoothenHeisig(
-      this.heisigService.getHeisigSentenceEn(this.userInput)
+      await this.heisigService.getHeisigSentenceEn(this.userInput)
     );
     if (this.wordsTTS.match(/Loading.*.../)) {
       setTimeout(() => this.updateTTS(), 1000);

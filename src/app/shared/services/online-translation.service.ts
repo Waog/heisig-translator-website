@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { shareReplay, tap } from 'rxjs/operators';
+import { HttpPromiseService } from './http-promise.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,24 +8,23 @@ export class OnlineTranslationService {
   private myMemoryUrl = 'https://api.mymemory.translated.net/get';
   private cacheEN = new Map<string, string>();
   private cacheDE = new Map<string, string>();
-  private ongoingRequests = new Map<string, Observable<any>>();
+  private ongoingRequests = new Map<string, Promise<any>>();
 
-  constructor(private http: HttpClient) {
+  constructor(private httpPromiseService: HttpPromiseService) {
     this.loadCacheFromLocalStorage();
   }
 
-  translate(text: string, langpair: string): Observable<any> {
+  async translate(text: string, langpair: string): Promise<any> {
     this.loadCacheFromLocalStorage(); // Load cache before each request
 
     const url = `${this.myMemoryUrl}?q=${encodeURIComponent(
       text
     )}&langpair=${langpair}`;
-
     const cache = this.getCacheByLangpair(langpair);
 
     // Check if the translation is in the cache
     if (cache && cache.has(text)) {
-      return of({ responseData: { translatedText: cache.get(text) } });
+      return { responseData: { translatedText: cache.get(text) } };
     }
 
     // Check if there is an ongoing request for the same URL
@@ -36,19 +33,19 @@ export class OnlineTranslationService {
     }
 
     // If not in cache or ongoing request, make the HTTP request
-    const request = this.http.get<any>(url).pipe(
-      tap((response) => {
+    const requestPromise = this.httpPromiseService
+      .get<any>(url)
+      .then((response) => {
         cache?.set(text, response.responseData.translatedText); // Cache the response
         this.saveCacheToLocalStorage(); // Save the cache to localStorage
         this.ongoingRequests.delete(url); // Remove from ongoing requests
-      }),
-      shareReplay(1) // Ensure the observable is shared among subscribers
-    );
+        return response;
+      });
 
     // Store the ongoing request
-    this.ongoingRequests.set(url, request);
+    this.ongoingRequests.set(url, requestPromise);
 
-    return request;
+    return requestPromise;
   }
 
   private getCacheByLangpair(langpair: string): Map<string, string> | null {

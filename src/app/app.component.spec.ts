@@ -66,14 +66,11 @@ describe('Integration: AppComponent', () => {
   });
 
   it('should create the app', async () => {
-    mockHeisig([]);
-    mockLocalDictionary([]);
-    mockTatoebaData([]);
     expect(component).toBeTruthy();
   });
 
-  it('should navigate to /translator on load', waitForAsync(() => {
-    router.navigate(['/translator']).then(() => {
+  it('should navigate to /translator on load', waitForAsync(async () => {
+    router.navigate(['/translator']).then(async () => {
       fixture.detectChanges();
       expect(router.url).toBe('/translator');
 
@@ -82,9 +79,8 @@ describe('Integration: AppComponent', () => {
       );
       expect(translatorComponent).not.toBeNull();
 
-      mockLocalDictionary([]);
+      await wait(1000);
       mockHeisig([]);
-      mockTatoebaData([]);
     });
   }));
 
@@ -97,10 +93,6 @@ describe('Integration: AppComponent', () => {
         By.directive(VocabularyComponent)
       );
       expect(vocabularyComponent).not.toBeNull();
-
-      mockLocalDictionary([]);
-      mockHeisig([]);
-      mockTatoebaData([]);
     });
   }));
 
@@ -109,10 +101,8 @@ describe('Integration: AppComponent', () => {
     fixture.detectChanges();
 
     await setUserInput('你');
-    mockLocalDictionary([]);
     mockHeisig([]);
     mockFrequencyData([]);
-    mockTatoebaData([]);
     await wait(500);
     const text1 = getElementText(SentenceTranslationComponent, 0);
     const text2 = getElementText(SentenceTranslationComponent, 1);
@@ -176,7 +166,7 @@ describe('Integration: AppComponent', () => {
     ];
     mockLocalDictionary(dictionary);
 
-    mockTatoebaData([]);
+    await wait(10);
 
     expect(getWordComponentText(0)).toBe('hello');
     expect(getWordComponentText(1)).toBe('Oli');
@@ -206,12 +196,14 @@ describe('Integration: AppComponent', () => {
       translation: 'Hallo!',
     });
 
+    await wait(10);
+
     expect(getSentenceComponentText(0)).toContain('Hello!');
     expect(getSentenceComponentText(1)).toContain('Hallo!');
 
     clickElement(SingleWordComponent, 0, '.word-container');
 
-    await wait(100);
+    await wait(1000);
 
     mockOnlineDictionaryResponse({
       chinese: '你好',
@@ -219,6 +211,7 @@ describe('Integration: AppComponent', () => {
       translation: 'Hidiho!',
     });
 
+    // mockTatoebaData([]);
     mockFrequencyData([]);
 
     expect(getElementText(WordDetailsComponent, 0, 'h1')).toBe(

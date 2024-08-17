@@ -1,4 +1,3 @@
-import { filter, firstValueFrom, map } from 'rxjs';
 import { AnkiCard } from './anki-export.service';
 import { ExampleSentence } from './example-sentences.service';
 import { Language } from './translation.service';
@@ -121,11 +120,12 @@ export class VocabItem {
     this.english ||= await this.getTranslation(this.hanzi, Language.EN);
     this.pinyin ||= this.services.pinyinService.toPinyinString(this.hanzi);
     this.sound ||= ''; // TODO: Implement sound fetching
-    this.heisigKeywords ||= this.services.heisigService.getHeisigSentenceEn(
-      this.hanzi,
-      undefined,
-      ', '
-    );
+    this.heisigKeywords ||=
+      await this.services.heisigService.getHeisigSentenceEn(
+        this.hanzi,
+        undefined,
+        ', '
+      );
     this.image ||= ''; // TODO: Implement image fetching;
     this.skill ||= 'Waog-Heisig';
     this.lesson ||= '';
@@ -150,34 +150,23 @@ export class VocabItem {
   }
 
   private async getTranslation(hanzi: string, lang: Language): Promise<string> {
-    return firstValueFrom(
-      this.services.translationService.getTranslation(hanzi, lang).pipe(
-        map((translationResult) => translationResult.translation),
-        filter((translation) => translation !== 'Loading...')
-      )
-    );
+    const translationResult =
+      await this.services.translationService.getTranslation(hanzi, lang);
+    return translationResult.translation;
   }
 
   private async addAutoFillAllTranslations() {
-    const translations = await firstValueFrom(
-      this.services.translationService
-        .getAllTranslations(this.hanzi, Language.EN)
-        .pipe(
-          filter(
-            (translationResult) =>
-              translationResult[0]?.translations[0] !== 'Loading...'
-          ),
-          map((translationResult) =>
-            translationResult.map((t) => t.translations)
-          ),
-          map((translationStringArrayArray) =>
-            translationStringArrayArray.flat()
-          )
-        )
-    );
+    const translations =
+      await this.services.translationService.getAllTranslations(
+        this.hanzi,
+        Language.EN
+      );
+
     for (const translation of translations) {
-      if (!this.allTranslations.includes(translation)) {
-        this.addTranslation(translation);
+      for (const t of translation.translations) {
+        if (!this.allTranslations.includes(t)) {
+          this.addTranslation(t);
+        }
       }
     }
   }

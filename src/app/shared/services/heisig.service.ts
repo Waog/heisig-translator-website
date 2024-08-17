@@ -1,8 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { removeBraces } from '../helper';
+import { HttpPromiseService } from './http-promise.service';
 
 // Internal interface for the JSON structure
 interface HeisigEntryInternal {
@@ -45,30 +43,23 @@ export interface HeisigEntry {
 })
 export class HeisigService {
   private heisigData: HeisigEntryInternal[] = [];
-  private heisigLoaded = new ReplaySubject<boolean>(1);
 
-  constructor(private http: HttpClient) {
-    this.loadHeisigData();
+  constructor(private httpPromiseService: HttpPromiseService) {}
+
+  private async loadHeisigData(): Promise<void> {
+    if (this.heisigData.length === 0) {
+      try {
+        this.heisigData = await this.httpPromiseService.getOnce<
+          HeisigEntryInternal[]
+        >('assets/heisig.json');
+      } catch (error) {
+        console.error('Failed to load Heisig data:', error);
+      }
+    }
   }
 
-  private loadHeisigData(): void {
-    this.http
-      .get<HeisigEntryInternal[]>('assets/heisig.json')
-      .pipe(
-        tap((data) => {
-          this.heisigData = data;
-          this.heisigLoaded.next(true);
-        })
-      )
-      .subscribe();
-  }
-
-  isLoaded(): Observable<boolean> {
-    return this.heisigLoaded.asObservable();
-  }
-
-  private mapEntry(entry: HeisigEntryInternal): HeisigEntry {
-    const components = this.mapComponents(entry.ComponentsFlatKeywords);
+  private async mapEntry(entry: HeisigEntryInternal): Promise<HeisigEntry> {
+    const components = await this.mapComponents(entry.ComponentsFlatKeywords);
     return {
       keyword: entry.Keyword,
       keywordDe: entry.KeyworddeDEGoogleTranslate,
@@ -87,11 +78,15 @@ export class HeisigService {
     };
   }
 
-  private mapComponents(componentsKeywords: string): HeisigEntry[] {
+  private async mapComponents(
+    componentsKeywords: string
+  ): Promise<HeisigEntry[]> {
     const keywordsArray = componentsKeywords.split('\n').map((k) => k.trim());
-    const allComponents = keywordsArray
-      .map((keyword) => this.getHeisigEntryByKeyword(keyword))
-      .filter((entry): entry is HeisigEntry => entry !== undefined);
+    const allComponents = (
+      await Promise.all(
+        keywordsArray.map((keyword) => this.getHeisigEntryByKeyword(keyword))
+      )
+    ).filter((entry): entry is HeisigEntry => entry !== undefined);
 
     const uniqueComponents = this.filterUniqueComponents(allComponents);
     return uniqueComponents;
@@ -167,28 +162,39 @@ export class HeisigService {
     return result;
   }
 
-  getHeisigEn(hanzi: string): string {
+  async getHeisigEn(hanzi: string): Promise<string> {
+    await this.loadHeisigData();
     const entry = this.heisigData.find((e) => e.Hanzi === hanzi);
     return entry ? entry.Keyword : hanzi;
   }
 
-  getHeisigSentenceEn(
+  async getHeisigSentenceEn(
     hanziSentence: string,
     replacementForUnknown: string | undefined = undefined,
     delimiter: string = ' '
-  ): string {
-    return hanziSentence
-      .split('')
-      .map((hanzi) => this.getHeisigEn(hanzi) || replacementForUnknown || hanzi)
-      .join(delimiter);
+  ): Promise<string> {
+    await this.loadHeisigData();
+
+    const heisigKeywords = await Promise.all(
+      hanziSentence.split('').map(async (hanzi) => {
+        const keyword = await this.getHeisigEn(hanzi);
+        return keyword || replacementForUnknown || hanzi;
+      })
+    );
+
+    return heisigKeywords.join(delimiter);
   }
 
-  getHeisigEntry(hanzi: string): HeisigEntry | undefined {
+  async getHeisigEntry(hanzi: string): Promise<HeisigEntry | undefined> {
+    await this.loadHeisigData();
     const entry = this.heisigData.find((e) => e.Hanzi === hanzi);
     return entry ? this.mapEntry(entry) : undefined;
   }
 
-  getHeisigEntryByKeyword(keyword: string): HeisigEntry | undefined {
+  async getHeisigEntryByKeyword(
+    keyword: string
+  ): Promise<HeisigEntry | undefined> {
+    await this.loadHeisigData();
     const entry = this.heisigData.find((e) => e.Keyword === keyword);
     return entry ? this.mapEntry(entry) : undefined;
   }

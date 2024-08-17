@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { smoothenHeisig } from '../shared/helper';
 import { HeisigService } from '../shared/services/heisig.service';
 import { PinyinService } from '../shared/services/pinyin.service';
 import {
   Language,
+  Translation,
   TranslationService,
 } from '../shared/services/translation.service';
 
@@ -28,49 +27,36 @@ export class WordDetailsService {
     return this.pinyinService.convertToPinyinWithNumbers(word);
   }
 
-  getHeisigDetails(word: string): { hanzi: string; heisig: string }[] {
-    return Array.from(word).map((char) => ({
-      hanzi: char,
-      heisig: this.heisigService.getHeisigEn(char) || '??',
-    }));
-  }
-
-  getHeisigTTSText(word: string): string {
-    return smoothenHeisig(
-      this.heisigService.getHeisigSentenceEn(word, 'unknown')
+  async getHeisigTTSText(word: string): Promise<string> {
+    const sentence = await this.heisigService.getHeisigSentenceEn(
+      word,
+      'unknown'
     );
+    return smoothenHeisig(sentence);
   }
 
-  getSimpleTranslation(word: string): Observable<string> {
-    return this.translationService
-      .getTranslation(word, Language.EN)
-      .pipe(map((translationResult) => translationResult.translation));
+  async getSimpleTranslation(word: string): Promise<string> {
+    const translationResult = await this.translationService.getTranslation(
+      word,
+      Language.EN
+    );
+    return translationResult.translation;
   }
 
-  getAllTranslations(word: string): Observable<
-    {
-      hanzi: string;
-      pinyin?: string;
-      translations: string[];
-      usedApi: boolean;
-    }[]
-  > {
+  async getAllTranslations(word: string): Promise<Translation[]> {
     return this.translationService.getAllTranslations(word, Language.EN);
   }
 
-  getDisplayPinyin(word: string): Observable<boolean> {
-    return this.getAllTranslations(word).pipe(
-      map((allTranslations) => {
-        const normalizedWholePinyin = this.normalizeString(
-          this.getPinyinWithNumbers(word)
-        );
+  async getDisplayPinyin(word: string): Promise<boolean> {
+    const allTranslations = await this.getAllTranslations(word);
+    const normalizedWholePinyin = this.normalizeString(
+      this.getPinyinWithNumbers(word)
+    );
 
-        return allTranslations.some(
-          (entry) =>
-            entry.pinyin &&
-            this.normalizeString(entry.pinyin) !== normalizedWholePinyin
-        );
-      })
+    return allTranslations.some(
+      (entry) =>
+        entry.pinyin &&
+        this.normalizeString(entry.pinyin) !== normalizedWholePinyin
     );
   }
 

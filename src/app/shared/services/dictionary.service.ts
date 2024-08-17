@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpPromiseService } from './http-promise.service';
 
 interface DictionaryEntry {
   traditional: string;
@@ -15,7 +13,6 @@ interface DictionaryEntry {
 })
 export class DictionaryService {
   private dictionary: DictionaryEntry[] = [];
-  private dictionaryLoaded = new BehaviorSubject<boolean>(false);
 
   // Set of known Chinese punctuation marks and symbols
   private chinesePunctuationMarks = new Set([
@@ -38,27 +35,19 @@ export class DictionaryService {
     '、',
   ]);
 
-  constructor(private http: HttpClient) {
-    this.loadDictionary();
+  constructor(private httpPromiseService: HttpPromiseService) {}
+
+  private async loadDictionary(): Promise<void> {
+    if (this.dictionary.length === 0) {
+      this.dictionary = await this.httpPromiseService.getOnce<
+        DictionaryEntry[]
+      >('assets/cedict.json');
+    }
   }
 
-  private loadDictionary(): void {
-    this.http
-      .get<DictionaryEntry[]>('assets/cedict.json')
-      .pipe(
-        tap((data) => {
-          this.dictionary = data;
-          this.dictionaryLoaded.next(true);
-        })
-      )
-      .subscribe();
-  }
+  public async translate(word: string): Promise<string | undefined> {
+    await this.loadDictionary();
 
-  isLoaded(): Observable<boolean> {
-    return this.dictionaryLoaded.asObservable();
-  }
-
-  translate(word: string): string | undefined {
     // Check if the word is a Chinese punctuation mark or symbol
     if (this.chinesePunctuationMarks.has(word)) {
       return word;
@@ -74,13 +63,17 @@ export class DictionaryService {
     return this.shortenTranslation(allEnglishTranslations);
   }
 
-  getAllTranslations(word: string): DictionaryEntry[] {
+  public async getAllTranslations(word: string): Promise<DictionaryEntry[]> {
+    await this.loadDictionary();
     return this.dictionary.filter(
       (e) => e.simplified === word || e.traditional === word
     );
   }
 
-  getTranslationsContainingCharacter(character: string): DictionaryEntry[] {
+  public async getTranslationsContainingCharacter(
+    character: string
+  ): Promise<DictionaryEntry[]> {
+    await this.loadDictionary();
     return this.dictionary.filter(
       (e) =>
         e.simplified.includes(character) || e.traditional.includes(character)
@@ -104,13 +97,13 @@ export class DictionaryService {
       e.includes(`,`) ? e.split(',')[0] + `, ...` : e
     );
 
-    // remove any entries which contain chinese characters
+    // Remove any entries which contain Chinese characters
     const chineseCharacterRegex = /[\u4e00-\u9fff]/;
     englishArray = englishArray.filter(
       (entry) => !chineseCharacterRegex.test(entry)
     );
 
-    // remove any empty strings
+    // Remove any empty strings
     englishArray = englishArray.filter((entry) => entry.length > 0);
 
     // If no valid translation was found, fallback to the first entry

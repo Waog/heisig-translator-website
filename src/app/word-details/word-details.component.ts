@@ -7,7 +7,6 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { AudioButtonComponent } from '../container-with-buttons/audio-button.component';
 import { ContainerWithButtonsComponent } from '../container-with-buttons/container-with-buttons.component';
 import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component';
@@ -17,6 +16,7 @@ import {
   ExampleSentence,
   ExampleSentencesService,
 } from '../shared/services/example-sentences.service';
+import { Translation } from '../shared/services/translation.service';
 import { HeisigDetailsComponent } from './heisig-details.component';
 import { WordDetailsService } from './word-details.service';
 
@@ -40,23 +40,16 @@ export class WordDetailsComponent implements OnInit, OnChanges {
   @Input() context: string = '';
   pinyin: string = '';
   heisigTTSText: string = '';
-  simpleTranslation$!: Observable<string>;
-  allTranslations$!: Observable<
-    {
-      hanzi: string;
-      pinyin?: string;
-      translations: string[];
-      usedApi: boolean;
-    }[]
-  >;
-  displayPinyin$!: Observable<boolean>;
+  simpleTranslation: string = '';
+  allTranslations: Translation[] = [];
+  displayPinyin: boolean = false;
   exampleSentences!: Promise<ExampleSentence[]>;
 
   constructor(
     private companion: WordDetailsService,
     private audioService: AudioService,
     private router: Router,
-    private exampleSentencesService: ExampleSentencesService // Inject the service
+    private exampleSentencesService: ExampleSentencesService
   ) {}
 
   ngOnInit(): void {
@@ -69,14 +62,16 @@ export class WordDetailsComponent implements OnInit, OnChanges {
     }
   }
 
-  private loadDetails(): void {
+  private async loadDetails(): Promise<void> {
     this.pinyin = this.companion.getPinyin(this.wordHanzi);
-    this.simpleTranslation$ = this.companion.getSimpleTranslation(
+    this.simpleTranslation = await this.companion.getSimpleTranslation(
       this.wordHanzi
     );
-    this.allTranslations$ = this.companion.getAllTranslations(this.wordHanzi);
-    this.displayPinyin$ = this.companion.getDisplayPinyin(this.wordHanzi);
-    this.heisigTTSText = this.companion.getHeisigTTSText(this.wordHanzi);
+    this.allTranslations = await this.companion.getAllTranslations(
+      this.wordHanzi
+    );
+    this.displayPinyin = await this.companion.getDisplayPinyin(this.wordHanzi);
+    this.heisigTTSText = await this.companion.getHeisigTTSText(this.wordHanzi);
 
     this.exampleSentences =
       this.exampleSentencesService.getSentencesContainingWord(this.wordHanzi);

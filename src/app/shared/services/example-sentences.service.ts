@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, firstValueFrom } from 'rxjs';
+import { HttpPromiseService } from './http-promise.service';
 import { PinyinService } from './pinyin.service';
 import { Language, TranslationService } from './translation.service';
 
@@ -22,27 +21,21 @@ export interface ExampleSentence {
   providedIn: 'root',
 })
 export class ExampleSentencesService {
-  private sentencesDataSubject: BehaviorSubject<TatoebaSentence[]> =
-    new BehaviorSubject<TatoebaSentence[]>([]);
-  private sentencesData$ = this.sentencesDataSubject.asObservable();
+  private sentencesData: TatoebaSentence[] = [];
 
   constructor(
-    private http: HttpClient,
+    private httpPromiseService: HttpPromiseService,
     private translationService: TranslationService,
     private pinyinService: PinyinService
-  ) {
-    this.loadSentencesData();
-  }
+  ) {}
 
-  private loadSentencesData(): void {
-    this.http.get<TatoebaSentence[]>('assets/tatoeba.json').subscribe(
-      (data) => {
-        this.sentencesDataSubject.next(data);
-      },
-      (error) => {
-        console.error('Failed to load sentences data:', error);
-      }
-    );
+  private async loadSentencesData(): Promise<TatoebaSentence[]> {
+    if (this.sentencesData.length === 0) {
+      this.sentencesData = await this.httpPromiseService.getOnce<
+        TatoebaSentence[]
+      >('assets/tatoeba.json');
+    }
+    return this.sentencesData;
   }
 
   public async getSentencesContainingWord(
@@ -50,7 +43,7 @@ export class ExampleSentencesService {
     resultLimit: number = 5,
     maxCharacters: number = 20
   ): Promise<ExampleSentence[]> {
-    const data = await this.getSentenceData();
+    const data = await this.loadSentencesData();
     const filteredSentences = data
       .filter(
         (sentence) =>
@@ -59,7 +52,7 @@ export class ExampleSentencesService {
       )
       .slice(0, resultLimit);
 
-    const result = [];
+    const result: ExampleSentence[] = [];
 
     for (const sentence of filteredSentences) {
       const englishTranslation =
@@ -73,7 +66,7 @@ export class ExampleSentencesService {
           pinyin: pinyin,
         });
       } else {
-        const translation = await this.translationService.getTranslationProm(
+        const translation = await this.translationService.getTranslation(
           sentence.text,
           Language.EN
         );
@@ -86,15 +79,5 @@ export class ExampleSentencesService {
     }
 
     return result;
-  }
-
-  private async getSentenceData(): Promise<TatoebaSentence[]> {
-    const currentData = this.sentencesDataSubject.value;
-    if (currentData && currentData.length > 0) {
-      return currentData;
-    }
-    return firstValueFrom(
-      this.sentencesData$.pipe(filter((data) => data.length > 0))
-    );
   }
 }

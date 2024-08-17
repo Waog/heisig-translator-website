@@ -1,4 +1,4 @@
-<div *ngIf="translations$ | async as translations" class="translations">
+<div *ngIf="translations.length > 0" class="translations">
   <table class="translations-table">
     <tbody>
       <tr *ngFor="let entry of translations">
