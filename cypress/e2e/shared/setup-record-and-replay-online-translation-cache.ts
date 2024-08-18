@@ -39,8 +39,8 @@ function addCacheToFixture() {
       win.localStorage.getItem('onlineTranslationCacheDE') || '{}'
     );
 
-    accumulatedCache.EN = { ...accumulatedCache.EN, ...cacheEN };
-    accumulatedCache.DE = { ...accumulatedCache.DE, ...cacheDE };
+    accumulatedCache.EN = toSortedObj({ ...accumulatedCache.EN, ...cacheEN });
+    accumulatedCache.DE = toSortedObj({ ...accumulatedCache.DE, ...cacheDE });
 
     cy.writeFile(cacheFileEN(), accumulatedCache.EN);
     cy.writeFile(cacheFileDE(), accumulatedCache.DE);
@@ -93,4 +93,23 @@ function specName(): string {
   return _specFileName
     .replace(/cypress[\\/]e2e[\\/]/, '')
     .replace(/\.cy\.ts$/, '');
+}
+
+/**
+ * Sorts the keys in an object alphabetically.
+ */
+function toSortedObj(objectWithUnsortedKeys: Object): Object {
+  // Create a new object to store the sorted keys
+  const sortedObj: { [key: string]: any } = {};
+
+  // Get the keys, sort them, and then iterate over them
+  Object.keys(objectWithUnsortedKeys)
+    .sort()
+    .forEach((key) => {
+      // Add each key-value pair to the new sorted object
+      sortedObj[key] = objectWithUnsortedKeys[key];
+    });
+
+  // Return the new object with sorted keys
+  return sortedObj;
 }

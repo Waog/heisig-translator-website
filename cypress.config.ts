@@ -9,6 +9,7 @@ export default defineConfig({
       return config;
     },
     experimentalRunAllSpecs: true,
+    experimentalStudio: true,
   },
 
   component: {

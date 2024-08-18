@@ -47,7 +47,6 @@ export class VocabularyComponent implements OnInit {
         let englishMatches = true;
         let pinyinMatches = true;
         let heisigMatches = true;
-        let notesMatches = true;
         for (const searchFilterTextSegment of this.searchFilterText.split(
           ' '
         )) {
@@ -60,16 +59,8 @@ export class VocabularyComponent implements OnInit {
             .includes(searchFilterTextSegment.replace(' ', ''));
           heisigMatches &&=
             item.heisigKeywords?.includes(searchFilterTextSegment) ?? false;
-          notesMatches &&=
-            item.notes?.includes(searchFilterTextSegment) ?? false;
         }
-        return (
-          hanziMatches ||
-          englishMatches ||
-          pinyinMatches ||
-          heisigMatches ||
-          notesMatches
-        );
+        return hanziMatches || englishMatches || pinyinMatches || heisigMatches;
       })
       .filter((item) => {
         // Apply flag filters
@@ -101,8 +92,7 @@ export class VocabularyComponent implements OnInit {
             this.pinyinService
               .pinyinToPinyinWithoutTones(item.pinyin || '')
               .replace(' ', '') === searchFilterText ||
-            item.heisigKeywords?.toLowerCase() === searchFilterText ||
-            item.notes?.toLowerCase() === searchFilterText
+            item.heisigKeywords?.toLowerCase() === searchFilterText
           );
         };
 

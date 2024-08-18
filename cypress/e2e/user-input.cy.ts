@@ -6,6 +6,8 @@ describe('User Input', () => {
   it('should wait for user input to finish', () => {
     cy.visit('/translator');
     cy.get('input#userInput').type('你');
-    cy.contains('Waiting until input stops...');
+    cy.contains('app-sentence-translation', 'Waiting until input stops...');
+    cy.contains('app-sentence-translation', 'You');
+    cy.contains('app-sentence-translation', 'Du');
   });
 });
