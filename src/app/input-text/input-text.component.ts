@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component';
-import { UrlParamService } from './url-param.service';
+import { InputUrlParamService } from './input-url-param.service';
 
 @Component({
   selector: 'app-input-text',
@@ -16,7 +16,7 @@ export class InputTextComponent implements OnInit {
   @Output() userInputChange = new EventEmitter<string>();
   userInput: string = '';
 
-  constructor(private urlParamService: UrlParamService) {}
+  constructor(private urlParamService: InputUrlParamService) {}
 
   ngOnInit(): void {
     this.urlParamService.getFilteredInput().subscribe((input) => {

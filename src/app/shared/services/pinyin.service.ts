@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { pinyin } from 'pinyin-pro';
+import { convert, pinyin } from 'pinyin-pro';
 
 @Injectable({
   providedIn: 'root',
@@ -20,5 +20,9 @@ export class PinyinService {
 
   convertToPinyinWithNumbers(text: string): string {
     return pinyin(text, { toneType: 'num' });
+  }
+
+  pinyinToPinyinWithoutTones(pinyinWithTones: string): string {
+    return convert(pinyinWithTones, { format: 'toneNone' });
   }
 }

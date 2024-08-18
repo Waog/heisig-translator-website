@@ -87,4 +87,10 @@ export class WordDetailsComponent implements OnInit, OnChanges {
       queryParams: { input: hanzi },
     });
   }
+
+  navigateToVocabItem(hanzi: string = this.wordHanzi): void {
+    this.router.navigate(['/vocabulary'], {
+      queryParams: { searchFilter: this.wordHanzi },
+    });
+  }
 }

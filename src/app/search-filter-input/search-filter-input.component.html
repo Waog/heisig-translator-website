@@ -1,0 +1,14 @@
+<div class="input-container">
+  <div class="input-wrapper">
+    <label for="searchFilter">Find Vocab</label>
+    <input
+      id="searchFilter"
+      #inputField
+      type="text"
+      [(ngModel)]="text"
+      (keydown.enter)="onSubmit()"
+      (blur)="onSubmit()"
+    />
+    <button class="reset-button" (click)="resetInput()">&#x2715;</button>
+  </div>
+</div>

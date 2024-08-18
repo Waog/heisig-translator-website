@@ -28,12 +28,13 @@
           type="word"
           class="favorite-button"
         ></app-favorite-button>
-        <button class="navigate-button" (click)="navigateToTranslator()">
-          🔍
+        <button class="navigate-button" (click)="navigateToVocabItem()">
+          🗂️
         </button>
       </div>
       <app-frequency [hanziWord]="wordHanzi"></app-frequency>
     </div>
+    <button class="navigate-button" (click)="navigateToTranslator()">🔍</button>
   </div>
 
   <h2>Translations:</h2>

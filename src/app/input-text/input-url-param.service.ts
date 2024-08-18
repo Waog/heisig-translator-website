@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class UrlParamService {
+export class InputUrlParamService {
   constructor(private route: ActivatedRoute) {}
 
   getFilteredInput(): Observable<string> {

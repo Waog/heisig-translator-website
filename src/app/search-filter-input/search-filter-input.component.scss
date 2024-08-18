@@ -1,0 +1,77 @@
+.input-container {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 20px 0 10px 0px;
+  box-sizing: border-box;
+  background-color: #1e1e1e;
+}
+
+@media (max-width: 600px) {
+  .input-container {
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
+
+.input-wrapper {
+  width: 100%;
+}
+
+label {
+  position: relative;
+  display: block;
+  width: fit-content;
+  margin-left: 0.4em;
+  padding: 0 0.2em;
+  font-size: 0.8em;
+  color: #a0a0a0;
+  z-index: 1;
+  font-style: italic;
+  background-color: #2c2c2c;
+}
+
+input[type="text"] {
+  margin-top: -0.4em;
+  display: inline-block;
+  width: 100%;
+  padding: 10px 2em 10px 10px;
+  font-size: 1.2em;
+  border: 1px solid #37474f;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+}
+
+input[type="text"]::placeholder {
+  color: #b0bec5;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #2c2c2c inset !important;
+  box-shadow: 0 0 0 1000px #2c2c2c inset !important;
+  -webkit-text-fill-color: #e0e0e0 !important;
+}
+
+button {
+  margin-left: -1.5em;
+  z-index: 1;
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  color: #b0bec5;
+  padding: 0;
+}
+
+button:hover {
+  color: #e0e0e0;
+}
+
+.reset-button {
+  right: 10px;
+}
