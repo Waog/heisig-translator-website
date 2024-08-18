@@ -10,6 +10,8 @@ export default defineConfig({
     },
     experimentalRunAllSpecs: true,
     experimentalStudio: true,
+    viewportWidth: 393, // Xiaomi Redmi Note 10S
+    viewportHeight: 736, // Xiaomi Redmi Note 10S
   },
 
   component: {
