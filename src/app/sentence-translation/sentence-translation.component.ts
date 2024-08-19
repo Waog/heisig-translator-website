@@ -86,18 +86,12 @@ export class SentenceTranslationComponent implements OnChanges, OnInit {
     }
   }
 
-  onGuessModeToggleOptionChange(option: string): void {
-    if (
-      Object.values(GuessModeToggleOptions).includes(
-        option as GuessModeToggleOptions
-      )
-    ) {
-      this.selectedGuessModeToggleOption = option as GuessModeToggleOptions;
-      localStorage.setItem(this.getGuessModeToggleStorageKey(), option);
-
-      // Reset the reveal state when guess mode is changed
-      this.isRevealed = false;
-    }
+  onGuessModeToggleOptionChange(): void {
+    localStorage.setItem(
+      this.getGuessModeToggleStorageKey(),
+      this.selectedGuessModeToggleOption
+    );
+    this.isRevealed = false;
   }
 
   async translateText(input: string): Promise<void> {

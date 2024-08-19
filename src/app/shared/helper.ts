@@ -50,6 +50,9 @@ export function smoothenHeisig(input: string): string {
   // Example: "blue ~'s" becomes "blue's"
   input = input.replace(/(\b\w+)\s*~'s/g, "$1's");
 
+  // Reduce multiple spaces and tabs to a single space
+  input = input.replace(/\s+/g, ' ').trim();
+
   return input;
 }
 

@@ -27,22 +27,22 @@
       SoundToggleOptions.Chinese,
       SoundToggleOptions.Heisig
     ]"
-    [(ngModel)]="selectedSoundToggleOption"
-    (optionSelected)="onSoundToggleOptionChange($event)"
+    [(selectedOption)]="selectedSoundToggleOption"
+    (selectedOptionChange)="onSoundToggleOptionChange()"
     container-buttons
   ></app-toggle-button>
 
   <app-toggle-button
     [options]="[GuessModeToggleOptions.Hide, GuessModeToggleOptions.Show]"
-    [(ngModel)]="selectedGuessModeToggleOption"
-    (optionSelected)="onGuessModeToggleOptionChange($event)"
+    [(selectedOption)]="selectedGuessModeToggleOption"
+    (selectedOptionChange)="onGuessModeToggleOptionChange()"
     container-buttons
   ></app-toggle-button>
 
   <app-toggle-button
     [options]="['Hiding Frequency', 'Showing Frequency']"
-    [(ngModel)]="showWordFrequency"
-    (optionSelected)="onShowWordFrequencyToggleOptionChange($event)"
+    [(selectedOption)]="showWordFrequency"
+    (selectedOptionChange)="onShowWordFrequencyToggleOptionChange()"
     container-buttons
   ></app-toggle-button>
 

@@ -8,8 +8,8 @@
 
   <app-toggle-button
     [options]="[GuessModeToggleOptions.Hide, GuessModeToggleOptions.Show]"
-    [(ngModel)]="selectedGuessModeToggleOption"
-    (optionSelected)="onGuessModeToggleOptionChange($event)"
+    [(selectedOption)]="selectedGuessModeToggleOption"
+    (selectedOptionChange)="onGuessModeToggleOptionChange()"
     container-buttons
   ></app-toggle-button>
 

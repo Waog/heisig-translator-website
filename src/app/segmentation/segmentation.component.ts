@@ -154,44 +154,29 @@ export class SegmentationComponent implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
-  onSoundToggleOptionChange(option: string): void {
-    if (
-      Object.values(SoundToggleOptions).includes(option as SoundToggleOptions)
-    ) {
-      this.selectedSoundToggleOption = option as SoundToggleOptions;
-      localStorage.setItem(
-        SegmentationComponent.SOUND_TOGGLE_STORAGE_KEY,
-        option
-      );
+  onSoundToggleOptionChange(): void {
+    localStorage.setItem(
+      SegmentationComponent.SOUND_TOGGLE_STORAGE_KEY,
+      this.selectedSoundToggleOption
+    );
+  }
+
+  onGuessModeToggleOptionChange(): void {
+    localStorage.setItem(
+      SegmentationComponent.GUESS_MODE_TOGGLE_STORAGE_KEY,
+      this.selectedGuessModeToggleOption
+    );
+
+    // Emit an empty string when the guess mode is set to Hide
+    if (this.selectedGuessModeToggleOption === GuessModeToggleOptions.Hide) {
+      this.wordSelected.emit('');
     }
   }
 
-  onGuessModeToggleOptionChange(option: string): void {
-    if (
-      Object.values(GuessModeToggleOptions).includes(
-        option as GuessModeToggleOptions
-      )
-    ) {
-      this.selectedGuessModeToggleOption = option as GuessModeToggleOptions;
-      localStorage.setItem(
-        SegmentationComponent.GUESS_MODE_TOGGLE_STORAGE_KEY,
-        option
-      );
-
-      // Emit an empty string when the guess mode is set to Hide
-      if (this.selectedGuessModeToggleOption === GuessModeToggleOptions.Hide) {
-        this.wordSelected.emit('');
-      }
-    }
-  }
-
-  onShowWordFrequencyToggleOptionChange(option: string): void {
-    if (['Hiding Frequency', 'Showing Frequency'].includes(option)) {
-      this.showWordFrequency = option;
-      localStorage.setItem(
-        SegmentationComponent.SHOW_WORD_FREQUENCY_STORAGE_KEY,
-        option
-      );
-    }
+  onShowWordFrequencyToggleOptionChange(): void {
+    localStorage.setItem(
+      SegmentationComponent.SHOW_WORD_FREQUENCY_STORAGE_KEY,
+      this.showWordFrequency
+    );
   }
 }

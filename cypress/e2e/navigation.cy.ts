@@ -13,6 +13,6 @@ describe('Navigation', () => {
     cy.visit('/');
     cy.contains('Vocabulary').click();
     cy.url().should('include', '/vocabulary');
-    cy.contains('Vocabulary List');
+    cy.contains('Find Vocab');
   });
 });

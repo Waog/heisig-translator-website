@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ToggleButtonComponent } from '../container-with-buttons/toggle-button.component';
 import { SearchFilterInputComponent } from '../search-filter-input/search-filter-input.component';
 import { PinyinService } from '../shared/services/pinyin.service';
 import { VocabItem } from '../shared/services/vocab-item';
@@ -9,20 +11,23 @@ import { VocabItemFormComponent } from '../vocab-item-form/vocab-item-form.compo
 @Component({
   selector: 'app-vocabulary',
   standalone: true,
-  imports: [CommonModule, VocabItemFormComponent, SearchFilterInputComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    VocabItemFormComponent,
+    SearchFilterInputComponent,
+    ToggleButtonComponent,
+  ],
   templateUrl: './vocabulary.component.html',
   styleUrls: ['./vocabulary.component.scss'],
 })
 export class VocabularyComponent implements OnInit {
   vocabItems: VocabItem[] = [];
   searchFilterText: string = '';
-  filters: { [key: string]: number } = {
-    importedFromAnki: 0,
-    exportedToAnki: 0,
-    markedForAnkiExport: 0,
-  };
-
-  wordSentenceFilter: number = 0; // 0 = No Filter, 1 = Words, 2 = Sentences
+  markedForExportFilter: string = 'to export: 🤷';
+  exportedFilter: string = 'exported: 🤷';
+  importedFilter: string = 'imported: 🤷';
+  wordSentenceFilter: string = 'all';
 
   constructor(
     private vocabListService: VocabListService,
@@ -30,6 +35,10 @@ export class VocabularyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadVocabItems();
+  }
+
+  onToggleChange(): void {
     this.loadVocabItems();
   }
 
@@ -52,7 +61,9 @@ export class VocabularyComponent implements OnInit {
         )) {
           hanziMatches &&= item.hanzi.includes(searchFilterTextSegment);
           englishMatches &&=
-            item.english?.includes(searchFilterTextSegment) ?? false;
+            item.english
+              ?.toLocaleLowerCase()
+              .includes(searchFilterTextSegment.toLocaleLowerCase()) ?? false;
           pinyinMatches &&= this.pinyinService
             .pinyinToPinyinWithoutTones(item.pinyin || '')
             .replace(' ', '')
@@ -63,21 +74,35 @@ export class VocabularyComponent implements OnInit {
         return hanziMatches || englishMatches || pinyinMatches || heisigMatches;
       })
       .filter((item) => {
-        // Apply flag filters
-        const flagFilter = Object.keys(this.filters).every((flag) => {
-          const flagKey = flag as keyof VocabItem;
-          if (this.filters[flag] === 1) return item[flagKey] === true;
-          if (this.filters[flag] === 2) return item[flagKey] === false;
-          return true;
-        });
-
-        // Apply word/sentence filter
-        const wordSentenceFilter =
-          this.wordSentenceFilter === 0 ||
-          (this.wordSentenceFilter === 1 && item.isWord) ||
-          (this.wordSentenceFilter === 2 && item.isSentence);
-
-        return flagFilter && wordSentenceFilter;
+        return (
+          (this.markedForExportFilter.includes('✔️') &&
+            item.markedForAnkiExport) ||
+          (this.markedForExportFilter.includes('❌') &&
+            !item.markedForAnkiExport) ||
+          this.markedForExportFilter.includes('🤷')
+        );
+      })
+      .filter((item) => {
+        return (
+          (this.exportedFilter.includes('✔️') && item.exportedToAnki) ||
+          (this.exportedFilter.includes('❌') && !item.exportedToAnki) ||
+          this.exportedFilter.includes('🤷')
+        );
+      })
+      .filter((item) => {
+        return (
+          (this.importedFilter.includes('✔️') && item.importedFromAnki) ||
+          (this.importedFilter.includes('❌') && !item.importedFromAnki) ||
+          this.importedFilter.includes('🤷')
+        );
+      })
+      .filter((item) => {
+        console.log(this.wordSentenceFilter);
+        return (
+          (this.wordSentenceFilter.includes('word') && item.isWord) ||
+          (this.wordSentenceFilter.includes('sentence') && item.isSentence) ||
+          this.wordSentenceFilter.includes('all')
+        );
       })
       .sort((vocabItemA, vocabItemB) => {
         // sort by: full text matches of any field with the full text of this.searchFilterText first, rest second
@@ -108,16 +133,6 @@ export class VocabularyComponent implements OnInit {
         // If neither or both fully match, sort alphabetically by hanzi as a fallback
         return vocabItemA.hanzi.localeCompare(vocabItemB.hanzi);
       });
-  }
-
-  toggleFilter(flag: string): void {
-    this.filters[flag] = (this.filters[flag] + 1) % 3;
-    this.loadVocabItems();
-  }
-
-  toggleWordSentenceFilter(): void {
-    this.wordSentenceFilter = (this.wordSentenceFilter + 1) % 3;
-    this.loadVocabItems();
   }
 
   deleteVocabItem(item: VocabItem): void {
