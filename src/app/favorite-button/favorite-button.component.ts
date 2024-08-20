@@ -23,6 +23,7 @@ export class FavoriteButtonComponent implements OnInit, OnChanges {
 
   isVocabItem: boolean = false;
   vocabItemHasSameFromInput: boolean = false;
+  disabled: boolean = false;
 
   constructor(private vocabListService: VocabListService) {}
 
@@ -40,6 +41,11 @@ export class FavoriteButtonComponent implements OnInit, OnChanges {
   }
 
   loadFavoriteStatus(): void {
+    if (!this.hanziString) {
+      this.disabled = true;
+    } else {
+      this.disabled = false;
+    }
     if (this.type === 'sentence') {
       this.isVocabItem = this.vocabListService.isVocabItem({
         hanzi: this.hanziString,

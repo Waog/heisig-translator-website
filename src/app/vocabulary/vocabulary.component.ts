@@ -140,7 +140,9 @@ export class VocabularyComponent implements OnInit {
   }
 
   deleteVocabItem(item: VocabItem): void {
-    this.vocabListService.removeVocabItem({ hanzi: item.hanzi });
+    if (item.uuid) {
+      this.vocabListService.removeVocabItem({ uuid: item.uuid });
+    }
     this.loadVocabItems();
   }
 

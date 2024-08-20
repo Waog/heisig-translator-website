@@ -22,3 +22,7 @@ button:hover {
 button:hover .filled {
   color: #e0c066;
 }
+
+button[disabled] {
+  filter: grayscale(100%) contrast(0);
+}

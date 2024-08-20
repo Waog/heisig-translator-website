@@ -1,4 +1,4 @@
-<button (click)="toggleFavorite()">
+<button (click)="toggleFavorite()" [disabled]="disabled">
   <span [ngClass]="{ filled: isVocabItem }">{{
     isVocabItem ? (vocabItemHasSameFromInput ? "❤️" : "💗") : "🤍"
   }}</span>
