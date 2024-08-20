@@ -1,2 +1,8 @@
 <label>{{ label }}</label>
-<textarea type="text" [(ngModel)]="text" (input)="onInputChange()"></textarea>
+<textarea
+  type="text"
+  [(ngModel)]="text"
+  (input)="onInputChange()"
+  [rows]="rows"
+  [disabled]="disabled"
+></textarea>

@@ -1,0 +1,42 @@
+app-labeled-text-input {
+  display: inline-block;
+}
+
+.folded app-labeled-text-input {
+  width: calc(100% - 2em);
+}
+
+.expanded app-labeled-text-input {
+  width: calc(100% - 4em);
+}
+
+.button-column {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 0.7em;
+}
+
+.folded .button-column {
+  width: 2em;
+}
+
+.button-column {
+  width: 4em;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  width: 2em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button[disabled] {
+  filter: invert(0.5);
+}
+
+.button:hover {
+  background-color: #555;
+}

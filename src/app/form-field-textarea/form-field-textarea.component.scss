@@ -1,0 +1,29 @@
+app-labeled-text-input,
+app-labeled-textarea {
+  display: inline-block;
+  width: calc(100% - 2em);
+}
+
+.button-column {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 0.7em;
+  width: 2em;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  width: 2em;
+  margin-bottom: 0.5em;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button[disabled] {
+  filter: invert(0.5);
+}
+
+.button:hover {
+  background-color: #555;
+}

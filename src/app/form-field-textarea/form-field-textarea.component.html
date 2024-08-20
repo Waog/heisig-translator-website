@@ -1,0 +1,29 @@
+<div class="folded" *ngIf="!editMode">
+  <app-labeled-text-input
+    [label]="label"
+    [text]="currentText"
+    [disabled]="true"
+  ></app-labeled-text-input>
+  <div class="button-column">
+    <button class="edit-button button" (click)="activateEditMode()">✏️</button>
+  </div>
+</div>
+<div class="expanded" *ngIf="editMode">
+  <app-labeled-textarea
+    class="expanded"
+    [label]="label"
+    type="text"
+    [(text)]="currentText"
+    [rows]="rows"
+  ></app-labeled-textarea>
+  <div class="button-column">
+    <button
+      class="save-button button"
+      (click)="save()"
+      [disabled]="currentText === text"
+    >
+      💾
+    </button>
+    <button class="discard-button button" (click)="discard()">❌</button>
+  </div>
+</div>

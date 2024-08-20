@@ -1,2 +1,7 @@
 <label>{{ label }}</label>
-<input type="text" [(ngModel)]="text" (input)="onInputChange()" />
+<input
+  [type]="type"
+  [(ngModel)]="text"
+  (input)="onInputChange()"
+  [disabled]="disabled"
+/>

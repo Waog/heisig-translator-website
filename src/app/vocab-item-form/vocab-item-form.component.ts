@@ -1,7 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormFieldNumberComponent } from '../form-field-number/form-field-number.component';
+import { FormFieldObjectComponent } from '../form-field-object/form-field-object.component';
+import { FormFieldTextComponent } from '../form-field-text/form-field-text.component';
+import { FormFieldTextareaComponent } from '../form-field-textarea/form-field-textarea.component';
 import { LabeledTextInputComponent } from '../labeled-text-input/labeled-text-input.component';
 import { LabeledTextareaComponent } from '../labeled-textarea/labeled-textarea.component';
 import { VocabItem } from '../shared/services/vocab-item';
@@ -16,28 +26,32 @@ import { VocabServiceCollectionService } from '../shared/services/vocab-service-
     FormsModule,
     LabeledTextInputComponent,
     LabeledTextareaComponent,
+    FormFieldTextareaComponent,
+    FormFieldTextComponent,
+    FormFieldObjectComponent,
+    FormFieldNumberComponent,
   ],
   templateUrl: './vocab-item-form.component.html',
   styleUrls: ['./vocab-item-form.component.scss'],
 })
-export class VocabItemFormComponent implements OnInit {
+export class VocabItemFormComponent implements OnChanges {
   @Input() vocabItem!: VocabItem;
-  @Output() delete = new EventEmitter<void>(); // EventEmitter for delete action
+  @Output() delete = new EventEmitter<void>();
   modifiedItem!: VocabItem;
   isModified: boolean = false;
-  isExpanded: boolean = false;
 
   constructor(
     private vocabListService: VocabListService,
-    private vocabServiceCollectionService: VocabServiceCollectionService,
-    private router: Router
+    private vocabServiceCollectionService: VocabServiceCollectionService
   ) {}
 
-  ngOnInit(): void {
-    this.modifiedItem = new VocabItem(
-      { ...this.vocabItem },
-      this.vocabServiceCollectionService
-    );
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['vocabItem'] && this.vocabItem) {
+      this.modifiedItem = new VocabItem(
+        { ...this.vocabItem },
+        this.vocabServiceCollectionService
+      );
+    }
   }
 
   onInputChange(): void {
@@ -57,12 +71,8 @@ export class VocabItemFormComponent implements OnInit {
     }
   }
 
-  toggleExpand(): void {
-    this.isExpanded = !this.isExpanded;
-  }
-
   emitDelete(): void {
-    this.delete.emit(); // Emit the delete event when the button is clicked
+    this.delete.emit();
   }
 
   addArrayItem(
@@ -82,11 +92,5 @@ export class VocabItemFormComponent implements OnInit {
 
   private isEqual(item1: VocabItem, item2: VocabItem): boolean {
     return item1.matches(item2) && item2.matches(item1);
-  }
-
-  navigateToTranslator(): void {
-    this.router.navigate(['/translator'], {
-      queryParams: { input: this.vocabItem.hanzi },
-    });
   }
 }

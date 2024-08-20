@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { AnkiCard } from './anki-export.service';
 import { ExampleSentence } from './example-sentences.service';
 import { Language } from './translation.service';
@@ -8,6 +9,9 @@ export type VocabItemInitializer = {
 } & Partial<VocabItem>;
 
 export class VocabItem {
+  uuid: string;
+  ankiGuid?: string;
+  ankiIndex?: number;
   hanzi: string;
   english?: string;
   pinyin?: string;
@@ -39,6 +43,7 @@ export class VocabItem {
     this.fromInputSentence = [...(init.fromInputSentence || [])];
     this.allTranslations = [...(init.allTranslations || [])];
     this.examples = [...(init.examples || [])];
+    this.uuid ||= uuidv4();
   }
 
   update(updatedItem: VocabItem): void {
@@ -80,6 +85,9 @@ export class VocabItem {
     ) => subset.every((value) => set.includes(value));
 
     return (
+      (!partial.uuid || this.uuid === partial.uuid) &&
+      (!partial.ankiGuid || this.ankiGuid === partial.ankiGuid) &&
+      (!partial.ankiIndex || this.ankiIndex === partial.ankiIndex) &&
       (!partial.hanzi || this.hanzi === partial.hanzi) &&
       (!partial.english || this.english === partial.english) &&
       (!partial.pinyin || this.pinyin === partial.pinyin) &&
@@ -117,6 +125,7 @@ export class VocabItem {
   }
 
   async autoFillEmptyFields(): Promise<void> {
+    this.uuid ||= uuidv4();
     this.english ||= await this.getTranslation(this.hanzi, Language.EN);
     this.pinyin ||= this.services.pinyinService.toPinyinString(this.hanzi);
     this.sound ||= ''; // TODO: Implement sound fetching

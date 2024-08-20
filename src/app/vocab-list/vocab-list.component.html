@@ -1,0 +1,16 @@
+<div
+  class="vocab-item-wrapper"
+  *ngFor="let vocabItem of vocabItems; let i = index"
+>
+  <div class="text-content">
+    <div class="hanzi">{{ vocabItem.hanzi }}</div>
+    <div class="english">{{ vocabItem.english }}</div>
+  </div>
+  <div class="button-content">
+    <button (click)="navigateToTranslator(vocabItem)" class="search-button">
+      🔍
+    </button>
+    <button (click)="deleteVocabItem(vocabItem)" class="delete-btn">🗑️</button>
+    <button (click)="editVocabItem(i)" class="edit-btn">✏️</button>
+  </div>
+</div>

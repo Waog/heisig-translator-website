@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 export class LabeledTextareaComponent {
   @Input() label!: string;
   @Input() text!: string | undefined;
+  @Input() rows = 2;
+  @Input() disabled = false;
   @Output() textChange = new EventEmitter<string>();
 
   onInputChange(): void {

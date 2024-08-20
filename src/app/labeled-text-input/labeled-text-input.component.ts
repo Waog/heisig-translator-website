@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 export class LabeledTextInputComponent {
   @Input() label!: string;
   @Input() text!: string | undefined;
+  @Input() disabled = false;
+  @Input() type = 'text';
   @Output() textChange = new EventEmitter<string>();
 
   onInputChange(): void {

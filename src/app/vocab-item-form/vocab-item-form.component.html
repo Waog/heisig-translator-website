@@ -1,184 +1,149 @@
 <div class="vocab-item-form">
-  <div class="header-content">
-    <div class="text-content">
-      <div class="hanzi">{{ vocabItem.hanzi }}</div>
-      <div class="english">{{ vocabItem.english }}</div>
-    </div>
-    <div class="button-content">
-      <div class="button-row">
-        <button (click)="navigateToTranslator()" class="search-button">
-          🔍
-        </button>
-        <button (click)="emitDelete()" class="delete-btn">❌</button>
-      </div>
-      <button (click)="toggleExpand()" class="toggle-btn">
-        {{ isExpanded ? "Collapse ▲" : "Expand ▼" }}
-      </button>
-    </div>
-  </div>
+  <app-form-field-text
+    label="uuid"
+    [(text)]="modifiedItem.uuid"
+    (textChange)="onInputChange(); save()"
+  />
 
-  <div *ngIf="isExpanded" class="expanded-content">
-    <app-labeled-text-input
-      label="Hanzi"
-      [(text)]="modifiedItem.hanzi"
-      (input)="onInputChange()"
+  <app-form-field-text
+    label="Anki GUID"
+    [(text)]="modifiedItem.ankiGuid"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-number
+    label="Anki Index"
+    [(number)]="modifiedItem.ankiIndex"
+    (numberChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="Hanzi"
+    [(text)]="modifiedItem.hanzi"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="English"
+    [(text)]="modifiedItem.english"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="Pinyin"
+    [(text)]="modifiedItem.pinyin"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="Sound"
+    [(text)]="modifiedItem.sound"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="Override TTS"
+    [(text)]="modifiedItem.overrideTTS"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="Heisig Keywords"
+    [(text)]="modifiedItem.heisigKeywords"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="Image"
+    [(text)]="modifiedItem.image"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="Skill"
+    [(text)]="modifiedItem.skill"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="Lesson"
+    [(text)]="modifiedItem.lesson"
+    (textChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-textarea
+    label="Notes"
+    [(text)]="modifiedItem.notes"
+    (textChange)="onInputChange(); save()"
+    [rows]="20"
+  />
+
+  <app-form-field-object
+    label="Segmentation"
+    [(object)]="modifiedItem.segmentation"
+    (objectChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-object
+    label="From Input Sentence"
+    [(object)]="modifiedItem.fromInputSentence"
+    (objectChange)="onInputChange(); save()"
+  />
+
+  <app-form-field-object
+    label="All Translations"
+    [(object)]="modifiedItem.allTranslations"
+    (objectChange)="onInputChange(); save()"
+  />
+
+  <!-- Flags -->
+  <label>
+    <input
+      type="checkbox"
+      [(ngModel)]="modifiedItem.importedFromAnki"
+      (change)="onInputChange()"
     />
+    Imported from Anki
+  </label>
 
-    <app-labeled-text-input
-      label="English"
-      [(text)]="modifiedItem.english"
-      (input)="onInputChange()"
+  <label>
+    <input
+      type="checkbox"
+      [(ngModel)]="modifiedItem.exportedToAnki"
+      (change)="onInputChange()"
     />
+    Exported to Anki
+  </label>
 
-    <app-labeled-text-input
-      label="Pinyin"
-      [(text)]="modifiedItem.pinyin"
-      (input)="onInputChange()"
+  <label>
+    <input
+      type="checkbox"
+      [(ngModel)]="modifiedItem.markedForAnkiExport"
+      (change)="onInputChange()"
     />
+    Marked for Anki Export
+  </label>
 
-    <app-labeled-text-input
-      label="Sound"
-      [(text)]="modifiedItem.sound"
-      (input)="onInputChange()"
+  <label>
+    <input
+      type="checkbox"
+      [(ngModel)]="modifiedItem.isSentence"
+      (change)="onInputChange()"
     />
+    Is Sentence
+  </label>
 
-    <app-labeled-text-input
-      label="Override TTS"
-      [(text)]="modifiedItem.overrideTTS"
-      (input)="onInputChange()"
+  <label>
+    <input
+      type="checkbox"
+      [(ngModel)]="modifiedItem.isWord"
+      (change)="onInputChange()"
     />
+    Is Word
+  </label>
 
-    <app-labeled-text-input
-      label="Heisig Keywords"
-      [(text)]="modifiedItem.heisigKeywords"
-      (input)="onInputChange()"
-    />
-
-    <app-labeled-text-input
-      label="Image"
-      [(text)]="modifiedItem.image"
-      (input)="onInputChange()"
-    />
-
-    <app-labeled-text-input
-      label="Skill"
-      [(text)]="modifiedItem.skill"
-      (input)="onInputChange()"
-    />
-
-    <app-labeled-text-input
-      label="Lesson"
-      [(text)]="modifiedItem.lesson"
-      (input)="onInputChange()"
-    />
-
-    <app-labeled-textarea
-      label="Notes"
-      [(text)]="modifiedItem.notes"
-      (input)="onInputChange()"
-    />
-
-    <!-- Arrays -->
-    <label for="fromInputSentence">Segmentation:</label>
-    <div
-      class="array-item"
-      *ngFor="let segment of modifiedItem.segmentation; let i = index"
-    >
-      <input
-        [(ngModel)]="modifiedItem.segmentation[i]"
-        (input)="onInputChange()"
-        type="text"
-      />
-      <button (click)="removeArrayItem('segmentation', i)">❌</button>
-    </div>
-    <button class="array-add-button" (click)="addArrayItem('segmentation')">
-      Add Segment
-    </button>
-
-    <label for="fromInputSentence">From Input Sentence:</label>
-    <div
-      class="array-item"
-      *ngFor="let sentence of modifiedItem.fromInputSentence; let i = index"
-    >
-      <input
-        [(ngModel)]="modifiedItem.fromInputSentence[i]"
-        (input)="onInputChange()"
-        type="text"
-      />
-      <button (click)="removeArrayItem('fromInputSentence', i)">❌</button>
-    </div>
-    <button
-      class="array-add-button"
-      (click)="addArrayItem('fromInputSentence')"
-    >
-      Add Sentence
-    </button>
-
-    <label for="allTranslations">All Translations:</label>
-    <div
-      class="array-item"
-      *ngFor="let translation of modifiedItem.allTranslations; let i = index"
-    >
-      <input
-        [(ngModel)]="modifiedItem.allTranslations[i]"
-        (input)="onInputChange()"
-        type="text"
-      />
-      <button (click)="removeArrayItem('allTranslations', i)">❌</button>
-    </div>
-    <button class="array-add-button" (click)="addArrayItem('allTranslations')">
-      Add Translation
-    </button>
-
-    <!-- Flags -->
-    <label>
-      <input
-        type="checkbox"
-        [(ngModel)]="modifiedItem.importedFromAnki"
-        (change)="onInputChange()"
-      />
-      Imported from Anki
-    </label>
-
-    <label>
-      <input
-        type="checkbox"
-        [(ngModel)]="modifiedItem.exportedToAnki"
-        (change)="onInputChange()"
-      />
-      Exported to Anki
-    </label>
-
-    <label>
-      <input
-        type="checkbox"
-        [(ngModel)]="modifiedItem.markedForAnkiExport"
-        (change)="onInputChange()"
-      />
-      Marked for Anki Export
-    </label>
-
-    <label>
-      <input
-        type="checkbox"
-        [(ngModel)]="modifiedItem.isSentence"
-        (change)="onInputChange()"
-      />
-      Is Sentence
-    </label>
-
-    <label>
-      <input
-        type="checkbox"
-        [(ngModel)]="modifiedItem.isWord"
-        (change)="onInputChange()"
-      />
-      Is Word
-    </label>
-
-    <button (click)="autoFill()">Auto-Fill</button>
-    <button class="primary" (click)="save()" [disabled]="!isModified">
-      Save
-    </button>
-  </div>
+  <button (click)="autoFill()">Auto-Fill</button>
+  <button class="primary" (click)="save()" [disabled]="!isModified">
+    Save
+  </button>
 </div>

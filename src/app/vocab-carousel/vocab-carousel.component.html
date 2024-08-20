@@ -1,0 +1,14 @@
+<div class="carousel-container">
+  <div class="carousel-header">
+    <button (click)="prevItem()" class="nav-button">◁</button>
+    <span class="index-display">{{ currentIndex + 1 }} / {{ totalItems }}</span>
+    <button (click)="nextItem()" class="nav-button">▷</button>
+    <button (click)="navigateToTranslator()" class="search-button">🔍</button>
+    <button (click)="deleteCurrentItem()" class="delete-button">🗑️</button>
+    <button (click)="closeCarousel()" class="close-button">❌</button>
+  </div>
+  <app-vocab-item-form
+    [vocabItem]="vocabItems[currentIndex]"
+    (delete)="deleteCurrentItem()"
+  ></app-vocab-item-form>
+</div>

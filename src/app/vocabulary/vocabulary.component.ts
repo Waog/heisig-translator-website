@@ -6,7 +6,8 @@ import { SearchFilterInputComponent } from '../search-filter-input/search-filter
 import { PinyinService } from '../shared/services/pinyin.service';
 import { VocabItem } from '../shared/services/vocab-item';
 import { VocabListService } from '../shared/services/vocab-list.service';
-import { VocabItemFormComponent } from '../vocab-item-form/vocab-item-form.component';
+import { VocabCarouselComponent } from '../vocab-carousel/vocab-carousel.component';
+import { VocabListComponent } from '../vocab-list/vocab-list.component';
 
 @Component({
   selector: 'app-vocabulary',
@@ -14,7 +15,8 @@ import { VocabItemFormComponent } from '../vocab-item-form/vocab-item-form.compo
   imports: [
     CommonModule,
     FormsModule,
-    VocabItemFormComponent,
+    VocabCarouselComponent,
+    VocabListComponent,
     SearchFilterInputComponent,
     ToggleButtonComponent,
   ],
@@ -23,6 +25,8 @@ import { VocabItemFormComponent } from '../vocab-item-form/vocab-item-form.compo
 })
 export class VocabularyComponent implements OnInit {
   vocabItems: VocabItem[] = [];
+  isCarouselVisible: boolean = false;
+  carouselIndex: number = 0; // Property to hold the index for the carousel
   searchFilterText: string = '';
   markedForExportFilter: string = 'to export: 🤷';
   exportedFilter: string = 'exported: 🤷';
@@ -138,5 +142,16 @@ export class VocabularyComponent implements OnInit {
   deleteVocabItem(item: VocabItem): void {
     this.vocabListService.removeVocabItem({ hanzi: item.hanzi });
     this.loadVocabItems();
+  }
+
+  showCarousel(index: number): void {
+    this.carouselIndex = index;
+    this.isCarouselVisible = true;
+    window.scrollTo({ top: 0 });
+  }
+
+  hideCarousel(): void {
+    this.isCarouselVisible = false;
+    window.scrollTo({ top: 0 });
   }
 }

@@ -2,32 +2,42 @@
   (textChange)="onSearchFilterTextChange($event)"
 ></app-search-filter-input>
 
-<app-toggle-button
-  [options]="['to export: 🤷', 'to export: ✔️', 'to export: ❌']"
-  [(selectedOption)]="markedForExportFilter"
-  (selectedOptionChange)="onToggleChange()"
-></app-toggle-button>
-<app-toggle-button
-  [options]="['exported: 🤷', 'exported: ✔️', 'exported: ❌']"
-  [(selectedOption)]="exportedFilter"
-  (selectedOptionChange)="onToggleChange()"
-></app-toggle-button>
-<app-toggle-button
-  [options]="['imported: 🤷', 'imported: ✔️', 'imported: ❌']"
-  [(selectedOption)]="importedFilter"
-  (selectedOptionChange)="onToggleChange()"
-></app-toggle-button>
-<app-toggle-button
-  [options]="['all', 'word', 'sentence']"
-  [(selectedOption)]="wordSentenceFilter"
-  (selectedOptionChange)="onToggleChange()"
-></app-toggle-button>
+<div class="filter-buttons">
+  <app-toggle-button
+    [options]="['to export: 🤷', 'to export: ✔️', 'to export: ❌']"
+    [(selectedOption)]="markedForExportFilter"
+    (selectedOptionChange)="onToggleChange()"
+  ></app-toggle-button>
+  <app-toggle-button
+    [options]="['exported: 🤷', 'exported: ✔️', 'exported: ❌']"
+    [(selectedOption)]="exportedFilter"
+    (selectedOptionChange)="onToggleChange()"
+  ></app-toggle-button>
+  <app-toggle-button
+    [options]="['imported: 🤷', 'imported: ✔️', 'imported: ❌']"
+    [(selectedOption)]="importedFilter"
+    (selectedOptionChange)="onToggleChange()"
+  ></app-toggle-button>
+  <app-toggle-button
+    [options]="['all', 'word', 'sentence']"
+    [(selectedOption)]="wordSentenceFilter"
+    (selectedOptionChange)="onToggleChange()"
+  ></app-toggle-button>
+</div>
 
-<div class="vocabulary-container">
-  <div class="vocab-item-wrapper" *ngFor="let vocabItem of vocabItems">
-    <app-vocab-item-form
-      [vocabItem]="vocabItem"
-      (delete)="deleteVocabItem(vocabItem)"
-    ></app-vocab-item-form>
-  </div>
+<div *ngIf="!isCarouselVisible">
+  <app-vocab-list
+    [vocabItems]="vocabItems"
+    (delete)="deleteVocabItem($event)"
+    (edit)="showCarousel($event)"
+  ></app-vocab-list>
+</div>
+
+<div *ngIf="isCarouselVisible">
+  <app-vocab-carousel
+    [vocabItems]="vocabItems"
+    [initialIndex]="carouselIndex"
+    (delete)="deleteVocabItem($event)"
+    (close)="hideCarousel()"
+  ></app-vocab-carousel>
 </div>
