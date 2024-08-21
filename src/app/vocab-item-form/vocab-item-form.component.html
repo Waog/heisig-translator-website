@@ -17,23 +17,50 @@
     (numberChange)="onInputChange(); save()"
   />
 
-  <app-form-field-textarea
-    label="Hanzi"
-    [(text)]="modifiedItem.hanzi"
-    (textChange)="onInputChange(); save()"
-  />
+  <div class="variant-container">
+    <a
+      class="variant-link"
+      *ngIf="modifiedItem.otherVariants.hanzi.length > 0"
+      (click)="onHanziVariantsClick()"
+    >
+      {{ modifiedItem.otherVariants.hanzi.length + 1 }} Variants 🗂️
+    </a>
+    <app-form-field-textarea
+      label="Hanzi"
+      [(text)]="modifiedItem.hanzi"
+      (textChange)="onInputChange(); save()"
+    />
+  </div>
 
-  <app-form-field-textarea
-    label="English"
-    [(text)]="modifiedItem.english"
-    (textChange)="onInputChange(); save()"
-  />
+  <div class="variant-container">
+    <a
+      class="variant-link"
+      *ngIf="modifiedItem.otherVariants.english.length > 0"
+      (click)="onEnglishVariantsClick()"
+    >
+      {{ modifiedItem.otherVariants.english.length + 1 }} Variants 🗂️
+    </a>
+    <app-form-field-textarea
+      label="English"
+      [(text)]="modifiedItem.english"
+      (textChange)="onInputChange(); save()"
+    />
+  </div>
 
-  <app-form-field-textarea
-    label="Pinyin"
-    [(text)]="modifiedItem.pinyin"
-    (textChange)="onInputChange(); save()"
-  />
+  <div class="variant-container">
+    <a
+      class="variant-link"
+      *ngIf="modifiedItem.otherVariants.pinyin.length > 0"
+      (click)="onPinyinVariantsClick()"
+    >
+      {{ modifiedItem.otherVariants.pinyin.length + 1 }} Variants 🗂️
+    </a>
+    <app-form-field-textarea
+      label="Pinyin"
+      [(text)]="modifiedItem.pinyin"
+      (textChange)="onInputChange(); save()"
+    />
+  </div>
 
   <app-form-field-textarea
     label="Sound"
@@ -84,11 +111,9 @@
     (objectChange)="onInputChange(); save()"
   />
 
-  <app-form-field-object
-    label="From Input Sentence"
-    [(object)]="modifiedItem.fromInputSentence"
-    (objectChange)="onInputChange(); save()"
-  />
+  <div *ngIf="modifiedItem.segmentIn.length > 0">
+    segmentIn: {{ modifiedItem.segmentIn | json }}
+  </div>
 
   <app-form-field-object
     label="All Translations"
@@ -127,18 +152,14 @@
   <label>
     <input
       type="checkbox"
-      [(ngModel)]="modifiedItem.isSentence"
-      (change)="onInputChange()"
+      disabled="true"
+      [checked]="modifiedItem.isSentence"
     />
     Is Sentence
   </label>
 
   <label>
-    <input
-      type="checkbox"
-      [(ngModel)]="modifiedItem.isWord"
-      (change)="onInputChange()"
-    />
+    <input type="checkbox" disabled="true" [checked]="modifiedItem.isWord" />
     Is Word
   </label>
 

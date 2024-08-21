@@ -37,6 +37,7 @@ import { VocabServiceCollectionService } from '../shared/services/vocab-service-
 export class VocabItemFormComponent implements OnChanges {
   @Input() vocabItem!: VocabItem;
   @Output() delete = new EventEmitter<void>();
+  @Output() filterChange = new EventEmitter<string>();
   modifiedItem!: VocabItem;
   isModified: boolean = false;
 
@@ -75,22 +76,31 @@ export class VocabItemFormComponent implements OnChanges {
     this.delete.emit();
   }
 
-  addArrayItem(
-    arrayName: 'segmentation' | 'fromInputSentence' | 'allTranslations'
-  ): void {
-    this.modifiedItem[arrayName].push('');
-    this.onInputChange();
-  }
-
-  removeArrayItem(
-    arrayName: 'segmentation' | 'fromInputSentence' | 'allTranslations',
-    index: number
-  ): void {
-    this.modifiedItem[arrayName].splice(index, 1);
-    this.onInputChange();
-  }
-
   private isEqual(item1: VocabItem, item2: VocabItem): boolean {
     return item1.matches(item2) && item2.matches(item1);
+  }
+
+  onHanziVariantsClick(): void {
+    this.filterChange.emit(
+      [this.modifiedItem.uuid, ...this.modifiedItem.otherVariants.hanzi].join(
+        ','
+      )
+    );
+  }
+
+  onEnglishVariantsClick(): void {
+    this.filterChange.emit(
+      [this.modifiedItem.uuid, ...this.modifiedItem.otherVariants.english].join(
+        ','
+      )
+    );
+  }
+
+  onPinyinVariantsClick(): void {
+    this.filterChange.emit(
+      [this.modifiedItem.uuid, ...this.modifiedItem.otherVariants.pinyin].join(
+        ','
+      )
+    );
   }
 }

@@ -1,28 +1,35 @@
 button {
+  position: relative;
   background: none;
   border: none;
   font-size: 1.5em;
   cursor: pointer;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 70px;
   padding: 0;
-  color: #b0bec5;
-}
-
-button:hover {
-  color: #e0e0e0;
-}
-
-.filled {
-  color: #d4af37;
-}
-
-button:hover .filled {
-  color: #e0c066;
+  line-height: 1;
 }
 
 button[disabled] {
   filter: grayscale(100%) contrast(0);
+}
+
+.plus,
+.count {
+  color: white;
+  font-weight: bold;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.plus {
+  position: absolute;
+  top: -0.3em;
+  right: 0;
+  font-size: 1em;
+}
+
+.count {
+  position: absolute;
+  bottom: -0.2em;
+  right: 0.4em;
+  font-size: 0.5em;
 }

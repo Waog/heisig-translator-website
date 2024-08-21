@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,5 +11,11 @@ export class SearchFilterUrlParamService {
   async getSearchFilterText(): Promise<string> {
     const params = await firstValueFrom(this.route.queryParams);
     return params['searchFilter'] || '';
+  }
+
+  getSearchFilterText$(): Observable<string> {
+    return this.route.queryParams.pipe(
+      map((params) => params['searchFilter'] || '')
+    );
   }
 }

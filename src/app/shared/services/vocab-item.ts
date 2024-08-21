@@ -8,6 +8,12 @@ export type VocabItemInitializer = {
   hanzi: string;
 } & Partial<VocabItem>;
 
+export interface OtherVariants {
+  hanzi: string[];
+  english: string[];
+  pinyin: string[];
+}
+
 export class VocabItem {
   uuid: string;
   ankiGuid?: string;
@@ -23,15 +29,58 @@ export class VocabItem {
   lesson?: string;
   notes?: string;
   segmentation: string[] = [];
-  fromInputSentence: string[] = [];
   allTranslations: string[] = [];
   examples: ExampleSentence[] = [];
+  itemCreationDate: Date;
   lastChange?: Date;
   importedFromAnki: boolean = false;
   exportedToAnki: boolean = false;
   markedForAnkiExport: boolean = false;
-  isSentence: boolean = false;
-  isWord: boolean = false;
+
+  get segmentIn(): string[] {
+    return this.services.vocabListService
+      .getAllVocabItems()
+      .filter(
+        (vocabItem: VocabItem) =>
+          vocabItem.hanzi.includes(this.hanzi) && vocabItem.hanzi !== this.hanzi
+      )
+      .map((vocabItem: VocabItem) => vocabItem.hanzi);
+  }
+
+  get isSentence(): boolean {
+    return this.segmentation.length > 1;
+  }
+
+  get isWord(): boolean {
+    return this.segmentation.length <= 1;
+  }
+
+  get otherVariants(): OtherVariants {
+    const result: OtherVariants = { hanzi: [], english: [], pinyin: [] };
+    for (const vocabItem of this.services.vocabListService.getAllVocabItems()) {
+      if (vocabItem.uuid === this.uuid) {
+        continue;
+      }
+      if (vocabItem.hanzi === this.hanzi) {
+        result.hanzi.push(vocabItem.uuid);
+      }
+      if (
+        this.english &&
+        vocabItem.english &&
+        vocabItem.english === this.english
+      ) {
+        result.english.push(vocabItem.uuid);
+      }
+      if (
+        this.pinyin &&
+        vocabItem.pinyin &&
+        vocabItem.pinyin.replace(' ', '') === this.pinyin.replace(' ', '')
+      ) {
+        result.pinyin.push(vocabItem.uuid);
+      }
+    }
+    return result;
+  }
 
   constructor(
     init: VocabItemInitializer,
@@ -40,10 +89,20 @@ export class VocabItem {
     this.hanzi = init.hanzi;
     Object.assign(this, init);
     this.segmentation = [...(init.segmentation || [])];
-    this.fromInputSentence = [...(init.fromInputSentence || [])];
     this.allTranslations = [...(init.allTranslations || [])];
     this.examples = [...(init.examples || [])];
     this.uuid ||= uuidv4();
+    this.itemCreationDate = init.itemCreationDate
+      ? new Date(init.itemCreationDate)
+      : new Date();
+    this.lastChange = init.lastChange ? new Date(init.lastChange) : new Date();
+    this.cleanup();
+  }
+
+  private cleanup() {
+    this.hanzi = this.hanzi.replace(' ', '').trim();
+    this.english = this.english?.trim();
+    this.pinyin = this.pinyin?.toLocaleLowerCase().trim();
   }
 
   update(updatedItem: VocabItem): void {
@@ -53,11 +112,6 @@ export class VocabItem {
 
   addTranslation(translation: string): void {
     this.allTranslations.push(translation);
-    this.updateLastChange();
-  }
-
-  addFromInputSentence(sentence: string): void {
-    this.fromInputSentence.push(sentence);
     this.updateLastChange();
   }
 
@@ -107,8 +161,6 @@ export class VocabItem {
         this.markedForAnkiExport === partial.markedForAnkiExport) &&
       (!partial.segmentation ||
         isSubset(partial.segmentation, this.segmentation)) &&
-      (!partial.fromInputSentence ||
-        isSubset(partial.fromInputSentence, this.fromInputSentence)) &&
       (!partial.allTranslations ||
         isSubset(partial.allTranslations, this.allTranslations)) &&
       (!partial.examples || isExampleSubset(partial.examples, this.examples)) &&
@@ -181,15 +233,6 @@ export class VocabItem {
   }
 
   private async getAutoFillNotes(): Promise<string> {
-    if (this.isSentence) {
-      return await this.getAutoFillSentenceNotes();
-    } else if (this.isWord) {
-      return await this.getAutoFillWordNotes();
-    }
-    return 'Neither Word nor Sentence! What is this?';
-  }
-
-  private async getAutoFillSentenceNotes(): Promise<string> {
     let result = '';
 
     const segmentedWords =
@@ -206,15 +249,7 @@ export class VocabItem {
       result += '</ul>\n';
       result += '<!-- end segments -->\n';
       result += '\n';
-    } else {
-      result += await this.getAutoFillWordNotes();
     }
-
-    return result;
-  }
-
-  private async getAutoFillWordNotes(): Promise<string> {
-    let result = '';
 
     if (this.allTranslations.length > 0) {
       result += '<!-- begin translations -->\n';
@@ -240,15 +275,15 @@ export class VocabItem {
       result += '\n';
     }
 
-    if (this.fromInputSentence.length > 0) {
-      result += '<!-- begin fromInputSentence -->\n';
-      result += '<h2>First found in:</h2>\n';
+    if (this.segmentIn.length > 0) {
+      result += '<!-- begin segmentIn -->\n';
+      result += '<h2>Occurs in other cards:</h2>\n';
       result += '<ul>\n';
-      for (const fromInputSentence of this.fromInputSentence) {
-        result += `  <li>${await this.toNoteEntry(fromInputSentence)}</li>\n`;
+      for (const segmentIn of this.segmentIn) {
+        result += `  <li>${await this.toNoteEntry(segmentIn)}</li>\n`;
       }
       result += '</ul>\n';
-      result += '<!-- end fromInputSentence -->\n';
+      result += '<!-- end segmentIn -->\n';
       result += '\n';
     }
 
@@ -263,10 +298,12 @@ export class VocabItem {
 
   toAnkiCard(): AnkiCard {
     return {
-      hanzi: this.hanzi,
-      english: this.english ?? '',
-      pinyin: this.pinyin ?? '',
-      sound: this.sound ?? '',
+      hanzi: this.hanzi + this.getVariantsAside('hanzi'),
+      english: this.english
+        ? this.english + this.getVariantsAside('english')
+        : '',
+      pinyin: this.pinyin ? this.pinyin + this.getVariantsAside('pinyin') : '',
+      sound: this.sound ? this.sound + this.getVariantsAside('pinyin') : '',
       overrideTTS: this.overrideTTS ?? '',
       heisigKeywords: this.heisigKeywords ?? '',
       image: this.image ?? '',
@@ -276,7 +313,35 @@ export class VocabItem {
     };
   }
 
+  getVariantsAside(property: 'hanzi' | 'english' | 'pinyin'): string {
+    if (this.otherVariants[property].length === 0) {
+      return '';
+    }
+    const allVariants: VocabItem[] = [
+      this,
+      ...this.otherVariants[property].map(
+        (uuid) => this.services.vocabListService.getVocabItem({ uuid })!
+      ),
+    ];
+    const orderedVariants = allVariants.sort((a, b) => {
+      const diffAnkiIndex =
+        ((a.ankiIndex as number) + 1 || Number.MAX_SAFE_INTEGER) -
+        ((b.ankiIndex as number) + 1 || Number.MAX_SAFE_INTEGER);
+      const diffCreationDate =
+        a.itemCreationDate.getTime() - b.itemCreationDate.getTime();
+      const diffUuid = a.uuid.localeCompare(b.uuid);
+      return diffAnkiIndex || diffCreationDate || diffUuid;
+    });
+    const variantIndex = orderedVariants.indexOf(this);
+    return `\n<aside>(${variantIndex + 1}/${orderedVariants.length})</aside>`;
+  }
+
   toSerializable(): VocabItem {
-    return { ...this, services: undefined };
+    return {
+      ...this,
+      itemCreationDate: this.itemCreationDate.toISOString(),
+      lastChange: this.lastChange?.toISOString(),
+      services: undefined,
+    };
   }
 }

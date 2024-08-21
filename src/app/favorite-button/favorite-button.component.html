@@ -1,5 +1,17 @@
-<button (click)="toggleFavorite()" [disabled]="disabled">
-  <span [ngClass]="{ filled: isVocabItem }">{{
-    isVocabItem ? (vocabItemHasSameFromInput ? "❤️" : "💗") : "🤍"
+<button *ngIf="allowMultiple" (click)="addFavorite()" [disabled]="disabled">
+  <span class="heart" [ngClass]="{ filled: vocabItems.length > 0 }">{{
+    vocabItems.length > 0 ? "❤️" : "🤍"
+  }}</span>
+  <span class="plus" *ngIf="vocabItems.length > 0">+</span>
+  <span class="count" *ngIf="vocabItems.length > 1">{{
+    vocabItems.length
+  }}</span>
+</button>
+<button *ngIf="!allowMultiple" (click)="toggleFavorite()" [disabled]="disabled">
+  <span class="heart" [ngClass]="{ filled: vocabItems.length > 0 }">{{
+    vocabItems.length > 0 ? "❤️" : "🤍"
+  }}</span>
+  <span class="count" *ngIf="vocabItems.length > 1">{{
+    vocabItems.length
   }}</span>
 </button>

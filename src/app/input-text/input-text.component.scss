@@ -67,6 +67,7 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #e0e0e0 !important;
 }
 
+app-favorite-button,
 button {
   position: absolute;
   top: 50%;
@@ -81,6 +82,10 @@ button {
 
 button:hover {
   color: #e0e0e0;
+}
+
+app-favorite-button {
+  right: 70px;
 }
 
 .paste-button {

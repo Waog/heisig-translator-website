@@ -62,4 +62,16 @@
     width: 10%;
     background-color: transparent;
   }
+
+  .variant-link {
+    display: block;
+    font-size: 0.7em;
+    cursor: pointer;
+    text-align: right;
+    margin-right: 4em;
+    color: lightseagreen;
+    margin-bottom: -1.2em;
+    z-index: 2;
+    position: relative;
+  }
 }

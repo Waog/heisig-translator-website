@@ -26,7 +26,7 @@ import { VocabListComponent } from '../vocab-list/vocab-list.component';
 export class VocabularyComponent implements OnInit {
   vocabItems: VocabItem[] = [];
   isCarouselVisible: boolean = false;
-  carouselIndex: number = 0; // Property to hold the index for the carousel
+  carouselIndex: number = 0;
   searchFilterText: string = '';
   markedForExportFilter: string = 'to export: 🤷';
   exportedFilter: string = 'exported: 🤷';
@@ -54,89 +54,89 @@ export class VocabularyComponent implements OnInit {
   loadVocabItems(): void {
     this.vocabItems = this.vocabListService
       .getAllVocabItems()
-      .filter((item) => {
-        // filter by search filter input, consider spaces as AND
-        let hanziMatches = true;
-        let englishMatches = true;
-        let pinyinMatches = true;
-        let heisigMatches = true;
-        for (const searchFilterTextSegment of this.searchFilterText.split(
-          ' '
-        )) {
-          hanziMatches &&= item.hanzi.includes(searchFilterTextSegment);
-          englishMatches &&=
-            item.english
-              ?.toLocaleLowerCase()
-              .includes(searchFilterTextSegment.toLocaleLowerCase()) ?? false;
-          pinyinMatches &&= this.pinyinService
-            .pinyinToPinyinWithoutTones(item.pinyin || '')
-            .replace(' ', '')
-            .includes(searchFilterTextSegment.replace(' ', ''));
-          heisigMatches &&=
-            item.heisigKeywords?.includes(searchFilterTextSegment) ?? false;
-        }
-        return hanziMatches || englishMatches || pinyinMatches || heisigMatches;
-      })
-      .filter((item) => {
-        return (
-          (this.markedForExportFilter.includes('✔️') &&
-            item.markedForAnkiExport) ||
-          (this.markedForExportFilter.includes('❌') &&
-            !item.markedForAnkiExport) ||
-          this.markedForExportFilter.includes('🤷')
-        );
-      })
-      .filter((item) => {
-        return (
-          (this.exportedFilter.includes('✔️') && item.exportedToAnki) ||
-          (this.exportedFilter.includes('❌') && !item.exportedToAnki) ||
-          this.exportedFilter.includes('🤷')
-        );
-      })
-      .filter((item) => {
-        return (
-          (this.importedFilter.includes('✔️') && item.importedFromAnki) ||
-          (this.importedFilter.includes('❌') && !item.importedFromAnki) ||
-          this.importedFilter.includes('🤷')
-        );
-      })
-      .filter((item) => {
-        console.log(this.wordSentenceFilter);
-        return (
-          (this.wordSentenceFilter.includes('word') && item.isWord) ||
-          (this.wordSentenceFilter.includes('sentence') && item.isSentence) ||
-          this.wordSentenceFilter.includes('all')
-        );
-      })
-      .sort((vocabItemA, vocabItemB) => {
-        // sort by: full text matches of any field with the full text of this.searchFilterText first, rest second
+      .filter((item) => this.filterBySearchText(item))
+      .filter((item) => this.filterByExportStatus(item))
+      .filter((item) => this.filterByImportStatus(item))
+      .filter((item) => this.filterByWordSentence(item))
+      .sort((a, b) => this.sortVocabItems(a, b));
+    if (this.vocabItems.length === 0) {
+      this.hideCarousel();
+    }
+  }
 
-        const searchFilterText = this.searchFilterText.trim().toLowerCase();
+  filterBySearchText(item: VocabItem): boolean {
+    const orSegments = this.searchFilterText.split(',');
 
-        // Helper function to check if any field fully matches the search text
-        const fullTextMatch = (item: VocabItem): boolean => {
-          return (
-            item.hanzi === searchFilterText ||
-            item.english?.toLowerCase() === searchFilterText ||
-            this.pinyinService
-              .pinyinToPinyinWithoutTones(item.pinyin || '')
-              .replace(' ', '') === searchFilterText ||
-            item.heisigKeywords?.toLowerCase() === searchFilterText
-          );
-        };
+    return orSegments.some((orSegment) =>
+      this.matchesAnyField(item, orSegment)
+    );
+  }
 
-        const itemAFullMatch = fullTextMatch(vocabItemA);
-        const itemBFullMatch = fullTextMatch(vocabItemB);
+  filterByExportStatus(item: VocabItem): boolean {
+    return (
+      (this.markedForExportFilter.includes('✔️') && item.markedForAnkiExport) ||
+      (this.markedForExportFilter.includes('❌') &&
+        !item.markedForAnkiExport) ||
+      this.markedForExportFilter.includes('🤷')
+    );
+  }
 
-        if (itemAFullMatch && !itemBFullMatch) {
-          return -1; // vocabItemA comes first
-        } else if (!itemAFullMatch && itemBFullMatch) {
-          return 1; // vocabItemB comes first
-        }
+  filterByImportStatus(item: VocabItem): boolean {
+    return (
+      (this.importedFilter.includes('✔️') && item.importedFromAnki) ||
+      (this.importedFilter.includes('❌') && !item.importedFromAnki) ||
+      this.importedFilter.includes('🤷')
+    );
+  }
 
-        // If neither or both fully match, sort alphabetically by hanzi as a fallback
-        return vocabItemA.hanzi.localeCompare(vocabItemB.hanzi);
-      });
+  filterByWordSentence(item: VocabItem): boolean {
+    return (
+      (this.wordSentenceFilter.includes('word') && item.isWord) ||
+      (this.wordSentenceFilter.includes('sentence') && item.isSentence) ||
+      this.wordSentenceFilter.includes('all')
+    );
+  }
+
+  matchesAnyField(item: VocabItem, segment: string): boolean {
+    return (
+      item.uuid.includes(segment) ||
+      item.hanzi.includes(segment) ||
+      (item.english
+        ?.toLocaleLowerCase()
+        .includes(segment.toLocaleLowerCase()) ??
+        false) ||
+      this.pinyinService
+        .pinyinToPinyinWithoutTones(item.pinyin || '')
+        .replace(' ', '')
+        .includes(segment.replace(' ', '')) ||
+      (item.heisigKeywords?.includes(segment) ?? false)
+    );
+  }
+
+  sortVocabItems(vocabItemA: VocabItem, vocabItemB: VocabItem): number {
+    const searchFilterText = this.searchFilterText.trim().toLowerCase();
+    const itemAFullMatch = this.isFullTextMatch(vocabItemA, searchFilterText);
+    const itemBFullMatch = this.isFullTextMatch(vocabItemB, searchFilterText);
+
+    if (itemAFullMatch && !itemBFullMatch) {
+      return -1;
+    } else if (!itemAFullMatch && itemBFullMatch) {
+      return 1;
+    }
+
+    return vocabItemA.hanzi.localeCompare(vocabItemB.hanzi);
+  }
+
+  isFullTextMatch(item: VocabItem, searchText: string): boolean {
+    return (
+      item.uuid === searchText ||
+      item.hanzi === searchText ||
+      item.english?.toLowerCase() === searchText ||
+      this.pinyinService
+        .pinyinToPinyinWithoutTones(item.pinyin || '')
+        .replace(' ', '') === searchText.replace(' ', '') ||
+      item.heisigKeywords?.toLowerCase() === searchText.toLowerCase()
+    );
   }
 
   deleteVocabItem(item: VocabItem): void {

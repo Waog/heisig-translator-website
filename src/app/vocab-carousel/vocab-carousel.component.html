@@ -10,5 +10,6 @@
   <app-vocab-item-form
     [vocabItem]="vocabItems[currentIndex]"
     (delete)="deleteCurrentItem()"
+    (filterChange)="onFilterChange($event)"
   ></app-vocab-item-form>
 </div>

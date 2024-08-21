@@ -36,6 +36,12 @@ export class VocabCarouselComponent implements OnChanges {
     ) {
       this.currentIndex = changes['initialIndex'].currentValue;
     }
+    if (this.currentIndex >= this.totalItems) {
+      this.currentIndex = this.totalItems - 1;
+    }
+    if (this.currentIndex < 0) {
+      this.currentIndex = 0;
+    }
   }
 
   get totalItems(): number {
@@ -67,5 +73,12 @@ export class VocabCarouselComponent implements OnChanges {
     this.router.navigate(['/translator'], {
       queryParams: { input: this.vocabItems[this.currentIndex].hanzi },
     });
+  }
+
+  onFilterChange(newFilter: string): void {
+    this.router.navigate(['/vocabulary'], {
+      queryParams: { searchFilter: newFilter },
+    });
+    this.closeCarousel();
   }
 }

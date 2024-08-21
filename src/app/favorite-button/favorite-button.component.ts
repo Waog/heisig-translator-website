@@ -3,9 +3,12 @@ import {
   Component,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { VocabItem } from '../shared/services/vocab-item';
 import { VocabListService } from '../shared/services/vocab-list.service';
 
 @Component({
@@ -15,20 +18,28 @@ import { VocabListService } from '../shared/services/vocab-list.service';
   templateUrl: './favorite-button.component.html',
   styleUrls: ['./favorite-button.component.scss'],
 })
-export class FavoriteButtonComponent implements OnInit, OnChanges {
+export class FavoriteButtonComponent implements OnInit, OnChanges, OnDestroy {
   @Input() hanziString: string = '';
   @Input() type: 'word' | 'sentence' = 'sentence';
   @Input() context?: string;
   @Input() customSegmentation?: string = '';
+  @Input() allowMultiple: boolean = false;
 
-  isVocabItem: boolean = false;
-  vocabItemHasSameFromInput: boolean = false;
+  vocabItems: VocabItem[] = [];
   disabled: boolean = false;
+  subscription!: Subscription;
 
   constructor(private vocabListService: VocabListService) {}
 
   ngOnInit(): void {
     this.loadFavoriteStatus();
+    this.subscription = this.vocabListService.onChange$.subscribe(() =>
+      this.loadFavoriteStatus()
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -43,88 +54,30 @@ export class FavoriteButtonComponent implements OnInit, OnChanges {
   loadFavoriteStatus(): void {
     if (!this.hanziString) {
       this.disabled = true;
+      this.vocabItems = [];
     } else {
       this.disabled = false;
-    }
-    if (this.type === 'sentence') {
-      this.isVocabItem = this.vocabListService.isVocabItem({
+      this.vocabItems = this.vocabListService.getVocabItems({
         hanzi: this.hanziString,
-        isSentence: true,
       });
-      this.vocabItemHasSameFromInput = true;
-    } else {
-      this.isVocabItem = this.vocabListService.isVocabItem({
-        hanzi: this.hanziString,
-        isWord: true,
-      });
-      this.vocabItemHasSameFromInput =
-        this.vocabListService
-          .getVocabItem({
-            hanzi: this.hanziString,
-            isWord: true,
-          })
-          ?.fromInputSentence.includes(this.context!) ?? false;
     }
   }
 
   async toggleFavorite(): Promise<void> {
-    if (this.isVocabItem && this.vocabItemHasSameFromInput) {
-      if (this.type === 'sentence') {
-        this.vocabListService.removeVocabItem({
-          hanzi: this.hanziString,
-          isSentence: true,
-        });
-        this.isVocabItem = false;
-        this.vocabItemHasSameFromInput = false;
-      } else {
-        const vocabItem = this.vocabListService.removeFromInputSentence(
-          { hanzi: this.hanziString, isWord: true },
-          this.context!
-        );
-        this.vocabItemHasSameFromInput = false;
-        if (vocabItem?.fromInputSentence.length === 0) {
-          this.vocabListService.removeVocabItem({
-            hanzi: this.hanziString,
-            isWord: true,
-          });
-          this.isVocabItem = false;
-        }
-      }
-    } else if (this.isVocabItem && !this.vocabItemHasSameFromInput) {
-      if (this.type === 'sentence') {
-        this.vocabItemHasSameFromInput = true;
-      } else {
-        const item = this.vocabListService.getVocabItem({
-          hanzi: this.hanziString,
-          isWord: true,
-        });
-        item?.addFromInputSentence(this.context!);
-        item?.markForAnkiExport();
-        this.vocabListService.saveVocabItems();
-        this.vocabItemHasSameFromInput = true;
-      }
+    if (this.vocabItems.length > 0) {
+      this.vocabListService.removeVocabItem({ hanzi: this.hanziString });
     } else {
-      if (this.type === 'sentence') {
-        await this.vocabListService.createAndFillVocabItem({
-          hanzi: this.hanziString,
-          isSentence: true,
-          markedForAnkiExport: true,
-          segmentation: this.customSegmentation
-            ? this.customSegmentation.split('.')
-            : undefined,
-        });
-        this.isVocabItem = true;
-        this.vocabItemHasSameFromInput = true;
-      } else {
-        await this.vocabListService.createAndFillVocabItem({
-          hanzi: this.hanziString,
-          isWord: true,
-          fromInputSentence: [this.context!],
-          markedForAnkiExport: true,
-        });
-        this.isVocabItem = true;
-        this.vocabItemHasSameFromInput = true;
-      }
+      await this.addFavorite();
     }
+  }
+
+  async addFavorite(): Promise<void> {
+    await this.vocabListService.createAndFillVocabItem({
+      hanzi: this.hanziString,
+      markedForAnkiExport: true,
+      segmentation: this.customSegmentation
+        ? this.customSegmentation.split('.')
+        : undefined,
+    });
   }
 }

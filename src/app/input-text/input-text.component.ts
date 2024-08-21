@@ -1,6 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { FavoriteButtonComponent } from '../favorite-button/favorite-button.component';
 import { InputUrlParamService } from './input-url-param.service';
 
@@ -11,22 +19,29 @@ import { InputUrlParamService } from './input-url-param.service';
   templateUrl: './input-text.component.html',
   styleUrls: ['./input-text.component.scss'],
 })
-export class InputTextComponent implements OnInit {
+export class InputTextComponent implements OnInit, OnDestroy {
   @Input() customSegmentation: string = '';
   @Output() userInputChange = new EventEmitter<string>();
   userInput: string = '';
+  subscription!: Subscription;
 
   constructor(private urlParamService: InputUrlParamService) {}
 
   ngOnInit(): void {
-    this.urlParamService.getFilteredInput().subscribe((input) => {
-      this.userInput = input;
-      this.onUserInputChange();
-    });
+    this.subscription = this.urlParamService
+      .getFilteredInput()
+      .subscribe((input) => {
+        this.userInput = input.trim();
+        this.onUserInputChange();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   onUserInputChange(): void {
-    this.userInputChange.emit(this.userInput);
+    this.userInputChange.emit(this.userInput.trim());
   }
 
   resetInput(): void {

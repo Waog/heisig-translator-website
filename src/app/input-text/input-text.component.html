@@ -8,7 +8,7 @@
       (input)="onUserInputChange()"
     />
     <app-favorite-button
-      [hanziString]="userInput"
+      [hanziString]="userInput.trim()"
       [type]="'sentence'"
       [customSegmentation]="customSegmentation"
     ></app-favorite-button>

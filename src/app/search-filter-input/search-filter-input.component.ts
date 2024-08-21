@@ -31,6 +31,10 @@ export class SearchFilterInputComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.text = await this.urlParamService.getSearchFilterText();
+    this.urlParamService.getSearchFilterText$().subscribe((text) => {
+      this.text = text;
+      this.textChange.emit(this.text);
+    });
     this.textChange.emit(this.text);
   }
 
