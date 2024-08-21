@@ -29,6 +29,7 @@ export class TranslatorComponent {
 
   onUserInputChange(newInput: string): void {
     this.userInput = newInput;
+    this.customSegmentation = '';
     this.selectedWord = '';
   }
 
