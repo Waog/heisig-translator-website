@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { AnkiCard } from './anki-export.service';
+import { AnkiCard } from './anki-card';
 import { ExampleSentence } from './example-sentences.service';
 import { Language } from './translation.service';
 import { VocabServiceCollectionService } from './vocab-service-collection.service';
@@ -33,6 +33,7 @@ export class VocabItem {
   examples: ExampleSentence[] = [];
   itemCreationDate: Date;
   lastChange?: Date;
+  lastUpdateFromAnki?: Date;
   importedFromAnki: boolean = false;
   exportedToAnki: boolean = false;
   markedForAnkiExport: boolean = false;
@@ -95,6 +96,9 @@ export class VocabItem {
     this.itemCreationDate = init.itemCreationDate
       ? new Date(init.itemCreationDate)
       : new Date();
+    this.lastUpdateFromAnki = init.lastUpdateFromAnki
+      ? new Date(init.lastUpdateFromAnki)
+      : undefined;
     this.lastChange = init.lastChange ? new Date(init.lastChange) : new Date();
     this.cleanup();
   }
@@ -103,6 +107,15 @@ export class VocabItem {
     this.hanzi = this.hanzi.replace(' ', '').trim();
     this.english = this.english?.trim();
     this.pinyin = this.pinyin?.toLocaleLowerCase().trim();
+    this.notes = this.removeAutoNotes(this.notes || '');
+  }
+
+  public static ankiHanziToVocabHanzi(hanzi: string): string {
+    return VocabItem.removeAsideTags(hanzi).replaceAll(' ', '')?.trim();
+  }
+
+  private static removeAsideTags(input: string): string {
+    return input.replace(/<aside>[\s\S]*?<\/aside>/g, '').trim();
   }
 
   update(updatedItem: VocabItem): void {
@@ -181,6 +194,7 @@ export class VocabItem {
     this.english ||= await this.getTranslation(this.hanzi, Language.EN);
     this.pinyin ||= this.services.pinyinService.toPinyinString(this.hanzi);
     this.sound ||= ''; // TODO: Implement sound fetching
+    this.overrideTTS ||= ''; // TODO: Implement sound fetching
     this.heisigKeywords ||=
       await this.services.heisigService.getHeisigSentenceEn(
         this.hanzi,
@@ -205,7 +219,7 @@ export class VocabItem {
             this.hanzi
           );
 
-    this.notes ||= await this.getAutoFillNotes();
+    this.notes ||= '';
 
     this.updateLastChange();
   }
@@ -233,7 +247,7 @@ export class VocabItem {
   }
 
   private async getAutoFillNotes(): Promise<string> {
-    let result = '';
+    let result = '\n<!-- begin auto-notes -->\n';
 
     const segmentedWords =
       this.segmentation.length > 0
@@ -287,6 +301,8 @@ export class VocabItem {
       result += '\n';
     }
 
+    result += '<!-- end auto-notes -->\n';
+
     return result;
   }
 
@@ -296,8 +312,10 @@ export class VocabItem {
     )})</i> ${await this.getTranslation(hanziSentence, Language.EN)}`;
   }
 
-  toAnkiCard(): AnkiCard {
+  async toAnkiCard(): Promise<AnkiCard> {
     return {
+      guid: this.ankiGuid,
+      index: this.ankiIndex,
       hanzi: this.hanzi + this.getVariantsAside('hanzi'),
       english: this.english
         ? this.english + this.getVariantsAside('english')
@@ -309,8 +327,65 @@ export class VocabItem {
       image: this.image ?? '',
       skill: this.skill ?? '',
       lesson: this.lesson ?? '',
-      notes: this.notes ?? '',
+      notes: this.notes + (await this.getAutoFillNotes()),
     };
+  }
+
+  isCausingChange(card: AnkiCard): boolean {
+    if (this.ankiGuid && this.ankiGuid !== card.guid) {
+      // NOTE: changing GUID is a problem. setting it initially is fine
+      return true;
+    }
+    const cloneCard = this.clone().updateFromAnkiCard(card);
+    // NOTE: which are solely determined by anki card don't count as changes
+    cloneCard.ankiGuid = this.ankiGuid;
+    cloneCard.ankiIndex = this.ankiIndex;
+    cloneCard.lastUpdateFromAnki = this.lastUpdateFromAnki;
+    cloneCard.lastChange = this.lastChange;
+    cloneCard.importedFromAnki = this.importedFromAnki;
+    return !cloneCard.equals(this);
+  }
+
+  updateFromAnkiCard(card: AnkiCard): VocabItem {
+    this.ankiGuid = card.guid?.trim();
+    this.ankiIndex = card.index;
+    this.hanzi = VocabItem.ankiHanziToVocabHanzi(card.hanzi);
+    this.english = VocabItem.removeAsideTags(card.english);
+    this.pinyin = VocabItem.removeAsideTags(this.removeToneMarkup(card.pinyin));
+    this.sound = VocabItem.removeAsideTags(card.sound);
+    this.overrideTTS = card.overrideTTS?.trim();
+    this.heisigKeywords = card.heisigKeywords?.trim();
+    this.image = card.image?.trim();
+    this.skill = card.skill?.trim();
+    this.lesson = card.lesson?.trim();
+    this.notes = this.removeAutoNotes(card.notes);
+    this.importedFromAnki = true;
+    this.cleanup();
+    this.lastUpdateFromAnki = new Date();
+    this.updateLastChange();
+    return this;
+  }
+
+  removeAutoNotes(notes: string): string {
+    return notes
+      .replace(
+        /<!--\s*begin\s*(?<tag>\w+)\s*-->([\s\S]*?)<!--\s*end\s*\k<tag>\s*-->/g,
+        ''
+      )
+      .trim();
+  }
+
+  removeToneMarkup(pinyin: string): string {
+    // Remove all HTML comments
+    let result = pinyin.replace(/<!--[\s\S]*?-->/g, '');
+
+    // Remove all spans with classes that start with "tone" and keep their content
+    result = result.replace(/<span class="tone\d+">(.*?)<\/span>/g, '$1');
+
+    // Trim any extra whitespace
+    result = result.trim();
+
+    return result;
   }
 
   getVariantsAside(property: 'hanzi' | 'english' | 'pinyin'): string {
@@ -341,7 +416,19 @@ export class VocabItem {
       ...this,
       itemCreationDate: this.itemCreationDate.toISOString(),
       lastChange: this.lastChange?.toISOString(),
+      lastUpdateFromAnki: this.lastUpdateFromAnki?.toISOString(),
       services: undefined,
     };
+  }
+
+  clone(): VocabItem {
+    return new VocabItem(this, this.services);
+  }
+
+  equals(other: VocabItem): boolean {
+    return (
+      JSON.stringify(this.toSerializable()) ===
+      JSON.stringify(other.toSerializable())
+    );
   }
 }

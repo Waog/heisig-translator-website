@@ -15,4 +15,18 @@ describe('Navigation', () => {
     cy.url().should('include', '/vocabulary');
     cy.contains('Find Vocab');
   });
+
+  it('should navigate to Anki Import and Export using the navigation', () => {
+    cy.visit('/');
+    cy.contains('Anki').click();
+    cy.url().should('include', '/anki');
+
+    cy.contains('Import').click();
+    cy.url().should('include', '/anki/import');
+    cy.contains('Anki Flashcards Import');
+
+    cy.contains('Export').click();
+    cy.url().should('include', '/anki/export');
+    cy.contains('Anki Flashcards Export');
+  });
 });

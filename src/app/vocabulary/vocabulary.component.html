@@ -23,6 +23,7 @@
     [(selectedOption)]="wordSentenceFilter"
     (selectedOptionChange)="onToggleChange()"
   ></app-toggle-button>
+  <span class="item-count">#{{ vocabItems.length }}</span>
 </div>
 
 <div *ngIf="!isCarouselVisible">

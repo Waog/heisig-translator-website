@@ -27,6 +27,7 @@ export class FormFieldTextareaComponent implements OnChanges {
   @Input() label!: string;
   @Input() text!: string | undefined;
   @Input() rows = 3;
+  @Input() readonly = false;
   @Output() textChange = new EventEmitter<string>();
 
   currentText: string = '';

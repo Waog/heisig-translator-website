@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  width: 100%;
+  color: #e0e0e0;
+  border-radius: 8px;
+
+  label {
+    font-weight: bold;
+    color: #80cbc4;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+
+  span {
+    display: inline-block;
+    margin-left: 10px;
+    color: #e0e0e0;
+  }
+
+  app-form-field-textarea {
+    margin-bottom: 0.4em;
+    display: block;
+  }
+}

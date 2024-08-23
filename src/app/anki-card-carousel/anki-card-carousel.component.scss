@@ -1,0 +1,75 @@
+.carousel-container {
+  background-color: #2e2e2e;
+  padding: 0 10px 10px;
+  border-radius: 8px;
+}
+
+.carousel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2e2e2e;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  border-radius: 5px;
+}
+
+.nav-button,
+.close-button {
+  background-color: #3a3a3a;
+  color: #80cbc4;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.nav-button:hover,
+.close-button:hover {
+  background-color: #555;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+  margin-bottom: 25px;
+}
+
+.create-btn,
+.discard-btn,
+.apply-btn {
+  background-color: #424242;
+  color: #e0f7fa;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.1em;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.create-btn,
+.apply-btn {
+  background-color: #33691e;
+  color: #c8e6c9;
+}
+
+.create-btn:hover,
+.apply-btn:hover {
+  background-color: #2b5d17;
+}
+
+.discard-btn {
+  background-color: #b71c1c;
+  color: #ffcdd2;
+}
+
+.discard-btn:hover {
+  background-color: #9a1313;
+}
+
+.index-display {
+  color: #e0e0e0;
+  font-size: 1em;
+}

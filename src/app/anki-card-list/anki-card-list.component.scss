@@ -1,0 +1,43 @@
+.anki-card-wrapper {
+  margin-bottom: 8px;
+  background-color: #2e2e2e;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hanzi {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.english {
+  color: #80cbc4;
+  font-size: 1em;
+}
+
+.button-content {
+  display: flex;
+  gap: 10px;
+}
+
+.view-btn {
+  background-color: #3a3a3a;
+  color: #80cbc4;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.view-btn:hover {
+  background-color: #555;
+}

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DebouncedLocalStorageService } from './debounced-local-storage.service';
 import { HttpPromiseService } from './http-promise.service';
 
 @Injectable({
@@ -10,7 +11,10 @@ export class OnlineTranslationService {
   private cacheDE = new Map<string, string>();
   private ongoingRequests = new Map<string, Promise<any>>();
 
-  constructor(private httpPromiseService: HttpPromiseService) {
+  constructor(
+    private httpPromiseService: HttpPromiseService,
+    private localStorage: DebouncedLocalStorageService
+  ) {
     this.loadCacheFromLocalStorage();
   }
 
@@ -58,8 +62,8 @@ export class OnlineTranslationService {
   }
 
   private loadCacheFromLocalStorage(): void {
-    const cacheENString = localStorage.getItem('onlineTranslationCacheEN');
-    const cacheDEString = localStorage.getItem('onlineTranslationCacheDE');
+    const cacheENString = this.localStorage.getItem('onlineTranslationCacheEN');
+    const cacheDEString = this.localStorage.getItem('onlineTranslationCacheDE');
     if (cacheENString) {
       const cacheENObject = JSON.parse(cacheENString);
       this.cacheEN.clear();
@@ -78,12 +82,12 @@ export class OnlineTranslationService {
 
   private saveCacheToLocalStorage(): void {
     const cacheENObject = Object.fromEntries(this.cacheEN);
-    localStorage.setItem(
+    this.localStorage.setItem(
       'onlineTranslationCacheEN',
       JSON.stringify(cacheENObject)
     );
     const cacheDEObject = Object.fromEntries(this.cacheDE);
-    localStorage.setItem(
+    this.localStorage.setItem(
       'onlineTranslationCacheDE',
       JSON.stringify(cacheDEObject)
     );

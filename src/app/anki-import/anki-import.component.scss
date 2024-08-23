@@ -6,11 +6,13 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-h2 {
-  margin-bottom: 20px;
+summary {
+  margin-top: 20px;
+  font-size: 1.5em;
+  user-select: none;
+  cursor: pointer;
 }
 
-.export-btn,
 input[type="file"] {
   margin-top: 1em;
   background-color: #3a3a3a;
@@ -22,7 +24,6 @@ input[type="file"] {
   transition: background-color 0.3s ease;
 }
 
-.export-btn:hover,
 input[type="file"]:hover {
   background-color: #555555;
 }

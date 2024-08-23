@@ -1,0 +1,20 @@
+<div class="anki-container">
+  <h2>Anki Flashcards Export</h2>
+
+  <div *ngIf="!isCarouselVisible">
+    <app-anki-card-list
+      [ankiCards]="ankiCards"
+      (viewDetails)="showCarousel($event)"
+    ></app-anki-card-list>
+  </div>
+
+  <div *ngIf="isCarouselVisible">
+    <app-anki-card-carousel
+      [ankiCards]="ankiCards"
+      [initialIndex]="carouselIndex"
+      (close)="hideCarousel()"
+    ></app-anki-card-carousel>
+  </div>
+
+  <button class="export-btn" (click)="exportDeck()">Export to Anki</button>
+</div>

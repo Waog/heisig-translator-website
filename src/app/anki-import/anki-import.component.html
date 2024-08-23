@@ -1,0 +1,75 @@
+<div class="anki-container">
+  <h2>Anki Flashcards Import</h2>
+
+  <input type="file" accept=".txt" (change)="importDeck($event)" />
+
+  <details *ngIf="matchedByGuidAndNoChangesRequired.length > 0">
+    <summary>
+      ✅ [{{ matchedByGuidAndNoChangesRequired.length }}] items, no changes
+      required (matched by GUID)
+    </summary>
+    <app-anki-review
+      [ankiCards]="matchedByGuidAndNoChangesRequired"
+      [applyAllType]="'update'"
+    ></app-anki-review>
+  </details>
+
+  <details *ngIf="matchedByHanziAndNoChangesRequired.length > 0">
+    <summary>
+      ✅ [{{ matchedByHanziAndNoChangesRequired.length }}] items, no changes
+      required (matched by Hanzi)
+    </summary>
+    <app-anki-review
+      [ankiCards]="matchedByHanziAndNoChangesRequired"
+      [applyAllType]="'update'"
+    ></app-anki-review>
+  </details>
+
+  <details *ngIf="newCards.length > 0">
+    <summary>☑️ [{{ newCards.length }}] items, new</summary>
+    <app-anki-review
+      [ankiCards]="newCards"
+      [applyAllType]="'create'"
+    ></app-anki-review>
+  </details>
+
+  <details *ngIf="matchedByGuidButChangesRequired.length > 0">
+    <summary>
+      ⚠️ [{{ matchedByGuidButChangesRequired.length }}] items, require changes
+      (matched by GUID)
+    </summary>
+    <app-anki-review
+      [ankiCards]="matchedByGuidButChangesRequired"
+      [applyAllType]="'update'"
+    ></app-anki-review>
+  </details>
+
+  <details *ngIf="matchedByHanziButChangesRequired.length > 0">
+    <summary>
+      ⚠️ [{{ matchedByHanziButChangesRequired.length }}] items, require changes
+      (matched by Hanzi)
+    </summary>
+    <app-anki-review
+      [ankiCards]="matchedByHanziButChangesRequired"
+      [applyAllType]="'update'"
+    ></app-anki-review>
+  </details>
+
+  <details *ngIf="matchedByHanziButMultipleMatches.length > 0">
+    <summary>
+      ⚠️ [{{ matchedByHanziButMultipleMatches.length }}] items, with multiple
+      matches
+    </summary>
+    <app-anki-review
+      [ankiCards]="matchedByHanziButMultipleMatches"
+    ></app-anki-review>
+  </details>
+
+  <details *ngIf="rest.length > 0">
+    <summary>
+      🛑 [{{ rest.length }}] items, rest (this is unexpected! this list should
+      be empty!)
+    </summary>
+    <app-anki-review [ankiCards]="rest"></app-anki-review>
+  </details>
+</div>

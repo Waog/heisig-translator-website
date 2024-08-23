@@ -1,0 +1,21 @@
+#separator:tab
+#html:true
+#guid column:1
+#notetype column:2
+#deck column:3
+#tags column:14
+ji069)>/$X	Chinese comprehensive	Chinese::4. Listen and Respond (Sound -> English)	人	people	"<span class=""tone2"">rén</span><!--ren-->"	[sound:Google translate_人.mp3]		person	"<img src=""chineseskill_people.jpg"">"	Basics 1	1		
+b:PeSI>uAA	Chinese comprehensive	Chinese::4. Listen and Respond (Sound -> English)	男人	man	"<span class=""tone2"">nán</span> <span class=""tone2"">rén</span><!--nan ren-->"	[sound:Google translate_男人.mp3]		male (n.), person	"<img src=""chineseskill_man.jpg"">"	Basics 1	1		
+GZpvr=PM[C	Chinese comprehensive	Chinese::4. Listen and Respond (Sound -> English)	女人	woman	"<span class=""tone3"">nǚ</span> <span class=""tone2"">rén</span><!--nü ren-->"	[sound:Google translate_女人.mp3]		woman, person	"<img src=""chineseskill_woman.jpg"">"	Basics 1	1		
+pCj`}p>,~|	Chinese comprehensive	Chinese::4. Listen and Respond (Sound -> English)	男孩	boy	"<span class=""tone2"">nán</span> <span class=""tone2"">hái</span><!--nan hai-->"	[sound:Google translate_男孩.mp3]		male (n.), tot	"<img src=""chineseskill_boy.jpg"">"	Basics 1	1		
+z4+1&5u8v{	Chinese comprehensive	Chinese::4. Listen and Respond (Sound -> English)	女孩	girl	"<span class=""tone3"">nǚ</span> <span class=""tone2"">hái</span><!--nü hai-->"	[sound:Google translate_女孩.mp3]		woman, tot	"<img src=""chineseskill_girl.jpg"">"	Basics 1	1		
+d@Q~shZHyM	Chinese comprehensive	Chinese::4. Listen and Respond (Sound -> English)	"天
+<aside>(2/X)</aside>"	sky	"<span class=""tone1"">tiān</span><!--tian-->
+<aside>(2/X)</aside>"	"[sound:Google translate_天.mp3]
+<aside>(2/X)</aside>"		heavens	"<img src=""chineseskill_sky.jpg"">"	Colors	2		
+zc?$n+a0]q	Chinese comprehensive	Chinese::4. Listen and Respond (Sound -> English)	我 是 男人	I am a man	"<span class=""tone3"">wǒ</span> <span class=""tone4"">shì</span> <span class=""tone2"">nán</span> <span class=""tone2"">rén</span><!--wo shi nan ren-->"	[sound:Google translate_我 是 男人.mp3]		I, be, male (n.), person		Basics 1	2		
+n$@ipYh=X4	Einfach (don't show Question on Answer side)	Chinese::0. Dialogs	"<div><b>Saying Hello</b></div><ul style=""margin-left: 20px; ""><li><b>朱琳：</b>Oli，你好。<br>(sound?)</li></ul>"	<div>[sound:Oli，你好。.mp3]</div>	"<div><b>Saying Hello</b></div><ul style=""margin-left: 20px; ""><li><b>朱琳：</b>Oli，你好。</li><li><b>Oli：</b>你好，朱琳。</li></ul>"								
+K]h%b58{KC	Chinese comprehensive	Chinese::4. Listen and Respond (Sound -> English)	"天
+<aside>(1/X)</aside>"	day	"<span class=""tone1"">tiān</span><!--tian-->
+<aside>(1/X)</aside>"	"[sound:Google translate_天.mp3]
+<aside>(1/X)</aside>"		heavens	"<img src=""day-9T4ezBMXc.png"">"	Number	3		

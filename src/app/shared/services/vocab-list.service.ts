@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { AnkiCard } from './anki-card';
+import { DebouncedLocalStorageService } from './debounced-local-storage.service';
 import { VocabItem, VocabItemInitializer } from './vocab-item';
 import { VocabServiceCollectionService } from './vocab-service-collection.service';
 
@@ -16,7 +18,8 @@ export class VocabListService {
     this.vocabItemsChange$.asObservable();
 
   constructor(
-    private vocabServiceCollectionService: VocabServiceCollectionService
+    private vocabServiceCollectionService: VocabServiceCollectionService,
+    private localStorage: DebouncedLocalStorageService
   ) {
     // NOTE: the list service must be assigned here, to avoid circular dependency injection.
     this.vocabServiceCollectionService.vocabListService = this;
@@ -24,7 +27,7 @@ export class VocabListService {
   }
 
   private loadVocabItems(): void {
-    const storedItems = localStorage.getItem(this.storageKey);
+    const storedItems = this.localStorage.getItem(this.storageKey);
     if (storedItems) {
       const parsedItems = JSON.parse(storedItems);
       this.vocabItems = this.cleanLegacy(parsedItems).map(
@@ -48,13 +51,14 @@ export class VocabListService {
       if ('isSentence' in item) delete item.isSentence;
       if ('isWord' in item) delete item.isWord;
       if ('fromInputSentence' in item) delete item.fromInputSentence;
+      if (!item.overrideTTS) item.overrideTTS = '';
     }
     return legacyVocabItems;
   }
 
   saveVocabItems(): void {
     const itemsToStore = this.vocabItems.map((item) => item.toSerializable());
-    localStorage.setItem(this.storageKey, JSON.stringify(itemsToStore));
+    this.localStorage.setItem(this.storageKey, JSON.stringify(itemsToStore));
     this.vocabItemsChange$.next();
   }
 
@@ -99,6 +103,18 @@ export class VocabListService {
 
   getVocabItems(filterItem: Partial<VocabItem>): VocabItem[] {
     return this.vocabItems.filter((vocabItem) => vocabItem.matches(filterItem));
+  }
+
+  getVocabItemsByAnkiCard(ankiCard: AnkiCard): VocabItem[] {
+    const guidMatches = this.getVocabItems({ ankiGuid: ankiCard.guid });
+    if (guidMatches.length > 0) return guidMatches;
+
+    let hanziMatches = this.getVocabItems({
+      hanzi: VocabItem.ankiHanziToVocabHanzi(ankiCard.hanzi),
+    });
+    if (hanziMatches.length > 0) return hanziMatches;
+
+    return [];
   }
 
   removeVocabItem(item: Partial<VocabItem>): void {

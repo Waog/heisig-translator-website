@@ -1,0 +1,12 @@
+<div
+  class="anki-card-wrapper"
+  *ngFor="let ankiCard of ankiCards; let i = index"
+>
+  <div class="text-content">
+    <div class="hanzi">{{ ankiCard.hanzi }}</div>
+    <div class="english">{{ ankiCard.english }}</div>
+  </div>
+  <div class="button-content">
+    <button (click)="viewAnkiCardDetails(i)" class="view-btn">👁️</button>
+  </div>
+</div>

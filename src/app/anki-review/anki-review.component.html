@@ -1,0 +1,18 @@
+<div class="anki-review-container">
+  <div *ngIf="!isCarouselVisible">
+    <app-anki-card-list
+      [ankiCards]="ankiCards"
+      (viewDetails)="showCarousel($event)"
+    ></app-anki-card-list>
+  </div>
+
+  <div *ngIf="isCarouselVisible">
+    <app-anki-card-carousel
+      [ankiCards]="ankiCards"
+      [initialIndex]="carouselIndex"
+      (close)="hideCarousel()"
+      [showVocabChanges]="true"
+      [applyAllType]="applyAllType"
+    ></app-anki-card-carousel>
+  </div>
+</div>

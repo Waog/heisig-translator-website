@@ -1,0 +1,25 @@
+.sub-nav {
+    position: fixed;
+    bottom: 50px; /* Just above the main navigation */
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #444;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    z-index: 1000;
+  }
+  
+  .sub-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  
+  .sub-nav a.active {
+    background-color: #666;
+    border-radius: 5px;
+  }
+  

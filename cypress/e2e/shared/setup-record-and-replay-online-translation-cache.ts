@@ -25,6 +25,7 @@ export function setupRecordAndReplayOnlineTranslationCache(
 
   afterEach(() => {
     if (Cypress.env('RECORD_MODE')) {
+      cy.wait(2100); // wait for debounce service
       addCacheToFixture();
     }
   });

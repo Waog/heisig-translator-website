@@ -5,7 +5,9 @@
     [disabled]="true"
   ></app-labeled-text-input>
   <div class="button-column">
-    <button class="edit-button button" (click)="activateEditMode()">✏️</button>
+    <button class="edit-button button" (click)="activateEditMode()">
+      {{ readonly ? "👁️" : "✏️" }}
+    </button>
   </div>
 </div>
 <div class="expanded" *ngIf="editMode">
@@ -15,9 +17,11 @@
     type="text"
     [(text)]="currentText"
     [rows]="rows"
+    [disabled]="readonly"
   ></app-labeled-textarea>
   <div class="button-column">
     <button
+      *ngIf="!readonly"
       class="save-button button"
       (click)="save()"
       [disabled]="currentText === text"

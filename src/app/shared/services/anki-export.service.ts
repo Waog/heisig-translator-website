@@ -1,18 +1,6 @@
 import { Injectable } from '@angular/core';
 import { saveAs } from 'file-saver';
-
-export interface AnkiCard {
-  hanzi: string;
-  english: string;
-  pinyin: string;
-  sound: string;
-  overrideTTS: string;
-  heisigKeywords: string;
-  image: string;
-  skill: string;
-  lesson: string;
-  notes: string;
-}
+import { AnkiCard } from './anki-card';
 
 @Injectable({
   providedIn: 'root',

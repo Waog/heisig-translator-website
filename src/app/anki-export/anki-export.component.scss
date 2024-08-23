@@ -10,8 +10,7 @@ h2 {
   margin-bottom: 20px;
 }
 
-.export-btn,
-input[type="file"] {
+.export-btn {
   margin-top: 1em;
   background-color: #3a3a3a;
   color: #e0e0e0;
@@ -22,7 +21,6 @@ input[type="file"] {
   transition: background-color 0.3s ease;
 }
 
-.export-btn:hover,
-input[type="file"]:hover {
+.export-btn:hover {
   background-color: #555555;
 }

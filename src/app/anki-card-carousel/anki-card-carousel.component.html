@@ -1,0 +1,57 @@
+<div class="carousel-container">
+  <div class="carousel-header">
+    <button (click)="prevItem()" class="nav-button">◁</button>
+    <span class="index-display">{{ currentIndex + 1 }} / {{ totalItems }}</span>
+    <button (click)="nextItem()" class="nav-button">▷</button>
+    <button (click)="closeCarousel()" class="close-button">❌</button>
+  </div>
+
+  <button
+    *ngIf="applyAllType === 'create'"
+    class="apply-btn"
+    (click)="onCreateAll()"
+  >
+    Create All
+  </button>
+  <button
+    *ngIf="applyAllType === 'update'"
+    class="apply-btn"
+    (click)="onUpdateAll()"
+  >
+    Update All
+  </button>
+
+  <div *ngFor="let vocabItem of currentVocabItems; index as i">
+    <h2>Vocab-Diff {{ i + 1 }} / {{ currentVocabItems.length }}</h2>
+    <div class="button-container">
+      <button class="apply-btn" (click)="onApplyDiff(vocabItem)">Apply</button>
+      <button class="discard-btn" (click)="onDeleteAnkiCard()">Discard</button>
+    </div>
+    <app-json-diff
+      [oldObject]="vocabItem.toSerializable()"
+      [newObject]="currentVocabItemsAfterChange[i].toSerializable()"
+    ></app-json-diff>
+  </div>
+
+  <div *ngIf="newVocabItem">
+    <h2>New VocabItem:</h2>
+    <div class="button-container">
+      <button class="create-btn" (click)="onCreateVocabItem()">Create</button>
+      <button class="discard-btn" (click)="onDeleteAnkiCard()">Discard</button>
+    </div>
+    <app-vocab-item-form [vocabItem]="newVocabItem"></app-vocab-item-form>
+  </div>
+
+  <h2>Anki Card:</h2>
+  <app-anki-card-details
+    [ankiCard]="ankiCards[currentIndex]"
+  ></app-anki-card-details>
+
+  <div *ngIf="showVocabChanges">
+    <h2>Affected VocabItems: ({{ currentVocabItems.length }})</h2>
+    <div *ngFor="let vocabItem of currentVocabItems; index as i">
+      <h3>VocabItem {{ i + 1 }} / {{ currentVocabItems.length }}</h3>
+      <app-vocab-item-form [vocabItem]="vocabItem"></app-vocab-item-form>
+    </div>
+  </div>
+</div>

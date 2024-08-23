@@ -1,0 +1,9 @@
+<nav class="sub-nav">
+  <a
+    *ngFor="let item of items"
+    [routerLink]="item.route"
+    routerLinkActive="active"
+    [queryParamsHandling]="'merge'"
+    >{{ item.label }}</a
+  >
+</nav>
